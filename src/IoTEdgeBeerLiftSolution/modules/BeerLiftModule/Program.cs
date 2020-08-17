@@ -13,11 +13,18 @@ namespace BeerLiftModule
     using Microsoft.Azure.Devices.Client;
     using Microsoft.Azure.Devices.Client.Transport.Mqtt;
     using Newtonsoft.Json;
+    using Iot.Device.Mcp23xxx;
+    using Microsoft.Azure.Devices.Shared;
 
     class Program
     {
+        private const int DefaultInterval = 5000;
+
+        private static readonly int s_deviceAddress = 0x20;
+
         // GPIO 17 which is physical pin 11
         static int r1Pin = 17;
+
         // GPIO 27 is physical pin 13
         static int r2Pin = 27;
 
@@ -53,17 +60,30 @@ namespace BeerLiftModule
             MqttTransportSettings mqttSetting = new MqttTransportSettings(TransportType.Mqtt_Tcp_Only);
             ITransportSettings[] settings = { mqttSetting };
 
-            // Open a connection to the Edge runtime
+            //// Open a connection to the Edge runtime
+
             ModuleClient ioTHubModuleClient = await ModuleClient.CreateFromEnvironmentAsync(settings);
+
+            // Attach callback for Twin desired properties updates
+            await ioTHubModuleClient.SetDesiredPropertyUpdateCallbackAsync(onDesiredPropertiesUpdate, ioTHubModuleClient);
+
+            // Execute callback method for Twin desired properties updates
+            var twin = await ioTHubModuleClient.GetTwinAsync();
+            await onDesiredPropertiesUpdate(twin.Properties.Desired, ioTHubModuleClient);
+
             await ioTHubModuleClient.OpenAsync();
             Console.WriteLine("IoT Hub module client initialized.");
+
+            //// Initialize GPIO
 
             _controller = new GpioController();
 
             _controller.OpenPin(r1Pin, PinMode.Output);
             _controller.OpenPin(r2Pin, PinMode.Output);
 
-            // Direct methods
+            Console.WriteLine("GPIO Initialized");   
+
+            //// Direct methods
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
                 "Open",
@@ -78,9 +98,117 @@ namespace BeerLiftModule
                 ioTHubModuleClient);
 
             Console.WriteLine("Attached method handler: Close");   
+
+            //// start reading beer state
+
+            var thread = new Thread(() => ThreadBody(ioTHubModuleClient));
+            thread.Start();
         }
 
-       static async Task<MethodResponse> OpenMethodCallBack(MethodRequest methodRequest, object userContext)        
+        private static async void ThreadBody(object userContext)
+        {
+            var client = userContext as ModuleClient;
+
+            if (client == null)
+            {
+                throw new InvalidOperationException("UserContext doesn't contain " + "expected values");
+            }
+
+            var i2cConnectionSettings = new I2cConnectionSettings(1, s_deviceAddress);
+            var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
+
+            using Mcp23xxx mcp23xxx = new Mcp23017(i2cDevice);
+
+            GpioController controllerUsingMcp = new GpioController(PinNumberingScheme.Logical, mcp23xxx);
+
+            if (mcp23xxx is Mcp23x1x mcp23x1x)
+            {
+                
+                // Input direction for switches.
+                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
+                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
+
+                while (true)
+                {
+                    byte dataPortA = mcp23x1x.ReadByte(Register.GPIO, Port.PortA);
+                    byte dataPortB = mcp23x1x.ReadByte(Register.GPIO, Port.PortB);
+
+                    Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
+
+                    // var BeerStateMessageBody = new BeerStateMessageBody
+                    // {
+                    //     timeStamp = DateTime.UtcNow,
+                    // };
+
+                    // await _moduleOutputs.GetModuleOutput("output1")?.SendMessage(heartbeatMessageBody);
+
+                    await Task.Delay(Interval);
+                }
+            }
+        }
+
+        private static int Interval { get; set; } = DefaultInterval;
+
+        private static Task onDesiredPropertiesUpdate(TwinCollection desiredProperties, object userContext)
+        {
+            if (desiredProperties.Count == 0)
+            {
+                return Task.CompletedTask;
+            }
+
+            try
+            {
+                Console.WriteLine("Desired property change:");
+                Console.WriteLine(JsonConvert.SerializeObject(desiredProperties));
+
+                var client = userContext as ModuleClient;
+
+                if (client == null)
+                {
+                    throw new InvalidOperationException($"UserContext doesn't contain expected ModuleClient");
+                }
+
+                var reportedProperties = new TwinCollection();
+
+                if (desiredProperties.Contains("interval")) 
+                {
+                    if (desiredProperties["interval"] != null)
+                    {
+                        Interval = desiredProperties["interval"];
+                    }
+                    else
+                    {
+                        Interval = DefaultInterval;
+                    }
+
+                    Console.WriteLine($"Interval changed to {Interval}");
+
+                    reportedProperties["interval"] = Interval;
+                }
+
+                if (reportedProperties.Count > 0)
+                {
+                    client.UpdateReportedPropertiesAsync(reportedProperties).ConfigureAwait(false);
+                }
+            }
+            catch (AggregateException ex)
+            {
+                foreach (Exception exception in ex.InnerExceptions)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Error when receiving desired property: {0}", exception);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Error when receiving desired property: {0}", ex.Message);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        static async Task<MethodResponse> OpenMethodCallBack(MethodRequest methodRequest, object userContext)        
         {
             Console.WriteLine("Executing OpenMethodCallBack");
 
@@ -133,42 +261,5 @@ namespace BeerLiftModule
 
             return response;
         }        
-
-
-
-        // /// <summary>
-        // /// This method is called whenever the module is sent a message from the EdgeHub. 
-        // /// It just pipe the messages without any change.
-        // /// It prints all the incoming messages.
-        // /// </summary>
-        // static async Task<MessageResponse> PipeMessage(Message message, object userContext)
-        // {
-        //     int counterValue = Interlocked.Increment(ref counter);
-
-        //     var moduleClient = userContext as ModuleClient;
-        //     if (moduleClient == null)
-        //     {
-        //         throw new InvalidOperationException("UserContext doesn't contain " + "expected values");
-        //     }
-
-        //     byte[] messageBytes = message.GetBytes();
-        //     string messageString = Encoding.UTF8.GetString(messageBytes);
-        //     Console.WriteLine($"Received message: {counterValue}, Body: [{messageString}]");
-
-        //     if (!string.IsNullOrEmpty(messageString))
-        //     {
-        //         using (var pipeMessage = new Message(messageBytes))
-        //         {
-        //             foreach (var prop in message.Properties)
-        //             {
-        //                 pipeMessage.Properties.Add(prop.Key, prop.Value);
-        //             }
-        //             await moduleClient.SendEventAsync("output1", pipeMessage);
-                
-        //             Console.WriteLine("Received message sent");
-        //         }
-        //     }
-        //     return MessageResponse.Completed;
-        // }
     }
 }

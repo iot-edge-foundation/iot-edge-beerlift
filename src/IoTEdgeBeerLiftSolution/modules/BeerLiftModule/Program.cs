@@ -310,6 +310,7 @@ namespace BeerLiftModule
                 openResponse.errorMessage = ex.Message;   
                 openResponse.responseState = -999;
             }
+
             var json = JsonConvert.SerializeObject(openResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
@@ -337,6 +338,7 @@ namespace BeerLiftModule
                 closeResponse.errorMessage = ex.Message;   
                 closeResponse.responseState = -999;
             }
+            
             var json = JsonConvert.SerializeObject(closeResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 

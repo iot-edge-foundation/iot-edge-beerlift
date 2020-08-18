@@ -1,40 +1,12 @@
 Temperature
 Humidity
+
 Which beer is empty -> read via direct method or with message
 
-second converter
-lights
+second converter = write lights
 
 
+LINKS
+=====
 
 https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/bitwise-and-shift-operators
-
-
-int tel = 0;
-
-            int a1 = 1;
-            int a2 = 2;
-            int a4 = 4;
-            int a8 = 8;
-            int a16 = 16;
-            int a32 = 32;
-            int a64 = 64;
-            int a128 = 128;
-
-            while (0 < 256)
-            {
-                Console.WriteLine("");
-                Console.WriteLine(tel);
-                Console.Write($"{(tel & a128) == a128} | ");
-                Console.Write($"{(tel & a64) == a64} | ");
-                Console.Write($"{(tel & a32) == a32} | ");
-                Console.Write($"{(tel & a16) == a16} | ");
-                Console.Write($"{(tel & a8) == a8} | ");
-                Console.Write($"{(tel & a4) == a4} | ");
-                Console.Write($"{(tel & a2) == a2} | ");
-                Console.WriteLine($"{(tel & a1) == a1} | ");
-
-                tel++;
-
-                Thread.Sleep(2000);
-            }

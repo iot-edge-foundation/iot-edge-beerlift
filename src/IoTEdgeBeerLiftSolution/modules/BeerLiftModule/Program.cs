@@ -20,6 +20,8 @@ namespace BeerLiftModule
     {
         private const int DefaultInterval = 5000;
 
+        private const int DefaultOpenCloseInterval = 20000;
+
         private static readonly int s_deviceAddress = 0x20;
 
         // GPIO 17 which is physical pin 11
@@ -29,6 +31,10 @@ namespace BeerLiftModule
         static int DefaultR2Pin = 27;
 
         static GpioController _controller;
+
+        private static string _moduleId; 
+
+        private static string _deviceId;
 
         static void Main(string[] args)
         {
@@ -57,6 +63,9 @@ namespace BeerLiftModule
         /// </summary>
         static async Task Init()
         {
+            _deviceId = System.Environment.GetEnvironmentVariable("IOTEDGE_DEVICEID");
+            _moduleId = Environment.GetEnvironmentVariable("IOTEDGE_MODULEID");
+
             Console.WriteLine();
             Console.WriteLine("  _     _              _              _                 _ _  __ _   ");
             Console.WriteLine(" (_)___| |_ ___ ___ __| |__ _ ___ ___| |__  ___ ___ _ _| (_)/ _| |_ ");
@@ -64,6 +73,10 @@ namespace BeerLiftModule
             Console.WriteLine(" |_\\___/\\__|   \\___\\__,_\\__, \\___|   |_.__/\\___\\___|_| |_|_|_|  \\__|");
             Console.WriteLine("                        |___/                                       ");
             Console.WriteLine();
+            Console.WriteLine("   Copyright © 2020 - josa josa josa");
+            Console.WriteLine(" ");
+
+            Console.WriteLine($".Net framework version '{Environment.GetEnvironmentVariable("DOTNET_VERSION")}' in use");
 
             MqttTransportSettings mqttSetting = new MqttTransportSettings(TransportType.Mqtt_Tcp_Only);
             ITransportSettings[] settings = { mqttSetting };
@@ -80,7 +93,10 @@ namespace BeerLiftModule
             await onDesiredPropertiesUpdate(twin.Properties.Desired, ioTHubModuleClient);
 
             await ioTHubModuleClient.OpenAsync();
-            Console.WriteLine("IoT Hub module client initialized.");
+
+            Console.WriteLine($"Module '{_deviceId}'-'{_moduleId}' initialized.");
+
+            Console.WriteLine("Attached routing output: output1"); 
 
             //// Initialize GPIO
 
@@ -89,7 +105,7 @@ namespace BeerLiftModule
             _controller.OpenPin(R1Pin, PinMode.Output);
             _controller.OpenPin(R2Pin, PinMode.Output);
 
-            Console.WriteLine("GPIO Initialized");   
+            Console.WriteLine("Default GPIO Initialized.");   
 
             //// Direct methods
 
@@ -129,9 +145,10 @@ namespace BeerLiftModule
 
             GpioController controllerUsingMcp = new GpioController(PinNumberingScheme.Logical, mcp23xxx);
 
+            Console.WriteLine("Mcp23017 GPIO Initialized.");   
+
             if (mcp23xxx is Mcp23x1x mcp23x1x)
             {
-                
                 // Input direction for switches.
                 mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
                 mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
@@ -143,12 +160,17 @@ namespace BeerLiftModule
 
                     Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
 
-                    // var BeerStateMessageBody = new BeerStateMessageBody
-                    // {
-                    //     timeStamp = DateTime.UtcNow,
-                    // };
+                    var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB);
+                    var json = JsonConvert.SerializeObject(beerLiftMessage);
 
-                    // await _moduleOutputs.GetModuleOutput("output1")?.SendMessage(heartbeatMessageBody);
+                    using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
+                    {
+                        pipeMessage.Properties.Add("StateLength", "16");
+
+                        await client.SendEventAsync("output1", pipeMessage);
+
+                        Console.WriteLine($"Message sent: {beerLiftMessage}");
+                    }
 
                     await Task.Delay(Interval);
                 }
@@ -156,9 +178,9 @@ namespace BeerLiftModule
         }
 
         private static int Interval { get; set; } = DefaultInterval;
-
-       private static int R1Pin { get; set; } = DefaultR1Pin;
-       private static int R2Pin { get; set; } = DefaultR2Pin;
+        private static int OpenCloseInterval { get; set; } = DefaultOpenCloseInterval;
+        private static int R1Pin { get; set; } = DefaultR1Pin;
+        private static int R2Pin { get; set; } = DefaultR2Pin;
 
         private static Task onDesiredPropertiesUpdate(TwinCollection desiredProperties, object userContext)
         {
@@ -195,6 +217,22 @@ namespace BeerLiftModule
                     Console.WriteLine($"Interval changed to {Interval}");
 
                     reportedProperties["interval"] = Interval;
+                }
+
+                if (desiredProperties.Contains("openCloseInterval")) 
+                {
+                    if (desiredProperties["openCloseInterval"] != null)
+                    {
+                        OpenCloseInterval = desiredProperties["openCloseInterval"];
+                    }
+                    else
+                    {
+                        OpenCloseInterval = DefaultOpenCloseInterval;
+                    }
+
+                    Console.WriteLine($"OpenCloseInterval changed to {OpenCloseInterval}");
+
+                    reportedProperties["openCloseInterval"] = OpenCloseInterval;
                 }
 
                 if (desiredProperties.Contains("r1Pin")) 
@@ -261,7 +299,7 @@ namespace BeerLiftModule
             {
                 _controller.Write(R1Pin, PinValue.High);
              
-                await Task.Delay(20000);
+                await Task.Delay(OpenCloseInterval);
 
                 _controller.Write(R1Pin, PinValue.Low);
 
@@ -288,7 +326,7 @@ namespace BeerLiftModule
             {
                 _controller.Write(R2Pin, PinValue.High);
              
-                await Task.Delay(20000);
+                await Task.Delay(OpenCloseInterval);
 
                 _controller.Write(R2Pin, PinValue.Low);
 

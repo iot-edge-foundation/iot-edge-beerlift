@@ -5,10 +5,6 @@ Which beer is empty -> read via direct method or with message
 second converter
 lights
 
-open close interval via desired properties
-
-
-make pin numbers part of device twin
 
 
 https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/bitwise-and-shift-operators

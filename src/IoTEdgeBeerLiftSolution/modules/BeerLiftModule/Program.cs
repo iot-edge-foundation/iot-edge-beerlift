@@ -23,10 +23,10 @@ namespace BeerLiftModule
         private static readonly int s_deviceAddress = 0x20;
 
         // GPIO 17 which is physical pin 11
-        static int r1Pin = 17;
+        static int DefaultR1Pin = 17;
 
         // GPIO 27 is physical pin 13
-        static int r2Pin = 27;
+        static int DefaultR2Pin = 27;
 
         static GpioController _controller;
 
@@ -57,6 +57,14 @@ namespace BeerLiftModule
         /// </summary>
         static async Task Init()
         {
+            Console.WriteLine();
+            Console.WriteLine("  _     _              _              _                 _ _  __ _   ");
+            Console.WriteLine(" (_)___| |_ ___ ___ __| |__ _ ___ ___| |__  ___ ___ _ _| (_)/ _| |_ ");
+            Console.WriteLine(" | / _ \\  _|___/ -_) _` / _` / -_)___| '_ \\/ -_) -_) '_| | |  _|  _|");
+            Console.WriteLine(" |_\\___/\\__|   \\___\\__,_\\__, \\___|   |_.__/\\___\\___|_| |_|_|_|  \\__|");
+            Console.WriteLine("                        |___/                                       ");
+            Console.WriteLine();
+
             MqttTransportSettings mqttSetting = new MqttTransportSettings(TransportType.Mqtt_Tcp_Only);
             ITransportSettings[] settings = { mqttSetting };
 
@@ -78,8 +86,8 @@ namespace BeerLiftModule
 
             _controller = new GpioController();
 
-            _controller.OpenPin(r1Pin, PinMode.Output);
-            _controller.OpenPin(r2Pin, PinMode.Output);
+            _controller.OpenPin(R1Pin, PinMode.Output);
+            _controller.OpenPin(R2Pin, PinMode.Output);
 
             Console.WriteLine("GPIO Initialized");   
 
@@ -149,6 +157,9 @@ namespace BeerLiftModule
 
         private static int Interval { get; set; } = DefaultInterval;
 
+       private static int R1Pin { get; set; } = DefaultR1Pin;
+       private static int R2Pin { get; set; } = DefaultR2Pin;
+
         private static Task onDesiredPropertiesUpdate(TwinCollection desiredProperties, object userContext)
         {
             if (desiredProperties.Count == 0)
@@ -186,6 +197,38 @@ namespace BeerLiftModule
                     reportedProperties["interval"] = Interval;
                 }
 
+                if (desiredProperties.Contains("r1Pin")) 
+                {
+                    if (desiredProperties["r1Pin"] != null)
+                    {
+                        R1Pin = desiredProperties["r1Pin"];
+                    }
+                    else
+                    {
+                        R1Pin = DefaultR1Pin;
+                    }
+
+                    Console.WriteLine($"R1Pin changed to {R1Pin}");
+
+                    reportedProperties["r1Pin"] = R1Pin;
+                }
+
+                if (desiredProperties.Contains("r2Pin")) 
+                {
+                    if (desiredProperties["r2Pin"] != null)
+                    {
+                        R2Pin = desiredProperties["r2Pin"];
+                    }
+                    else
+                    {
+                        R2Pin = DefaultR2Pin;
+                    }
+
+                    Console.WriteLine($"R2Pin changed to {R2Pin}");
+
+                    reportedProperties["r2Pin"] = R2Pin;
+                }
+
                 if (reportedProperties.Count > 0)
                 {
                     client.UpdateReportedPropertiesAsync(reportedProperties).ConfigureAwait(false);
@@ -216,11 +259,11 @@ namespace BeerLiftModule
 
             try
             {
-                _controller.Write(r1Pin, PinValue.High);
+                _controller.Write(R1Pin, PinValue.High);
              
                 await Task.Delay(20000);
 
-                _controller.Write(r1Pin, PinValue.Low);
+                _controller.Write(R1Pin, PinValue.Low);
 
                 Console.WriteLine("Opened.");
             }
@@ -243,11 +286,11 @@ namespace BeerLiftModule
 
             try
             {
-                _controller.Write(r2Pin, PinValue.High);
+                _controller.Write(R2Pin, PinValue.High);
              
                 await Task.Delay(20000);
 
-                _controller.Write(r2Pin, PinValue.Low);
+                _controller.Write(R2Pin, PinValue.Low);
 
                 Console.WriteLine("Closed.");
             }

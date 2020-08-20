@@ -414,7 +414,7 @@ namespace BeerLiftModule
         {
              var ambiantValues = new AmbiantValues{Temperature = -273, Humidity = -1 };
 
-            for (int i = 0; i<100; i++)
+            for (int i = 1; i <= 100; i++)
             {
                 ambiantValues.Attempts = i;
 

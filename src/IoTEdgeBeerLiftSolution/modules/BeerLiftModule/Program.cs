@@ -157,8 +157,6 @@ namespace BeerLiftModule
 
             using Mcp23xxx mcp23xxx = new Mcp23017(i2cDevice);
 
-            //GpioController controllerUsingMcp = new GpioController(PinNumberingScheme.Logical, mcp23xxx);
-
             Console.WriteLine("Mcp23017 GPIO Initialized.");   
 
             if (mcp23xxx is Mcp23x1x mcp23x1x)

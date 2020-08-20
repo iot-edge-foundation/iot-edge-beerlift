@@ -392,17 +392,14 @@ namespace BeerLiftModule
 
             try
             {
-                for(int i = 0; i<20; i++)
-                {
-                    var ambiantValues = ReadAmbiantValues();
-                
-                    ambiantValuesResponse.Temperature = ambiantValues.Temperature;
-                    ambiantValuesResponse.Humidity = ambiantValues.Humidity;
+                var ambiantValues = ReadAmbiantValues();
+            
+                ambiantValuesResponse.Temperature = ambiantValues.Temperature;
+                ambiantValuesResponse.Humidity = ambiantValues.Humidity;
 
-                    await Task.Delay(500);    
-                }
+                await Task.Delay(10);    
 
-                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow}: {ambiantValuesResponse.Temperature}/{ambiantValuesResponse.Humidity}.");
+                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow} - Temperature:{ambiantValuesResponse.Temperature} / Humidity:{ambiantValuesResponse.Humidity}.");
             }
             catch (Exception ex)
             {

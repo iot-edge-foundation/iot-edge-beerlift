@@ -1,3 +1,5 @@
+using System;
+
 namespace BeerLiftModule
 {
     public class BeerLiftMessage
@@ -8,6 +10,7 @@ namespace BeerLiftModule
 
         public BeerLiftMessage()
         {
+            Timestamp = DateTime.UtcNow;
         }
 
         public BeerLiftMessage(int stateA, int stateB) : this()
@@ -50,6 +53,7 @@ namespace BeerLiftModule
         public bool BeerState14 {get; set;}
         public bool BeerState15 {get; set;}
         public bool BeerState16 {get; set;}
+        DateTime Timestamp {get; set;}
 
         public override string ToString()
         {

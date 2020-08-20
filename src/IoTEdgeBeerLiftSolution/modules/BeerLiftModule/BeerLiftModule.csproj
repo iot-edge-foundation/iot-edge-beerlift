@@ -23,5 +23,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
     <PackageReference Include="System.Device.Gpio" Version="1.0.0" />
+    <PackageReference Include="UnitsNet" Version="4.69.0" />
   </ItemGroup>
 </Project>

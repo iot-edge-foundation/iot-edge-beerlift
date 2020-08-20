@@ -15,6 +15,7 @@ namespace BeerLiftModule
     using Newtonsoft.Json;
     using Iot.Device.Mcp23xxx;
     using Microsoft.Azure.Devices.Shared;
+    using Iot.Device.DHTxx;
 
     class Program
     {
@@ -22,15 +23,25 @@ namespace BeerLiftModule
 
         private const int DefaultOpenCloseInterval = 20000;
 
-        private static readonly int s_deviceAddress = 0x20;
+        private static byte lastDataPortA = 0;
+
+        private static byte lastDataPortB = 0;
+
+        private static double _degreesCelsius = -273;
+
+        // I2C Read banks at 0x20
+        private static readonly int _deviceAddressRead = 0x20;
 
         // GPIO 17 which is physical pin 11
-        static int DefaultR1Pin = 17;
+        private static int DefaultR1Pin = 17;
 
         // GPIO 27 is physical pin 13
-        static int DefaultR2Pin = 27;
+        private static int DefaultR2Pin = 27;
 
-        static GpioController _controller;
+        // GPIO 4 is used for 1-Wire
+        private static int DefaultDht22Pin = 4;
+
+        private static GpioController _controller;
 
         private static string _moduleId; 
 
@@ -121,6 +132,11 @@ namespace BeerLiftModule
                 CloseMethodCallBack,
                 ioTHubModuleClient);
 
+            await ioTHubModuleClient.SetMethodHandlerAsync(
+                "AmbiantValues",
+                AmbiantValuesMethodCallBack,
+                ioTHubModuleClient);
+
             Console.WriteLine("Attached method handler: Close");   
 
             //// start reading beer state
@@ -138,12 +154,12 @@ namespace BeerLiftModule
                 throw new InvalidOperationException("UserContext doesn't contain " + "expected values");
             }
 
-            var i2cConnectionSettings = new I2cConnectionSettings(1, s_deviceAddress);
+            var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressRead);
             var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
 
             using Mcp23xxx mcp23xxx = new Mcp23017(i2cDevice);
 
-            GpioController controllerUsingMcp = new GpioController(PinNumberingScheme.Logical, mcp23xxx);
+            //GpioController controllerUsingMcp = new GpioController(PinNumberingScheme.Logical, mcp23xxx);
 
             Console.WriteLine("Mcp23017 GPIO Initialized.");   
 
@@ -160,16 +176,23 @@ namespace BeerLiftModule
 
                     Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
 
-                    var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB);
-                    var json = JsonConvert.SerializeObject(beerLiftMessage);
-
-                    using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
+                    if (dataPortA != lastDataPortA || 
+                            dataPortB != lastDataPortB)
                     {
-                        pipeMessage.Properties.Add("StateLength", "16");
+                        lastDataPortA = dataPortA;
+                        lastDataPortB = dataPortB;
 
-                        await client.SendEventAsync("output1", pipeMessage);
+                        var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB);
+                        var json = JsonConvert.SerializeObject(beerLiftMessage);
 
-                        Console.WriteLine($"Message sent: {beerLiftMessage}");
+                        using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
+                        {
+                            pipeMessage.Properties.Add("StateLength", "16");
+
+                            await client.SendEventAsync("output1", pipeMessage);
+
+                            Console.WriteLine($"Message sent: {beerLiftMessage}");
+                        }
                     }
 
                     await Task.Delay(Interval);
@@ -181,6 +204,7 @@ namespace BeerLiftModule
         private static int OpenCloseInterval { get; set; } = DefaultOpenCloseInterval;
         private static int R1Pin { get; set; } = DefaultR1Pin;
         private static int R2Pin { get; set; } = DefaultR2Pin;
+        private static int Dht22Pin { get; set; } = DefaultDht22Pin;
 
         private static Task onDesiredPropertiesUpdate(TwinCollection desiredProperties, object userContext)
         {
@@ -267,6 +291,22 @@ namespace BeerLiftModule
                     reportedProperties["r2Pin"] = R2Pin;
                 }
 
+                if (desiredProperties.Contains("dht22Pin")) 
+                {
+                    if (desiredProperties["dht22Pin"] != null)
+                    {
+                        Dht22Pin = desiredProperties["dht22Pin"];
+                    }
+                    else
+                    {
+                        Dht22Pin = DefaultDht22Pin;
+                    }
+
+                    Console.WriteLine($"Dht22Pin changed to {Dht22Pin}");
+
+                    reportedProperties["dht22Pin"] = Dht22Pin;
+                }
+
                 if (reportedProperties.Count > 0)
                 {
                     client.UpdateReportedPropertiesAsync(reportedProperties).ConfigureAwait(false);
@@ -291,19 +331,19 @@ namespace BeerLiftModule
 
         static async Task<MethodResponse> OpenMethodCallBack(MethodRequest methodRequest, object userContext)        
         {
-            Console.WriteLine("Executing OpenMethodCallBack");
+            Console.WriteLine($"Executing OpenMethodCallBack at {DateTime.UtcNow}");
 
             var openResponse = new OpenResponse{responseState = 0};
 
             try
             {
-                _controller.Write(R1Pin, PinValue.High);
+                _controller.Write(R1Pin, PinValue.Low);
              
                 await Task.Delay(OpenCloseInterval);
 
-                _controller.Write(R1Pin, PinValue.Low);
+                _controller.Write(R1Pin, PinValue.High);
 
-                Console.WriteLine("Opened.");
+                Console.WriteLine($"Opened at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
@@ -319,19 +359,19 @@ namespace BeerLiftModule
 
         static async Task<MethodResponse> CloseMethodCallBack(MethodRequest methodRequest, object userContext)        
         {
-            Console.WriteLine("Executing CloseMethodCallBack");
+            Console.WriteLine($"Executing CloseMethodCallBack at {DateTime.UtcNow}");
 
             var closeResponse = new CloseResponse{responseState = 0};
 
             try
             {
-                _controller.Write(R2Pin, PinValue.High);
+                _controller.Write(R2Pin, PinValue.Low);
              
                 await Task.Delay(OpenCloseInterval);
 
-                _controller.Write(R2Pin, PinValue.Low);
+                _controller.Write(R2Pin, PinValue.High);
 
-                Console.WriteLine("Closed.");
+                Console.WriteLine($"Closed at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
@@ -343,6 +383,57 @@ namespace BeerLiftModule
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;
-        }        
+        }   
+
+        
+       static async Task<MethodResponse> AmbiantValuesMethodCallBack(MethodRequest methodRequest, object userContext)        
+        {
+            Console.WriteLine($"Executing AmbiantValuesMethodCallBack at {DateTime.UtcNow}");
+
+            var ambiantValuesResponse = new AmbiantValuesResponse{responseState = 0};
+
+            try
+            {
+                var ambiantValues = ReadAmbiantValues();
+             
+                ambiantValuesResponse.Temperature = ambiantValues.Temperature;
+                ambiantValuesResponse.Humidity = ambiantValues.Humidity;
+
+                await Task.Delay(0);
+
+                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow}.");
+            }
+            catch (Exception ex)
+            {
+                ambiantValuesResponse.errorMessage = ex.Message;   
+                ambiantValuesResponse.responseState = -999;
+            }
+            
+            var json = JsonConvert.SerializeObject(ambiantValuesResponse);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+
+            return response;
+        } 
+        private static AmbiantValues ReadAmbiantValues()
+        {
+            using (Dht22 dht = new Dht22(Dht22Pin))
+            {
+                var temperature = dht.Temperature;
+                var humidity = dht.Humidity;
+
+                var degreesCelsius = temperature.DegreesCelsius;
+
+                if (temperature.Kelvins == 0)
+                {
+                    degreesCelsius = _degreesCelsius;
+                }
+
+                var ambiantValues = new AmbiantValues{Temperature = degreesCelsius, Humidity = humidity.Percent };
+
+                _degreesCelsius = degreesCelsius;
+
+                return ambiantValues;
+            }
+        }     
     }
 }

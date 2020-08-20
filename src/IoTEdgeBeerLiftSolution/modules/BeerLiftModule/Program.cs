@@ -87,8 +87,6 @@ namespace BeerLiftModule
             Console.WriteLine("   Copyright © 2020 - josa josa josa");
             Console.WriteLine(" ");
 
-            Console.WriteLine($".Net framework version '{Environment.GetEnvironmentVariable("DOTNET_VERSION")}' in use");
-
             MqttTransportSettings mqttSetting = new MqttTransportSettings(TransportType.Mqtt_Tcp_Only);
             ITransportSettings[] settings = { mqttSetting };
 
@@ -394,14 +392,17 @@ namespace BeerLiftModule
 
             try
             {
-                var ambiantValues = ReadAmbiantValues();
-             
-                ambiantValuesResponse.Temperature = ambiantValues.Temperature;
-                ambiantValuesResponse.Humidity = ambiantValues.Humidity;
+                for(int i = 0; i<20; i++)
+                {
+                    var ambiantValues = ReadAmbiantValues();
+                
+                    ambiantValuesResponse.Temperature = ambiantValues.Temperature;
+                    ambiantValuesResponse.Humidity = ambiantValues.Humidity;
 
-                await Task.Delay(0);
+                    await Task.Delay(500);    
+                }
 
-                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow}.");
+                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow}: {ambiantValuesResponse.Temperature}/{ambiantValuesResponse.Humidity}.");
             }
             catch (Exception ex)
             {

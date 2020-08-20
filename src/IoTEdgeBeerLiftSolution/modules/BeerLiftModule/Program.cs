@@ -128,12 +128,14 @@ namespace BeerLiftModule
                 CloseMethodCallBack,
                 ioTHubModuleClient);
 
+            Console.WriteLine("Attached method handler: Close");   
+
             await ioTHubModuleClient.SetMethodHandlerAsync(
-                "AmbiantValues",
+                "Ambiant",
                 AmbiantValuesMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: Close");   
+            Console.WriteLine("Attached method handler: Ambiant");   
 
             //// start reading beer state
 
@@ -395,7 +397,7 @@ namespace BeerLiftModule
 
                 await Task.Delay(10);    
 
-                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow} - Temperature:{ambiantValuesResponse.Temperature} / Humidity:{ambiantValuesResponse.Humidity}.");
+                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow} - Temperature:{ambiantValuesResponse.Temperature} / Humidity:{ambiantValuesResponse.Humidity} / Attempts:{ambiantValues.Attempts}.");
             }
             catch (Exception ex)
             {

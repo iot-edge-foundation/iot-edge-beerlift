@@ -27,8 +27,6 @@ namespace BeerLiftModule
 
         private static byte lastDataPortB = 0;
 
-        private static double _degreesCelsius = -273;
-
         // I2C Read banks at 0x20
         private static readonly int _deviceAddressRead = 0x20;
 
@@ -412,24 +410,28 @@ namespace BeerLiftModule
         } 
         private static AmbiantValues ReadAmbiantValues()
         {
-            using (Dht22 dht = new Dht22(Dht22Pin))
+             var ambiantValues = new AmbiantValues{Temperature = -273, Humidity = -1 };
+
+            for (int i = 0; i<100; i++)
             {
-                var temperature = dht.Temperature;
-                var humidity = dht.Humidity;
+                ambiantValues.Attempts = i;
 
-                var degreesCelsius = temperature.DegreesCelsius;
-
-                if (temperature.Kelvins == 0)
+                using (Dht22 dht = new Dht22(Dht22Pin))
                 {
-                    degreesCelsius = _degreesCelsius;
+                    var temperature = dht.Temperature;
+                    var humidity = dht.Humidity;
+
+                    if (temperature.Kelvins != 0)
+                    {
+                        ambiantValues.Temperature = temperature.DegreesCelsius;
+                        ambiantValues.Humidity = humidity.Percent;
+
+                        return ambiantValues;
+                    }
                 }
-
-                var ambiantValues = new AmbiantValues{Temperature = degreesCelsius, Humidity = humidity.Percent };
-
-                _degreesCelsius = degreesCelsius;
-
-                return ambiantValues;
             }
+
+            return ambiantValues;
         }     
     }
 }

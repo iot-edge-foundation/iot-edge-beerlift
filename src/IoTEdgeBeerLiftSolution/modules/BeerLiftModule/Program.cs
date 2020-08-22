@@ -112,8 +112,8 @@ namespace BeerLiftModule
             _controller.OpenPin(UpRelayPin, PinMode.Output);
             _controller.OpenPin(DownRelayPin, PinMode.Output);
 
-            _controller.Write(UpRelayPin, PinValue.High);  //by default high
-            _controller.Write(DownRelayPin, PinValue.High);  //by default high
+            _controller.Write(UpRelayPin, PinValue.Low);  //by default high
+            _controller.Write(DownRelayPin, PinValue.Low);  //by default high
 
             Console.WriteLine("Default GPIO Initialized.");   
 
@@ -336,11 +336,11 @@ namespace BeerLiftModule
 
             try
             {
-                _controller.Write(UpRelayPin, PinValue.Low); // start action
+                _controller.Write(UpRelayPin, PinValue.High); // start action
              
                 await Task.Delay(UpDownInterval);
 
-                _controller.Write(UpRelayPin, PinValue.High); // stop action
+                _controller.Write(UpRelayPin, PinValue.Low); // stop action
 
                 Console.WriteLine($"Up at {DateTime.UtcNow}.");
             }
@@ -364,11 +364,11 @@ namespace BeerLiftModule
 
             try
             {
-                _controller.Write(DownRelayPin, PinValue.Low); // start action
+                _controller.Write(DownRelayPin, PinValue.High); // start action
              
                 await Task.Delay(UpDownInterval);
 
-                _controller.Write(DownRelayPin, PinValue.High); // stop action
+                _controller.Write(DownRelayPin, PinValue.Low); // stop action
 
                 Console.WriteLine($"Down at {DateTime.UtcNow}.");
             }

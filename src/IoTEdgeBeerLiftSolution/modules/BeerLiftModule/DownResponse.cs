@@ -1,6 +1,6 @@
 namespace BeerLiftModule
 {
-    public class OpenResponse 
+    public class DownResponse 
     {
         public int responseState { get; set; }
 

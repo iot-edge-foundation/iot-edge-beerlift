@@ -21,7 +21,7 @@ namespace BeerLiftModule
     {
         private const int DefaultInterval = 5000;
 
-        private const int DefaultOpenCloseInterval = 20000;
+        private const int DefaultUpDownInterval = 20000;
 
         private static byte lastDataPortA = 0;
 
@@ -31,10 +31,10 @@ namespace BeerLiftModule
         private static readonly int _deviceAddressRead = 0x20;
 
         // GPIO 17 which is physical pin 11
-        private static int DefaultR1Pin = 17;
+        private static int DefaultUpRelayPin = 17;
 
         // GPIO 27 is physical pin 13
-        private static int DefaultR2Pin = 27;
+        private static int DefaultDownRelayPin = 27;
 
         // GPIO 4 is used for 1-Wire
         private static int DefaultDht22Pin = 4;
@@ -109,26 +109,29 @@ namespace BeerLiftModule
 
             _controller = new GpioController();
 
-            _controller.OpenPin(R1Pin, PinMode.Output);
-            _controller.OpenPin(R2Pin, PinMode.Output);
+            _controller.OpenPin(UpRelayPin, PinMode.Output);
+            _controller.OpenPin(DownRelayPin, PinMode.Output);
+
+            _controller.Write(UpRelayPin, PinValue.High);  //by default high
+            _controller.Write(DownRelayPin, PinValue.High);  //by default high
 
             Console.WriteLine("Default GPIO Initialized.");   
 
             //// Direct methods
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
-                "Open",
-                OpenMethodCallBack,
+                "Up",
+                UpMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: Open");   
+            Console.WriteLine("Attached method handler: Up");   
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
-                "Close",
-                CloseMethodCallBack,
+                "Down",
+                DownMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: Close");   
+            Console.WriteLine("Attached method handler: Down");   
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
                 "Ambiant",
@@ -197,9 +200,9 @@ namespace BeerLiftModule
         }
 
         private static int Interval { get; set; } = DefaultInterval;
-        private static int OpenCloseInterval { get; set; } = DefaultOpenCloseInterval;
-        private static int R1Pin { get; set; } = DefaultR1Pin;
-        private static int R2Pin { get; set; } = DefaultR2Pin;
+        private static int UpDownInterval { get; set; } = DefaultUpDownInterval;
+        private static int UpRelayPin { get; set; } = DefaultUpRelayPin;
+        private static int DownRelayPin { get; set; } = DefaultDownRelayPin;
         private static int Dht22Pin { get; set; } = DefaultDht22Pin;
 
         private static Task onDesiredPropertiesUpdate(TwinCollection desiredProperties, object userContext)
@@ -239,52 +242,52 @@ namespace BeerLiftModule
                     reportedProperties["interval"] = Interval;
                 }
 
-                if (desiredProperties.Contains("openCloseInterval")) 
+                if (desiredProperties.Contains("upDownInterval")) 
                 {
-                    if (desiredProperties["openCloseInterval"] != null)
+                    if (desiredProperties["upDownInterval"] != null)
                     {
-                        OpenCloseInterval = desiredProperties["openCloseInterval"];
+                        UpDownInterval = desiredProperties["upDownInterval"];
                     }
                     else
                     {
-                        OpenCloseInterval = DefaultOpenCloseInterval;
+                        UpDownInterval = DefaultUpDownInterval;
                     }
 
-                    Console.WriteLine($"OpenCloseInterval changed to {OpenCloseInterval}");
+                    Console.WriteLine($"UpDownInterval changed to {UpDownInterval}");
 
-                    reportedProperties["openCloseInterval"] = OpenCloseInterval;
+                    reportedProperties["upDownInterval"] = UpDownInterval;
                 }
 
-                if (desiredProperties.Contains("r1Pin")) 
+                if (desiredProperties.Contains("upRelayPin")) 
                 {
-                    if (desiredProperties["r1Pin"] != null)
+                    if (desiredProperties["upRelayPin"] != null)
                     {
-                        R1Pin = desiredProperties["r1Pin"];
+                        UpRelayPin = desiredProperties["upRelayPin"];
                     }
                     else
                     {
-                        R1Pin = DefaultR1Pin;
+                        UpRelayPin = DefaultUpRelayPin;
                     }
 
-                    Console.WriteLine($"R1Pin changed to {R1Pin}");
+                    Console.WriteLine($"UpRelayPin changed to {UpRelayPin}");
 
-                    reportedProperties["r1Pin"] = R1Pin;
+                    reportedProperties["upRelayPin"] = UpRelayPin;
                 }
 
-                if (desiredProperties.Contains("r2Pin")) 
+                if (desiredProperties.Contains("downRelayPin")) 
                 {
-                    if (desiredProperties["r2Pin"] != null)
+                    if (desiredProperties["downRelayPin"] != null)
                     {
-                        R2Pin = desiredProperties["r2Pin"];
+                        DownRelayPin = desiredProperties["downRelayPin"];
                     }
                     else
                     {
-                        R2Pin = DefaultR2Pin;
+                        DownRelayPin = DefaultDownRelayPin;
                     }
 
-                    Console.WriteLine($"R2Pin changed to {R2Pin}");
+                    Console.WriteLine($"DownRelayPin changed to {DownRelayPin}");
 
-                    reportedProperties["r2Pin"] = R2Pin;
+                    reportedProperties["downRelayPin"] = DownRelayPin;
                 }
 
                 if (desiredProperties.Contains("dht22Pin")) 
@@ -325,57 +328,57 @@ namespace BeerLiftModule
             return Task.CompletedTask;
         }
 
-        static async Task<MethodResponse> OpenMethodCallBack(MethodRequest methodRequest, object userContext)        
+        static async Task<MethodResponse> UpMethodCallBack(MethodRequest methodRequest, object userContext)        
         {
-            Console.WriteLine($"Executing OpenMethodCallBack at {DateTime.UtcNow}");
+            Console.WriteLine($"Executing UpMethodCallBack at {DateTime.UtcNow}");
 
-            var openResponse = new OpenResponse{responseState = 0};
+            var upResponse = new UpResponse{responseState = 0};
 
             try
             {
-                _controller.Write(R1Pin, PinValue.Low);
+                _controller.Write(UpRelayPin, PinValue.Low); // start action
              
-                await Task.Delay(OpenCloseInterval);
+                await Task.Delay(UpDownInterval);
 
-                _controller.Write(R1Pin, PinValue.High);
+                _controller.Write(UpRelayPin, PinValue.High); // stop action
 
-                Console.WriteLine($"Opened at {DateTime.UtcNow}.");
+                Console.WriteLine($"Up at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
-                openResponse.errorMessage = ex.Message;   
-                openResponse.responseState = -999;
+                upResponse.errorMessage = ex.Message;   
+                upResponse.responseState = -999;
             }
 
-            var json = JsonConvert.SerializeObject(openResponse);
+            var json = JsonConvert.SerializeObject(upResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;
         } 
 
-        static async Task<MethodResponse> CloseMethodCallBack(MethodRequest methodRequest, object userContext)        
+        static async Task<MethodResponse> DownMethodCallBack(MethodRequest methodRequest, object userContext)        
         {
-            Console.WriteLine($"Executing CloseMethodCallBack at {DateTime.UtcNow}");
+            Console.WriteLine($"Executing DownMethodCallBack at {DateTime.UtcNow}");
 
-            var closeResponse = new CloseResponse{responseState = 0};
+            var downResponse = new DownResponse{responseState = 0};
 
             try
             {
-                _controller.Write(R2Pin, PinValue.Low);
+                _controller.Write(DownRelayPin, PinValue.Low); // start action
              
-                await Task.Delay(OpenCloseInterval);
+                await Task.Delay(UpDownInterval);
 
-                _controller.Write(R2Pin, PinValue.High);
+                _controller.Write(DownRelayPin, PinValue.High); // stop action
 
-                Console.WriteLine($"Closed at {DateTime.UtcNow}.");
+                Console.WriteLine($"Down at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
-                closeResponse.errorMessage = ex.Message;   
-                closeResponse.responseState = -999;
+                downResponse.errorMessage = ex.Message;   
+                downResponse.responseState = -999;
             }
             
-            var json = JsonConvert.SerializeObject(closeResponse);
+            var json = JsonConvert.SerializeObject(downResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;

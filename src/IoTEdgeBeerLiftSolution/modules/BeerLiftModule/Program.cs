@@ -99,11 +99,13 @@ namespace BeerLiftModule
             var twin = await ioTHubModuleClient.GetTwinAsync();
             await onDesiredPropertiesUpdate(twin.Properties.Desired, ioTHubModuleClient);
 
+            Console.WriteLine("Device twin initialized."); 
+
             await ioTHubModuleClient.OpenAsync();
 
             Console.WriteLine($"Module '{_deviceId}'-'{_moduleId}' initialized.");
 
-            Console.WriteLine("Attached routing output: output1"); 
+            Console.WriteLine("Attached routing output: output1."); 
 
             //// Initialize GPIO
 
@@ -112,10 +114,10 @@ namespace BeerLiftModule
             _controller.OpenPin(UpRelayPin, PinMode.Output);
             _controller.OpenPin(DownRelayPin, PinMode.Output);
 
-            _controller.Write(UpRelayPin, PinValue.Low);  //by default high
-            _controller.Write(DownRelayPin, PinValue.Low);  //by default high
+            _controller.Write(UpRelayPin, PinValue.High);  //by default high
+            _controller.Write(DownRelayPin, PinValue.High);  //by default high
 
-            Console.WriteLine("Default GPIO Initialized.");   
+            Console.WriteLine("Default GPIO relays Initialized.");   
 
             //// Direct methods
 
@@ -124,21 +126,21 @@ namespace BeerLiftModule
                 UpMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: Up");   
+            Console.WriteLine("Attached method handler: Up.");   
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
                 "Down",
                 DownMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: Down");   
+            Console.WriteLine("Attached method handler: Down.");   
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
                 "Ambiant",
                 AmbiantValuesMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: Ambiant");   
+            Console.WriteLine("Attached method handler: Ambiant.");   
 
             //// start reading beer state
 
@@ -336,11 +338,11 @@ namespace BeerLiftModule
 
             try
             {
-                _controller.Write(UpRelayPin, PinValue.High); // start action
+                _controller.Write(UpRelayPin, PinValue.Low); // start action
              
                 await Task.Delay(UpDownInterval);
 
-                _controller.Write(UpRelayPin, PinValue.Low); // stop action
+                _controller.Write(UpRelayPin, PinValue.High); // stop action
 
                 Console.WriteLine($"Up at {DateTime.UtcNow}.");
             }
@@ -364,11 +366,11 @@ namespace BeerLiftModule
 
             try
             {
-                _controller.Write(DownRelayPin, PinValue.High); // start action
+                _controller.Write(DownRelayPin, PinValue.Low); // start action
              
                 await Task.Delay(UpDownInterval);
 
-                _controller.Write(DownRelayPin, PinValue.Low); // stop action
+                _controller.Write(DownRelayPin, PinValue.High); // stop action
 
                 Console.WriteLine($"Down at {DateTime.UtcNow}.");
             }

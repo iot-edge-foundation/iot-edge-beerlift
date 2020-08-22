@@ -10,3 +10,6 @@ LINKS
 =====
 
 https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/bitwise-and-shift-operators
+
+
+Desired properies: als niet uit te lezen dan van reported overnemen en anders van default overnemen.

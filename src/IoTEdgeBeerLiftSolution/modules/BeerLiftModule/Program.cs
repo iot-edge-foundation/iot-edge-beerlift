@@ -19,6 +19,8 @@ namespace BeerLiftModule
 
     class Program
     {
+        private static Mcp23xxx _mcp23xxx;
+
         private static string _state = "unknown";
         private const int DefaultInterval = 5000;
 
@@ -148,10 +150,33 @@ namespace BeerLiftModule
 
             Console.WriteLine("Attached method handler: Ambiant.");   
 
+            SetupI2CRead();
+
             //// start reading beer state
 
             var thread = new Thread(() => ThreadBody(ioTHubModuleClient));
             thread.Start();
+        }
+
+        private static void SetupI2CRead()
+        {
+            var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressRead);
+            var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
+
+            _mcp23xxx = new Mcp23017(i2cDevice);
+
+            if (_mcp23xxx is Mcp23x1x mcp23x1x)
+            {
+                // Input direction for switches.
+                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
+                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
+
+                Console.WriteLine("Mcp23017 Read GPIO Initialized.");   
+            }
+            else
+            {
+                Console.WriteLine("Unable to initialize Mcp23017 Read GPIO.");   
+            }            
         }
 
         private static async void ThreadBody(object userContext)
@@ -163,49 +188,44 @@ namespace BeerLiftModule
                 throw new InvalidOperationException("UserContext doesn't contain " + "expected values");
             }
 
-            var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressRead);
-            var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
+            var  mcp23x1x = _mcp23xxx as Mcp23x1x;
 
-            using Mcp23xxx mcp23xxx = new Mcp23017(i2cDevice);
-
-            Console.WriteLine("Mcp23017 GPIO Initialized.");   
-
-            if (mcp23xxx is Mcp23x1x mcp23x1x)
+            if (mcp23x1x == null)
             {
-                // Input direction for switches.
-                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
-                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
+                Console.WriteLine("Unable to cast Mcp23017 Read GPIO.");   
 
-                while (true)
+                return;
+            }
+
+            while (true)
+            {
+                byte dataPortA = mcp23x1x.ReadByte(Register.GPIO, Port.PortA);
+                byte dataPortB = mcp23x1x.ReadByte(Register.GPIO, Port.PortB);
+
+                Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
+
+                if (dataPortA != _lastDataPortA
+                        || dataPortB != _lastDataPortB
+                        || _state != _lastState)
                 {
-                    byte dataPortA = mcp23x1x.ReadByte(Register.GPIO, Port.PortA);
-                    byte dataPortB = mcp23x1x.ReadByte(Register.GPIO, Port.PortB);
+                    _lastDataPortA = dataPortA;
+                    _lastDataPortB = dataPortB;
+                    _lastState = _state;
 
-                    Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
+                    var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
+                    var json = JsonConvert.SerializeObject(beerLiftMessage);
 
-                    if (dataPortA != _lastDataPortA
-                            || dataPortB != _lastDataPortB
-                            || _state != _lastState)
+                    using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
                     {
-                        _lastDataPortA = dataPortA;
-                        _lastDataPortB = dataPortB;
-                        _lastState = _state;
+                        pipeMessage.Properties.Add("StateLength", "16");
 
-                        var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
-                        var json = JsonConvert.SerializeObject(beerLiftMessage);
+                        await client.SendEventAsync("output1", pipeMessage);
 
-                        using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
-                        {
-                            pipeMessage.Properties.Add("StateLength", "16");
-
-                            await client.SendEventAsync("output1", pipeMessage);
-
-                            Console.WriteLine($"Message sent: {beerLiftMessage}");
-                        }
+                        Console.WriteLine($"Message sent: {beerLiftMessage}");
                     }
-
-                    await Task.Delay(Interval);
                 }
+
+                await Task.Delay(Interval);
             }
         }
 

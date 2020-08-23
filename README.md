@@ -96,7 +96,7 @@ The following direct methods are available:
 
 *Note* Method names are case sensitive
 
-#### Up
+#### Direct Method - Up
 
 No JSON body needed to be send.
 
@@ -114,7 +114,7 @@ class UpResponse
 }
 ```
 
-### Down
+### Direct Method - Down
 
 No JSON body needed to be send.
 
@@ -132,7 +132,7 @@ class DownResponse
 }
 ```
 
-### Ambiant
+### Direct Method - Ambiant
 
 No JSON body needed to be send.
 
@@ -154,6 +154,72 @@ class AmbiantValuesResponse
     string State {get; set;}
 }
 ```
+
+## Module Twin
+
+The module is configurable using the desired properties of the module twin:
+
+* interval (in milliseconds, default 5000)
+* upDownInterval (in milliseconds, default 20000)
+* upRelayPin (default pin 17)
+* downRelayPin (default pin 27)
+* dht22Pin (default pin 4)
+
+# Raspberry Pi
+
+## Operating system 
+
+We run the lastest Raspbian version, Buster. 
+
+A version two of the Raspberry PI will work too. 
+
+## Azure IoT Edge
+
+Azure IoT Edge is the perfect solution for our controller unit. We are able to program in C# .Net Core 3.1 and access the GPIO of the Raspberry PI.
+
+For this we need to run the module with elevated rights using these Container Create Options:
+
+```
+{
+    "HostConfig": {
+        "Privileged": true
+    }
+}
+```
+
+## Raspberry PI configuration
+
+### SSH
+
+Because the Raspberry PI will work headless, a fixed IP address comes in handy for SSH.
+
+If you have installed Buster with a dashboard, SSH can be configured in the "Raspberry Pi Configuration" application, on the interfaces page.
+
+This has only to be done once.
+
+### GPIO configuration
+
+We will use both the I2C and 1-Wire GPIO busses. These have to be activated before these are available.
+
+I2C and 1-Wire can be configured in the "Raspberry Pi Configuration" application, on the interfaces page. Please reboot the Raspberry PI afterwards. 
+
+This has only to be done once.
+
+### I2C detect
+
+In this configuration, we use two I2C addresses: 0x20 (for switch input) and 0x22 (for led output).
+
+If you are not sure about your configuration, please check:
+
+```
+sudo i2cdetect -y 1
+```
+
+# Safety
+
+Please be aware this beer lift is operating on 220 Volts.
+
+**If you are not confident with this voltage or with the materials used, please do not attempt this at home**
 
 # Links
 

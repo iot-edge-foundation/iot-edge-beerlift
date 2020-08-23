@@ -37,6 +37,11 @@ namespace BeerLiftModule
             BeerState16 = (stateB & 128) == 128;
         }
 
+        public BeerLiftMessage(int stateA, int stateB, string state) : this(stateA, stateB)
+        {
+            State = state;
+        }
+
         public bool BeerState01 {get; set;}
         public bool BeerState02 {get; set;}
         public bool BeerState03 {get; set;}
@@ -55,9 +60,11 @@ namespace BeerLiftModule
         public bool BeerState16 {get; set;}
         DateTime Timestamp {get; set;}
 
+        string State {get; set;}
+
         public override string ToString()
         {
-            return $"A:{_stateA} - B:{_stateB}";
+            return $"A:{_stateA} - B:{_stateB} - state:{State}";
         }  
     }
 }

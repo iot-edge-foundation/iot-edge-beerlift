@@ -19,13 +19,16 @@ namespace BeerLiftModule
 
     class Program
     {
+        private static string _state = "unknown";
         private const int DefaultInterval = 5000;
 
         private const int DefaultUpDownInterval = 20000;
 
-        private static byte lastDataPortA = 0;
+        private static string _lastState;
 
-        private static byte lastDataPortB = 0;
+        private static byte _lastDataPortA = 0;
+
+        private static byte _lastDataPortB = 0;
 
         // I2C Read banks at 0x20
         private static readonly int _deviceAddressRead = 0x20;
@@ -177,13 +180,15 @@ namespace BeerLiftModule
 
                     Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
 
-                    if (dataPortA != lastDataPortA || 
-                            dataPortB != lastDataPortB)
+                    if (dataPortA != _lastDataPortA
+                            || dataPortB != _lastDataPortB
+                            || _state != _lastState)
                     {
-                        lastDataPortA = dataPortA;
-                        lastDataPortB = dataPortB;
+                        _lastDataPortA = dataPortA;
+                        _lastDataPortB = dataPortB;
+                        _lastState = _state;
 
-                        var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB);
+                        var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
                         var json = JsonConvert.SerializeObject(beerLiftMessage);
 
                         using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
@@ -338,6 +343,8 @@ namespace BeerLiftModule
 
             try
             {
+                _state = "Moving up";
+
                 _controller.Write(UpRelayPin, PinValue.Low); // start action
              
                 await Task.Delay(UpDownInterval);
@@ -345,9 +352,13 @@ namespace BeerLiftModule
                 _controller.Write(UpRelayPin, PinValue.High); // stop action
 
                 Console.WriteLine($"Up at {DateTime.UtcNow}.");
+
+                _state = "Up";
             }
             catch (Exception ex)
             {
+                _state = "Exception up";
+
                 upResponse.errorMessage = ex.Message;   
                 upResponse.responseState = -999;
             }
@@ -366,6 +377,8 @@ namespace BeerLiftModule
 
             try
             {
+                _state = "Moving down";
+
                 _controller.Write(DownRelayPin, PinValue.Low); // start action
              
                 await Task.Delay(UpDownInterval);
@@ -373,9 +386,13 @@ namespace BeerLiftModule
                 _controller.Write(DownRelayPin, PinValue.High); // stop action
 
                 Console.WriteLine($"Down at {DateTime.UtcNow}.");
+
+                _state = "Down";
             }
             catch (Exception ex)
             {
+                _state = "Exception down";
+
                 downResponse.errorMessage = ex.Message;   
                 downResponse.responseState = -999;
             }

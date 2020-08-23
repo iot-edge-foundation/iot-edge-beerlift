@@ -19,7 +19,9 @@ namespace BeerLiftModule
 
     class Program
     {
-        private static Mcp23xxx _mcp23xxx;
+        private static Mcp23xxx _mcp23xxxRead;
+
+        private static Mcp23xxx _mcp23xxxWrite;
 
         private static string _state = "unknown";
         private const int DefaultInterval = 5000;
@@ -36,7 +38,7 @@ namespace BeerLiftModule
         private static readonly int _deviceAddressRead = 0x20;
 
         // I2C Read banks at 0x22
-        //private static readonly int _deviceAddressWrite = 0x22;
+        private static readonly int _deviceAddressWrite = 0x22;
 
         // GPIO 17 which is physical pin 11
         private static int DefaultUpRelayPin = 17;
@@ -150,7 +152,16 @@ namespace BeerLiftModule
 
             Console.WriteLine("Attached method handler: Ambiant.");   
 
+            await ioTHubModuleClient.SetMethodHandlerAsync(
+                "Circus",
+                CircusMethodCallBack,
+                ioTHubModuleClient);
+
+            Console.WriteLine("Attached method handler: Circus.");   
+
             SetupI2CRead();
+
+            SetupI2CWrite();
 
             //// start reading beer state
 
@@ -163,9 +174,9 @@ namespace BeerLiftModule
             var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressRead);
             var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
 
-            _mcp23xxx = new Mcp23017(i2cDevice);
+            _mcp23xxxRead = new Mcp23017(i2cDevice);
 
-            if (_mcp23xxx is Mcp23x1x mcp23x1x)
+            if (_mcp23xxxRead is Mcp23x1x mcp23x1x)
             {
                 // Input direction for switches.
                 mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
@@ -179,6 +190,27 @@ namespace BeerLiftModule
             }            
         }
 
+        private static void SetupI2CWrite()
+        {
+            var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressWrite);
+            var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
+
+            _mcp23xxxWrite = new Mcp23017(i2cDevice);
+
+            if (_mcp23xxxWrite is Mcp23x1x mcp23x1x)
+            {
+                // Input direction for Leds.
+                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
+                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
+
+                Console.WriteLine("Mcp23017 Write GPIO Initialized.");   
+            }
+            else
+            {
+                Console.WriteLine("Unable to initialize Mcp23017 Write GPIO.");   
+            }            
+        }
+
         private static async void ThreadBody(object userContext)
         {
             var client = userContext as ModuleClient;
@@ -188,7 +220,7 @@ namespace BeerLiftModule
                 throw new InvalidOperationException("UserContext doesn't contain " + "expected values");
             }
 
-            var  mcp23x1x = _mcp23xxx as Mcp23x1x;
+            var  mcp23x1x = _mcp23xxxRead as Mcp23x1x;
 
             if (mcp23x1x == null)
             {
@@ -426,7 +458,52 @@ namespace BeerLiftModule
             return response;
         }   
 
-        
+        private static async Task<MethodResponse> CircusMethodCallBack(MethodRequest methodRequest, object userContext)    
+        {
+            Console.WriteLine($"Executing CircusMethodCallBack at {DateTime.UtcNow}");
+
+            var circusResponse = new CircusResponse{responseState = 0};
+
+            try
+            {
+                var  mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("Unable to cast Mcp23017 Read GPIO.");   
+
+                    circusResponse.errorMessage = "Unable to cast Mcp23017 Read GPIO";   
+                    circusResponse.responseState = 1;
+                }
+                else
+                {
+                    for(var i = 0; i< 256; i++)
+                    {
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) i , Port.PortA);
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) i, Port.PortB);
+
+                        await Task.Delay(20);
+
+                        Console.Write($".{i}");   
+                    }  
+
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine($"Circus at {DateTime.UtcNow}.");
+            }
+            catch (Exception ex)
+            {
+                circusResponse.errorMessage = ex.Message;   
+                circusResponse.responseState = -999;
+            }
+            
+            var json = JsonConvert.SerializeObject(circusResponse);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+
+            return response;                
+        }
+
        static async Task<MethodResponse> AmbiantValuesMethodCallBack(MethodRequest methodRequest, object userContext)        
         {
             Console.WriteLine($"Executing AmbiantValuesMethodCallBack at {DateTime.UtcNow}");
@@ -480,6 +557,6 @@ namespace BeerLiftModule
             }
 
             return ambiantValues;
-        }     
+        } 
     }
 }

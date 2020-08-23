@@ -9,5 +9,7 @@ namespace BeerLiftModule
         public double Temperature {get; set;}
 
         public double Humidity {get; set;}
+
+        public string State {get; set;}
     }
 }

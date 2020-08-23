@@ -58,9 +58,8 @@ namespace BeerLiftModule
         public bool BeerState14 {get; set;}
         public bool BeerState15 {get; set;}
         public bool BeerState16 {get; set;}
-        DateTime Timestamp {get; set;}
-
-        string State {get; set;}
+        public DateTime Timestamp {get; set;}
+        public string State {get; set;}
 
         public override string ToString()
         {

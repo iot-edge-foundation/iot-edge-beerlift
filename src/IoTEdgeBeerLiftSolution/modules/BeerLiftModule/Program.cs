@@ -416,10 +416,11 @@ namespace BeerLiftModule
             
                 ambiantValuesResponse.Temperature = ambiantValues.Temperature;
                 ambiantValuesResponse.Humidity = ambiantValues.Humidity;
+                ambiantValuesResponse.State = _state;
 
-                await Task.Delay(10);    
+                await Task.Delay(1);    
 
-                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow} - Temperature:{ambiantValuesResponse.Temperature} / Humidity:{ambiantValuesResponse.Humidity} / Attempts:{ambiantValues.Attempts}.");
+                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow} - Temperature:{ambiantValuesResponse.Temperature} / Humidity:{ambiantValuesResponse.Humidity} / Attempts:{ambiantValues.Attempts} / State:{_state}.");
             }
             catch (Exception ex)
             {

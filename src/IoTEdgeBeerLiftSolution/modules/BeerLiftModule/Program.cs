@@ -33,6 +33,9 @@ namespace BeerLiftModule
         // I2C Read banks at 0x20
         private static readonly int _deviceAddressRead = 0x20;
 
+        // I2C Read banks at 0x22
+        //private static readonly int _deviceAddressWrite = 0x22;
+
         // GPIO 17 which is physical pin 11
         private static int DefaultUpRelayPin = 17;
 

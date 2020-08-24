@@ -18,23 +18,23 @@ namespace BeerLiftModule
             _stateA = stateA;
             _stateB = stateB;
             
-            BeerState01 = (stateA & 1) == 1;
-            BeerState02 = (stateA & 2) == 2;
-            BeerState03 = (stateA & 4) == 4;
-            BeerState04 = (stateA & 8) == 8;
-            BeerState05 = (stateA & 16) == 16;
-            BeerState06 = (stateA & 32) == 32;
-            BeerState07 = (stateA & 64) == 64;
-            BeerState08 = (stateA & 128) == 128;
+            Slot01 = (stateA & 1) == 1;
+            Slot02 = (stateA & 2) == 2;
+            Slot03 = (stateA & 4) == 4;
+            Slot04 = (stateA & 8) == 8;
+            Slot05 = (stateA & 16) == 16;
+            Slot06 = (stateA & 32) == 32;
+            Slot07 = (stateA & 64) == 64;
+            Slot08 = (stateA & 128) == 128;
 
-            BeerState09 = (stateB & 1) == 1;
-            BeerState10 = (stateB & 2) == 2;
-            BeerState11 = (stateB & 4) == 4;
-            BeerState12 = (stateB & 8) == 8;
-            BeerState13 = (stateB & 16) == 16;
-            BeerState14 = (stateB & 32) == 32;
-            BeerState15 = (stateB & 64) == 64;
-            BeerState16 = (stateB & 128) == 128;
+            Slot09 = (stateB & 1) == 1;
+            Slot10 = (stateB & 2) == 2;
+            Slot11 = (stateB & 4) == 4;
+            Slot12 = (stateB & 8) == 8;
+            Slot13 = (stateB & 16) == 16;
+            Slot14 = (stateB & 32) == 32;
+            Slot15 = (stateB & 64) == 64;
+            Slot16 = (stateB & 128) == 128;
         }
 
         public BeerLiftMessage(int stateA, int stateB, string state) : this(stateA, stateB)
@@ -42,22 +42,22 @@ namespace BeerLiftModule
             State = state;
         }
 
-        public bool BeerState01 {get; set;}
-        public bool BeerState02 {get; set;}
-        public bool BeerState03 {get; set;}
-        public bool BeerState04 {get; set;}
-        public bool BeerState05 {get; set;}
-        public bool BeerState06 {get; set;}
-        public bool BeerState07 {get; set;}
-        public bool BeerState08 {get; set;}
-        public bool BeerState09 {get; set;}
-        public bool BeerState10 {get; set;}
-        public bool BeerState11 {get; set;}
-        public bool BeerState12 {get; set;}
-        public bool BeerState13 {get; set;}
-        public bool BeerState14 {get; set;}
-        public bool BeerState15 {get; set;}
-        public bool BeerState16 {get; set;}
+        public bool Slot01 {get; set;}
+        public bool Slot02 {get; set;}
+        public bool Slot03 {get; set;}
+        public bool Slot04 {get; set;}
+        public bool Slot05 {get; set;}
+        public bool Slot06 {get; set;}
+        public bool Slot07 {get; set;}
+        public bool Slot08 {get; set;}
+        public bool Slot09 {get; set;}
+        public bool Slot10 {get; set;}
+        public bool Slot11 {get; set;}
+        public bool Slot12 {get; set;}
+        public bool Slot13 {get; set;}
+        public bool Slot14 {get; set;}
+        public bool Slot15 {get; set;}
+        public bool Slot16 {get; set;}
         public DateTime Timestamp {get; set;}
         public string State {get; set;}
 

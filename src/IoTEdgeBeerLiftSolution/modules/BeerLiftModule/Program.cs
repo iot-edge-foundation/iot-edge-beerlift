@@ -159,6 +159,13 @@ namespace BeerLiftModule
 
             Console.WriteLine("Attached method handler: Circus.");   
 
+            await ioTHubModuleClient.SetMethodHandlerAsync(
+                "FirstEmptySpot",
+                FirstEmptySpotMethodCallBack,
+                ioTHubModuleClient);
+
+            Console.WriteLine("Attached method handler: FirstEmptySpot.");   
+
             SetupI2CRead();
 
             SetupI2CWrite();
@@ -458,6 +465,70 @@ namespace BeerLiftModule
             return response;
         }   
 
+        private static async Task<MethodResponse> FirstEmptySpotMethodCallBack(MethodRequest methodRequest, object userContext)
+        {
+            Console.WriteLine($"Executing FirstEmptySpotMethodCallBack at {DateTime.UtcNow}");
+
+            var firstEmptySpotResponse = new FirstEmptySpotResponse{responseState = 0};
+
+            try
+            {
+                var beerLiftMessage = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
+
+                firstEmptySpotResponse.FindFirstEmpty = beerLiftMessage.FindFirstEmptySpot();
+
+                var  mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("Unable to cast Mcp23017 Read GPIO.");   
+
+                    firstEmptySpotResponse.errorMessage = "Unable to cast Mcp23017 Read GPIO";   
+                    firstEmptySpotResponse.responseState = 1;
+                }
+                else
+                {
+                    for(var i = 0; i<25 ; i++)
+                    {
+                        if (firstEmptySpotResponse.FindFirstEmpty == 0)
+                        {
+                            Console.WriteLine("Skip blink");
+                            continue;
+                        }
+
+                        // blink led on i % 2 on else off
+
+                        if (firstEmptySpotResponse.FindFirstEmpty <= 8)
+                        {
+                            var j = (i % 2) == Math.Pow(2, firstEmptySpotResponse.FindFirstEmpty) ? 1 : 0;
+                            mcp23x1x.WriteByte(Register.GPIO, (byte) j , Port.PortA);
+                        }
+                        else
+                        {
+                            var j = (i % 2) == Math.Pow(2, firstEmptySpotResponse.FindFirstEmpty - 8) ? 1 : 0;
+                            mcp23x1x.WriteByte(Register.GPIO, (byte) j, Port.PortB);
+                        }
+
+                        await Task.Delay(100);
+                    }
+
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine($"FirstEmptySpot at {DateTime.UtcNow}.");
+            }
+            catch (Exception ex)
+            {
+                firstEmptySpotResponse.errorMessage = ex.Message;   
+                firstEmptySpotResponse.responseState = -999;
+            }
+            
+            var json = JsonConvert.SerializeObject(firstEmptySpotResponse);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+
+            return response;  
+        }
+
         private static async Task<MethodResponse> CircusMethodCallBack(MethodRequest methodRequest, object userContext)    
         {
             Console.WriteLine($"Executing CircusMethodCallBack at {DateTime.UtcNow}");
@@ -477,6 +548,11 @@ namespace BeerLiftModule
                 }
                 else
                 {
+                    Console.WriteLine("Ra da da da da da da da Circus");
+                    Console.WriteLine("Da da da da da da da da");
+                    Console.WriteLine("Afro Circus, Afro Circus, Afro");
+                    Console.WriteLine("Polka dot, polka dot, polka dot, Afro!");
+
                     for(var i = 0; i< 256; i++)
                     {
                         mcp23x1x.WriteByte(Register.GPIO, (byte) i , Port.PortA);

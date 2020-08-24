@@ -65,5 +65,27 @@ namespace BeerLiftModule
         {
             return $"A:{_stateA} - B:{_stateB} - state:{State}";
         }  
+
+        public int FindFirstEmptySpot()
+        {
+            if (!Slot01) return 1;
+            if (!Slot02) return 2;
+            if (!Slot03) return 3;
+            if (!Slot04) return 4;
+            if (!Slot05) return 5;
+            if (!Slot06) return 6;
+            if (!Slot07) return 7;
+            if (!Slot08) return 8;
+            if (!Slot09) return 9;
+            if (!Slot10) return 10;
+            if (!Slot11) return 11;
+            if (!Slot12) return 12;
+            if (!Slot13) return 13;
+            if (!Slot14) return 14;
+            if (!Slot15) return 15;
+            if (!Slot16) return 16;
+
+            return 0;
+        }
     }
 }

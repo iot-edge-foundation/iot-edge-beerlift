@@ -173,6 +173,16 @@ We run the lastest Raspbian version, Buster.
 
 A version two of the Raspberry PI will work too. 
 
+## installing Azure IoT Edge
+
+Follow this [description](https://docs.microsoft.com/en-us/azure/iot-edge/support#tier-2) to make it possible to install Azure IoT Edge on Buster:
+
+```
+sudo apt-get install libssl1.0.2
+```
+
+After that, perform the regular [installation](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-linux) on Buster.
+
 ## Azure IoT Edge
 
 Azure IoT Edge is the perfect solution for our controller unit. We are able to program in C# .Net Core 3.1 and access the GPIO of the Raspberry PI.

@@ -65,22 +65,22 @@ Message:
 ```
 class BeerLiftMessage
 {
-    bool BeerState01 {get; set;}
-    bool BeerState02 {get; set;}
-    bool BeerState03 {get; set;}
-    bool BeerState04 {get; set;}
-    bool BeerState05 {get; set;}
-    bool BeerState06 {get; set;}
-    bool BeerState07 {get; set;}
-    bool BeerState08 {get; set;}
-    bool BeerState09 {get; set;}
-    bool BeerState10 {get; set;}
-    bool BeerState11 {get; set;}
-    bool BeerState12 {get; set;}
-    bool BeerState13 {get; set;}
-    bool BeerState14 {get; set;}
-    bool BeerState15 {get; set;}
-    bool BeerState16 {get; set;}
+    public bool Slot01 {get; set;}
+    public bool Slot02 {get; set;}
+    public bool Slot03 {get; set;}
+    public bool Slot04 {get; set;}
+    public bool Slot05 {get; set;}
+    public bool Slot06 {get; set;}
+    public bool Slot07 {get; set;}
+    public bool Slot08 {get; set;}
+    public bool Slot09 {get; set;}
+    public bool Slot10 {get; set;}
+    public bool Slot11 {get; set;}
+    public bool Slot12 {get; set;}
+    public bool Slot13 {get; set;}
+    public bool Slot14 {get; set;}
+    public bool Slot15 {get; set;}
+    public bool Slot16 {get; set;}
     DateTime Timestamp {get; set;}
     string State {get; set;}
 }

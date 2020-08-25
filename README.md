@@ -93,6 +93,7 @@ The following direct methods are available:
 * Up
 * Down
 * Ambiant
+* Circus
 
 *Note* Method names are case sensitive
 
@@ -155,6 +156,24 @@ class AmbiantValuesResponse
 }
 ```
 
+### Direct Method - Circus
+
+No JSON body needed to be send.
+
+Lits up the LED lights in a semi-random pattern for a few seconds.
+
+Response:
+
+```
+class AmbiantValuesResponse 
+{
+    int responseState { get; set; }
+    string errorMessage { get; set; }
+}
+```
+
+*Note*: Enjoy the show.
+
 ## Module Twin
 
 The module is configurable using the desired properties of the module twin:
@@ -181,7 +200,9 @@ Follow this [description](https://docs.microsoft.com/en-us/azure/iot-edge/suppor
 sudo apt-get install libssl1.0.2
 ```
 
-After that, perform the regular [installation](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-linux) on Buster.
+After that, perform the regular [installation](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-linux) on Buster. 
+
+*Note*: The installation guide is referring to Raspbian Stretch but that is applicable to Buster too.
 
 ## Azure IoT Edge
 

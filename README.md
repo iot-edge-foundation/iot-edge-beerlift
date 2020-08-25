@@ -93,6 +93,7 @@ The following direct methods are available:
 * Up
 * Down
 * Ambiant
+* Circus
 
 *Note* Method names are case sensitive
 
@@ -154,6 +155,24 @@ class AmbiantValuesResponse
     string State {get; set;}
 }
 ```
+
+### Direct Method - Circus
+
+No JSON body needed to be send.
+
+Lits up the LED lights in a semi-random pattern for a few seconds.
+
+Response:
+
+```
+class AmbiantValuesResponse 
+{
+    int responseState { get; set; }
+    string errorMessage { get; set; }
+}
+```
+
+*Note*: Enjoy the show.
 
 ## Module Twin
 

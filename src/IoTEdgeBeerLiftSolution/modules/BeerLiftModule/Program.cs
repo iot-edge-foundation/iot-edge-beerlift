@@ -19,9 +19,9 @@ namespace BeerLiftModule
 
     class Program
     {
-        private static Mcp23xxx _mcp23xxxRead;
+        private static Mcp23xxx _mcp23xxxRead = null;
 
-        private static Mcp23xxx _mcp23xxxWrite;
+        private static Mcp23xxx _mcp23xxxWrite = null;
 
         private static string _state = "unknown";
         private const int DefaultInterval = 5000;
@@ -171,51 +171,67 @@ namespace BeerLiftModule
             SetupI2CWrite();
 
             //// start reading beer state
-
-            var thread = new Thread(() => ThreadBody(ioTHubModuleClient));
-            thread.Start();
+            if (_mcp23xxxRead != null)
+            {
+                var thread = new Thread(() => ThreadBody(ioTHubModuleClient));
+                thread.Start();
+            }
         }
 
         private static void SetupI2CRead()
         {
-            var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressRead);
-            var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
-
-            _mcp23xxxRead = new Mcp23017(i2cDevice);
-
-            if (_mcp23xxxRead is Mcp23x1x mcp23x1x)
+            try
             {
-                // Input direction for switches.
-                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
-                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
+                var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressRead);
+                var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
 
-                Console.WriteLine("Mcp23017 Read GPIO Initialized.");   
-            }
-            else
+                _mcp23xxxRead = new Mcp23017(i2cDevice);
+
+                if (_mcp23xxxRead is Mcp23x1x mcp23x1x)
+                {
+                    // Input direction for switches.
+                    mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
+                    mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
+
+                    Console.WriteLine("Mcp23017 Read GPIO Initialized.");   
+                }
+                else
+                {
+                    Console.WriteLine("Unable to initialize Mcp23017 Read GPIO.");   
+                }    
+            }  
+            catch (Exception ex)
             {
-                Console.WriteLine("Unable to initialize Mcp23017 Read GPIO.");   
-            }            
+                Console.WriteLine($"Error when initializing Mcp23017 Read GPIO: {ex.Message}");   
+            }         
         }
 
         private static void SetupI2CWrite()
         {
-            var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressWrite);
-            var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
-
-            _mcp23xxxWrite = new Mcp23017(i2cDevice);
-
-            if (_mcp23xxxWrite is Mcp23x1x mcp23x1x)
+            try
             {
-                // Input direction for Leds.
-                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
-                mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
+                var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressWrite);
+                var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
 
-                Console.WriteLine("Mcp23017 Write GPIO Initialized.");   
-            }
-            else
+                _mcp23xxxWrite = new Mcp23017(i2cDevice);
+
+                if (_mcp23xxxWrite is Mcp23x1x mcp23x1x)
+                {
+                    // Input direction for Leds.
+                    mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
+                    mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
+
+                    Console.WriteLine("Mcp23017 Write GPIO Initialized.");   
+                }
+                else
+                {
+                    Console.WriteLine("Unable to initialize Mcp23017 Write GPIO.");   
+                }
+            }  
+            catch (Exception ex)
             {
-                Console.WriteLine("Unable to initialize Mcp23017 Write GPIO.");   
-            }            
+                Console.WriteLine($"Error when initializing Mcp23017 Write GPIO: {ex.Message}");   
+            }          
         }
 
         private static async void ThreadBody(object userContext)
@@ -488,7 +504,7 @@ namespace BeerLiftModule
                 }
                 else
                 {
-                    for(var i = 0; i<25 ; i++)
+                    for (var i = 0; i<25 ; i++)
                     {
                         if (firstEmptySpotResponse.FindFirstEmpty == 0)
                         {

@@ -16,6 +16,7 @@ namespace BeerLiftModule
     using Iot.Device.Mcp23xxx;
     using Microsoft.Azure.Devices.Shared;
     using Iot.Device.DHTxx;
+    using System.Globalization;
 
     class Program
     {
@@ -28,26 +29,25 @@ namespace BeerLiftModule
 
         private const int DefaultUpDownInterval = 20000;
 
+        // GPIO 17 which is physical pin 11
+        private const int DefaultUpRelayPin = 17;
+
+        // GPIO 27 is physical pin 13
+        private const int DefaultDownRelayPin = 27;
+
+        // GPIO 4 is used for 1-Wire
+        private const int DefaultDht22Pin = 4;
+
+        private const int DefaultI2CAddressRead = 0x20;
+
+        // I2C Read banks at 0x22
+        private const int DefaultI2CAddressWrite = 0x22;
+
         private static string _lastState;
 
         private static byte _lastDataPortA = 0;
 
         private static byte _lastDataPortB = 0;
-
-        // I2C Read banks at 0x20
-        private static readonly int _deviceAddressRead = 0x20;
-
-        // I2C Read banks at 0x22
-        private static readonly int _deviceAddressWrite = 0x22;
-
-        // GPIO 17 which is physical pin 11
-        private static int DefaultUpRelayPin = 17;
-
-        // GPIO 27 is physical pin 13
-        private static int DefaultDownRelayPin = 27;
-
-        // GPIO 4 is used for 1-Wire
-        private static int DefaultDht22Pin = 4;
 
         private static GpioController _controller;
 
@@ -182,7 +182,7 @@ namespace BeerLiftModule
         {
             try
             {
-                var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressRead);
+                var i2cConnectionSettings = new I2cConnectionSettings(1, I2CAddressRead);
                 var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
 
                 _mcp23xxxRead = new Mcp23017(i2cDevice);
@@ -193,16 +193,16 @@ namespace BeerLiftModule
                     mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
                     mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
 
-                    Console.WriteLine("Mcp23017 Read GPIO Initialized.");   
+                    Console.WriteLine("Mcp23017 Read Initialized.");   
                 }
                 else
                 {
-                    Console.WriteLine("Unable to initialize Mcp23017 Read GPIO.");   
+                    Console.WriteLine("Unable to initialize Mcp23017 Read.");   
                 }    
             }  
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when initializing Mcp23017 Read GPIO: {ex.Message}");   
+                Console.WriteLine($"Error when initializing Mcp23017 at Read address {I2CAddressRead}: {ex.Message}");   
             }         
         }
 
@@ -210,7 +210,7 @@ namespace BeerLiftModule
         {
             try
             {
-                var i2cConnectionSettings = new I2cConnectionSettings(1, _deviceAddressWrite);
+                var i2cConnectionSettings = new I2cConnectionSettings(1, I2CAddressWrite);
                 var i2cDevice = I2cDevice.Create(i2cConnectionSettings);
 
                 _mcp23xxxWrite = new Mcp23017(i2cDevice);
@@ -221,16 +221,16 @@ namespace BeerLiftModule
                     mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
                     mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
 
-                    Console.WriteLine("Mcp23017 Write GPIO Initialized.");   
+                    Console.WriteLine("Mcp23017 Write Initialized.");   
                 }
                 else
                 {
-                    Console.WriteLine("Unable to initialize Mcp23017 Write GPIO.");   
+                    Console.WriteLine("Unable to initialize Mcp23017 Write.");   
                 }
             }  
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when initializing Mcp23017 Write GPIO: {ex.Message}");   
+                Console.WriteLine($"Error when initializing Mcp23017 at Write address {I2CAddressWrite}: {ex.Message}");   
             }          
         }
 
@@ -289,6 +289,8 @@ namespace BeerLiftModule
         private static int UpRelayPin { get; set; } = DefaultUpRelayPin;
         private static int DownRelayPin { get; set; } = DefaultDownRelayPin;
         private static int Dht22Pin { get; set; } = DefaultDht22Pin;
+        private static int I2CAddressRead { get; set; } = DefaultI2CAddressRead;
+        private static int I2CAddressWrite { get; set; } = DefaultI2CAddressWrite;
 
         private static Task onDesiredPropertiesUpdate(TwinCollection desiredProperties, object userContext)
         {
@@ -389,6 +391,42 @@ namespace BeerLiftModule
                     Console.WriteLine($"Dht22Pin changed to {Dht22Pin}");
 
                     reportedProperties["dht22Pin"] = Dht22Pin;
+                }
+
+                if (desiredProperties.Contains("i2cAddressRead")) 
+                {
+                    if (desiredProperties["i2cAddressRead"] != null)
+                    {
+                        string prop = desiredProperties["i2cAddressRead"];
+
+                        I2CAddressRead = Int32.Parse(prop.ToLower().Split('x')[1], NumberStyles.HexNumber);
+                    }
+                    else
+                    {
+                        I2CAddressRead = DefaultI2CAddressRead;
+                    }
+
+                    Console.WriteLine($"I2CAddressRead changed to {Dht22Pin}");
+
+                    reportedProperties["i2cAddressRead"] = Dht22Pin;
+                }
+
+                if (desiredProperties.Contains("i2cAddressWrite")) 
+                {
+                    if (desiredProperties["i2cAddressWrite"] != null)
+                    {
+                        string prop = desiredProperties["i2cAddressWrite"];
+
+                        I2CAddressRead = Int32.Parse(prop.ToLower().Split('x')[1], NumberStyles.HexNumber);
+                    }
+                    else
+                    {
+                        I2CAddressRead = DefaultI2CAddressWrite;
+                    }
+
+                    Console.WriteLine($"I2CAddressWrite changed to {Dht22Pin}");
+
+                    reportedProperties["i2cAddressWrite"] = Dht22Pin;
                 }
 
                 if (reportedProperties.Count > 0)

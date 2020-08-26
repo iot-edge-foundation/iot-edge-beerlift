@@ -407,7 +407,7 @@ namespace BeerLiftModule
                     }
 
                     Console.WriteLine($"I2CAddressRead changed to 0x{I2CAddressRead:X4}");
-                    Console.WriteLine($"Restart module to access new address");
+                    Console.WriteLine($"Restart module to access new address.");
 
                     reportedProperties["i2cAddressRead"] = I2CAddressRead;
                 }
@@ -418,15 +418,15 @@ namespace BeerLiftModule
                     {
                         string prop = desiredProperties["i2cAddressWrite"];
 
-                        I2CAddressRead = Int32.Parse(prop.ToLower().Split('x')[1], NumberStyles.HexNumber);
+                        I2CAddressWrite = Int32.Parse(prop.ToLower().Split('x')[1], NumberStyles.HexNumber);
                     }
                     else
                     {
-                        I2CAddressRead = DefaultI2CAddressWrite;
+                        I2CAddressWrite = DefaultI2CAddressWrite;
                     }
 
-                    Console.WriteLine($"I2CAddressRead changed to 0x{I2CAddressWrite:X4}");
-                    Console.WriteLine($"Restart module to access new address");
+                    Console.WriteLine($"I2CAddressWrite changed to 0x{I2CAddressWrite:X4}");
+                    Console.WriteLine($"Restart module to access new address.");
 
                     reportedProperties["i2cAddressWrite"] = I2CAddressWrite;
                 }

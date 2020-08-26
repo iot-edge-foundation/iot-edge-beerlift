@@ -202,7 +202,7 @@ namespace BeerLiftModule
             }  
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when initializing Mcp23017 at Read address {I2CAddressRead}: {ex.Message}");   
+                Console.WriteLine($"Error when initializing Mcp23017 at Read address '0x{I2CAddressRead:X4}': {ex.Message}");   
             }         
         }
 
@@ -230,7 +230,7 @@ namespace BeerLiftModule
             }  
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when initializing Mcp23017 at Write address {I2CAddressWrite}: {ex.Message}");   
+                Console.WriteLine($"Error when initializing Mcp23017 at Write address '0x{I2CAddressWrite:X4}': {ex.Message}");   
             }          
         }
 
@@ -406,9 +406,10 @@ namespace BeerLiftModule
                         I2CAddressRead = DefaultI2CAddressRead;
                     }
 
-                    Console.WriteLine($"I2CAddressRead changed to {Dht22Pin}");
+                    Console.WriteLine($"I2CAddressRead changed to 0x{I2CAddressRead:X4}");
+                    Console.WriteLine($"Restart module to access new address");
 
-                    reportedProperties["i2cAddressRead"] = Dht22Pin;
+                    reportedProperties["i2cAddressRead"] = I2CAddressRead;
                 }
 
                 if (desiredProperties.Contains("i2cAddressWrite")) 
@@ -424,9 +425,10 @@ namespace BeerLiftModule
                         I2CAddressRead = DefaultI2CAddressWrite;
                     }
 
-                    Console.WriteLine($"I2CAddressWrite changed to {Dht22Pin}");
+                    Console.WriteLine($"I2CAddressRead changed to 0x{I2CAddressWrite:X4}");
+                    Console.WriteLine($"Restart module to access new address");
 
-                    reportedProperties["i2cAddressWrite"] = Dht22Pin;
+                    reportedProperties["i2cAddressWrite"] = I2CAddressWrite;
                 }
 
                 if (reportedProperties.Count > 0)

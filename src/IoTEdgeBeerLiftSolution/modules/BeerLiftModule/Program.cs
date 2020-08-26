@@ -576,7 +576,7 @@ namespace BeerLiftModule
 
                         await Task.Delay(20);
 
-                        Console.Write($".{i}");   
+                        //Console.Write($".{i}");   
                     }  
 
                     Console.WriteLine();

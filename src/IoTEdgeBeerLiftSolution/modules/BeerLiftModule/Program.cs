@@ -202,6 +202,7 @@ namespace BeerLiftModule
             }  
             catch (Exception ex)
             {
+                _mcp23xxxRead = null;
                 Console.WriteLine($"Error when initializing Mcp23017 at Read address '0x{I2CAddressRead:X4}': {ex.Message}");   
             }         
         }
@@ -230,6 +231,7 @@ namespace BeerLiftModule
             }  
             catch (Exception ex)
             {
+                _mcp23xxxWrite = null;
                 Console.WriteLine($"Error when initializing Mcp23017 at Write address '0x{I2CAddressWrite:X4}': {ex.Message}");   
             }          
         }
@@ -533,13 +535,18 @@ namespace BeerLiftModule
 
                 firstEmptySpotResponse.FindFirstEmpty = beerLiftMessage.FindFirstEmptySpot();
 
-                var  mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("Unable to cast Mcp23017 Read GPIO.");   
+                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
 
-                    firstEmptySpotResponse.errorMessage = "Unable to cast Mcp23017 Read GPIO";   
+                    firstEmptySpotResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
                     firstEmptySpotResponse.responseState = 1;
                 }
                 else
@@ -593,13 +600,18 @@ namespace BeerLiftModule
 
             try
             {
-                var  mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                  mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("Unable to cast Mcp23017 Read GPIO.");   
+                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
 
-                    circusResponse.errorMessage = "Unable to cast Mcp23017 Read GPIO";   
+                    circusResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
                     circusResponse.responseState = 1;
                 }
                 else

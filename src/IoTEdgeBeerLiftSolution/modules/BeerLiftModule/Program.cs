@@ -551,26 +551,31 @@ namespace BeerLiftModule
                 }
                 else
                 {
+                    mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
+
+                    var port = firstEmptySpotResponse.FindFirstEmpty <= 8 ? Port.PortA : Port.PortB;
+
+                    byte bPos = firstEmptySpotResponse.FindFirstEmpty <= 8 
+                                        ? (byte) Math.Pow(2, firstEmptySpotResponse.FindFirstEmpty -1)
+                                        : (byte) Math.Pow(2, firstEmptySpotResponse.FindFirstEmpty - 9);
+                    
+                    Console.WriteLine($"First dimming all leds to lit {bPos} op {port}.");
+
                     for (var i = 0; i<25 ; i++)
                     {
                         if (firstEmptySpotResponse.FindFirstEmpty == 0)
                         {
-                            Console.WriteLine("Skip blink");
+                            Console.Write("Skip blink. ");
                             continue;
                         }
 
                         // blink led on i % 2 on else off
+                        var j = (i % 2) == 0 ? bPos : 0;
 
-                        if (firstEmptySpotResponse.FindFirstEmpty <= 8)
-                        {
-                            var j = (i % 2) == Math.Pow(2, firstEmptySpotResponse.FindFirstEmpty) ? 1 : 0;
-                            mcp23x1x.WriteByte(Register.GPIO, (byte) j , Port.PortA);
-                        }
-                        else
-                        {
-                            var j = (i % 2) == Math.Pow(2, firstEmptySpotResponse.FindFirstEmpty - 8) ? 1 : 0;
-                            mcp23x1x.WriteByte(Register.GPIO, (byte) j, Port.PortB);
-                        }
+                        Console.Write($"Lit {j}. ");
+
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) j , port);
 
                         await Task.Delay(100);
                     }
@@ -631,7 +636,7 @@ namespace BeerLiftModule
                         //Console.Write($".{i}");   
                     }  
 
-                    Console.WriteLine();
+                    //Console.WriteLine();
                 }
 
                 Console.WriteLine($"Circus at {DateTime.UtcNow}.");

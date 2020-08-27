@@ -279,4 +279,5 @@ Please be aware this beer lift is operating on 220 Volts.
 # Links
 
 The MCP23017 access is based on library https://github.com/dotnet/iot/tree/master/src/devices/Mcp23xxx
+
 The DHT22 access is based on library https://github.com/dotnet/iot/tree/master/src/devices/Dhtxx 

@@ -190,7 +190,7 @@ namespace BeerLiftModule
                     mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
                     mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
 
-                    Console.WriteLine("Mcp23017 Read initialized at Read address '0x{I2CAddressRead:X4}'.");   
+                    Console.WriteLine($"Mcp23017 Read initialized at Read address '0x{I2CAddressRead:X4}'.");   
                 }
                 else
                 {
@@ -219,7 +219,7 @@ namespace BeerLiftModule
                     mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortA);
                     mcp23x1x.WriteByte(Register.IODIR, 0b0000_0000, Port.PortB);
 
-                    Console.WriteLine("Mcp23017 Write initialized at Write address '0x{I2CAddressWrite:X4}'.");   
+                    Console.WriteLine($"Mcp23017 Write initialized at Write address '0x{I2CAddressWrite:X4}'.");   
                 }
                 else
                 {

@@ -105,6 +105,132 @@
             "schema": "boolean"
           },
           {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot03:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot03"
+            },
+            "name": "slot03",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot04:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot04"
+            },
+            "name": "slot04",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot05:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot05"
+            },
+            "name": "slot05",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot06:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot06"
+            },
+            "name": "slot06",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot07:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot07"
+            },
+            "name": "slot07",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot08:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot08"
+            },
+            "name": "slot08",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot09:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot09"
+            },
+            "name": "slot09",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot10:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot10"
+            },
+            "name": "slot10",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot11:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot11"
+            },
+            "name": "slot11",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot12:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot12"
+            },
+            "name": "slot12",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot13:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot13"
+            },
+            "name": "slot13",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot14:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot14"
+            },
+            "name": "slot14",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot15:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot15"
+            },
+            "name": "slot15",
+            "schema": "boolean"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:slot16:1",
+            "@type": "Telemetry",
+            "displayName": {
+              "en": "slot16"
+            },
+            "name": "slot16",
+            "schema": "boolean"
+          },          
+          {
             "@id": "urn:w9ccxhmsk:blp:manage:state:1",
             "@type": "Telemetry",
             "displayName": {
@@ -167,6 +293,177 @@
             },
             "name": "Up"
           },
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:FirstEmptySpot:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+              "@id": "urn:w9ccxhmsk:blp:manage:FirstEmptySpot:FirstEmptySpotResponse:1",
+              "@type": "SchemaField",
+              "displayName": {
+                "en": "FirstEmptySpotResponse"
+              },
+              "name": "FirstEmptySpotResponse",
+              "schema": {
+                "@id": "urn:w9ccxhmsk:blp:manage:FirstEmptySpot:FirstEmptySpotResponse:jhxzklv0q:1",
+                "@type": "Object",
+                "displayName": {
+                  "en": "Object"
+                },
+                "fields": [
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:FirstEmptySpot:FirstEmptySpotResponse:jhxzklv0q:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:FirstEmptySpot:FirstEmptySpotResponse:jhxzklv0q:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                  },
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:FirstEmptySpot:FirstEmptySpotResponse:jhxzklv0q:firstEmptySlot:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "firstEmptySlot"
+                    },
+                    "name": "firstEmptySlot",
+                    "schema": "integer"
+                  }
+                ]
+              }
+            },
+            "displayName": {
+              "en": "FirstEmptySpot"
+            },
+            "name": "FirstEmptySpot"
+          },
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:Ambiant:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+              "@id": "urn:w9ccxhmsk:blp:manage:Ambiant:AmbiantResponse:1",
+              "@type": "SchemaField",
+              "displayName": {
+                "en": "AmbiantResponse"
+              },
+              "name": "AmbiantResponse",
+              "schema": {
+                "@id": "urn:w9ccxhmsk:blp:manage:Ambiant:AmbiantResponse:jhxzklv0q:1",
+                "@type": "Object",
+                "displayName": {
+                  "en": "Object"
+                },
+                "fields": [
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:Ambiant:AmbiantResponse:jhxzklv0q:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:Ambiant:AmbiantResponse:jhxzklv0q:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                  },
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:Ambiant:AmbiantResponse:jhxzklv0q:temperature:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "temperature"
+                    },
+                    "name": "temperature",
+                    "schema": "double"
+                  },
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:Ambiant:AmbiantResponse:jhxzklv0q:humidity:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "humidity"
+                    },
+                    "name": "humidity",
+                    "schema": "double"
+                  },
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:Ambiant:AmbiantResponse:jhxzklv0q:state:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "state"
+                    },
+                    "name": "state",
+                    "schema": "string"
+                  }
+                ]
+              }
+            },
+            "displayName": {
+              "en": "Ambiant"
+            },
+            "name": "Ambiant"
+          },          
+          {
+            "@id": "urn:w9ccxhmsk:blp:manage:Circus:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+              "@id": "urn:w9ccxhmsk:blp:manage:Circus:CircusResponse:1",
+              "@type": "SchemaField",
+              "displayName": {
+                "en": "CircusResponse"
+              },
+              "name": "CircusResponse",
+              "schema": {
+                "@id": "urn:w9ccxhmsk:blp:manage:Circus:CircusResponse:jhxzklv0q:1",
+                "@type": "Object",
+                "displayName": {
+                  "en": "Object"
+                },
+                "fields": [
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:Circus:CircusResponse:jhxzklv0q:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:w9ccxhmsk:blp:manage:Circus:CircusResponse:jhxzklv0q:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                  }
+                ]
+              }
+            },
+            "displayName": {
+              "en": "Circus"
+            },
+            "name": "Circus"
+          },          
           {
             "@id": "urn:w9ccxhmsk:blp:manage:Down:1",
             "@type": "Command",

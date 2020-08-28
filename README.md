@@ -94,6 +94,7 @@ The following direct methods are available:
 * Down
 * Ambiant
 * Circus
+* FirstEmptySpot
 
 *Note* Method names are case sensitive
 
@@ -139,7 +140,9 @@ No JSON body needed to be send.
 
 Reads the temperature and humidity of the DHT22.
 
-Due to the behavior of the DHT, multiple reads are needed unit a actual temperature is read. The humidity is not valid, please ignore.
+Due to the behavior of the DHT, multiple reads are needed unit a actual temperature is read.
+
+If no value is retrieved succesfully, -273 degrees Celsius is returned.
 
 The state of the lift can be seen too. 
 
@@ -173,6 +176,27 @@ class AmbiantValuesResponse
 ```
 
 *Note*: Enjoy the show.
+
+### Direct Method - FirstEmptySpot
+
+No JSON body needed to be send.
+
+Returns the first empty spot (1-16) where no bottle is placed. 
+
+If all spots are occupied, it returns 0.
+
+It also flashes the LED at the empty spot found.
+
+Response:
+
+```
+class AmbiantValuesResponse 
+{
+    int responseState { get; set; }
+    string errorMessage { get; set; }
+    int FindFirstEmpty {get; set;}
+}
+```
 
 ## Module Twin
 
@@ -255,4 +279,5 @@ Please be aware this beer lift is operating on 220 Volts.
 # Links
 
 The MCP23017 access is based on library https://github.com/dotnet/iot/tree/master/src/devices/Mcp23xxx
+
 The DHT22 access is based on library https://github.com/dotnet/iot/tree/master/src/devices/Dhtxx 

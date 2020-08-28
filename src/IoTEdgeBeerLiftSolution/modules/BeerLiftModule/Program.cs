@@ -463,7 +463,7 @@ namespace BeerLiftModule
 
             try
             {
-                _state = "Moving up";
+                _state = "movingUp";
 
                 _controller.Write(UpRelayPin, PinValue.Low); // start action
              
@@ -473,11 +473,11 @@ namespace BeerLiftModule
 
                 Console.WriteLine($"Up at {DateTime.UtcNow}.");
 
-                _state = "Up";
+                _state = "up";
             }
             catch (Exception ex)
             {
-                _state = "Exception up";
+                _state = "unknown";
 
                 upResponse.errorMessage = ex.Message;   
                 upResponse.responseState = -999;
@@ -497,7 +497,7 @@ namespace BeerLiftModule
 
             try
             {
-                _state = "Moving down";
+                _state = "movingDown";
 
                 _controller.Write(DownRelayPin, PinValue.Low); // start action
              
@@ -507,11 +507,11 @@ namespace BeerLiftModule
 
                 Console.WriteLine($"Down at {DateTime.UtcNow}.");
 
-                _state = "Down";
+                _state = "down";
             }
             catch (Exception ex)
             {
-                _state = "Exception down";
+                _state = "unknown";
 
                 downResponse.errorMessage = ex.Message;   
                 downResponse.responseState = -999;

@@ -36,7 +36,7 @@ namespace BeerLiftModule
         private const int DefaultDownRelayPin = 27;
 
         // GPIO 4 is used for 1-Wire
-        private const int DefaultDht22Pin = 4;
+        private const int DefaultDhtPin = 4;
 
         private const int DefaultI2CAddressRead = 0x20;
 
@@ -290,7 +290,7 @@ namespace BeerLiftModule
         private static int UpDownInterval { get; set; } = DefaultUpDownInterval;
         private static int UpRelayPin { get; set; } = DefaultUpRelayPin;
         private static int DownRelayPin { get; set; } = DefaultDownRelayPin;
-        private static int Dht22Pin { get; set; } = DefaultDht22Pin;
+        private static int DhtPin { get; set; } = DefaultDhtPin;
         private static int I2CAddressRead { get; set; } = DefaultI2CAddressRead;
         private static int I2CAddressWrite { get; set; } = DefaultI2CAddressWrite;
 
@@ -379,20 +379,20 @@ namespace BeerLiftModule
                     reportedProperties["downRelayPin"] = DownRelayPin;
                 }
 
-                if (desiredProperties.Contains("dht22Pin")) 
+                if (desiredProperties.Contains("dhtPin")) 
                 {
-                    if (desiredProperties["dht22Pin"] != null)
+                    if (desiredProperties["dhtPin"] != null)
                     {
-                        Dht22Pin = desiredProperties["dht22Pin"];
+                        DhtPin = desiredProperties["dhtPin"];
                     }
                     else
                     {
-                        Dht22Pin = DefaultDht22Pin;
+                        DhtPin = DefaultDhtPin;
                     }
 
-                    Console.WriteLine($"Dht22Pin changed to {Dht22Pin}");
+                    Console.WriteLine($"DhtPin changed to {DhtPin}");
 
-                    reportedProperties["dht22Pin"] = Dht22Pin;
+                    reportedProperties["dhtPin"] = DhtPin;
                 }
 
                 if (desiredProperties.Contains("i2cAddressRead")) 
@@ -533,7 +533,7 @@ namespace BeerLiftModule
             {
                 var beerLiftMessage = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
 
-                firstEmptySpotResponse.FindFirstEmpty = beerLiftMessage.FindFirstEmptySpot();
+                firstEmptySpotResponse.firstEmptySlot = beerLiftMessage.FindFirstEmptySpot();
 
                 Mcp23x1x mcp23x1x = null;
                 
@@ -554,17 +554,17 @@ namespace BeerLiftModule
                     mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
                     mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
 
-                    var port = firstEmptySpotResponse.FindFirstEmpty <= 8 ? Port.PortA : Port.PortB;
+                    var port = firstEmptySpotResponse.firstEmptySlot <= 8 ? Port.PortA : Port.PortB;
 
-                    byte bPos = firstEmptySpotResponse.FindFirstEmpty <= 8 
-                                        ? (byte) Math.Pow(2, firstEmptySpotResponse.FindFirstEmpty -1)
-                                        : (byte) Math.Pow(2, firstEmptySpotResponse.FindFirstEmpty - 9);
+                    byte bPos = firstEmptySpotResponse.firstEmptySlot <= 8 
+                                        ? (byte) Math.Pow(2, firstEmptySpotResponse.firstEmptySlot -1)
+                                        : (byte) Math.Pow(2, firstEmptySpotResponse.firstEmptySlot - 9);
                     
                     Console.WriteLine($"First dimming all leds to lit {bPos} op {port}.");
 
                     for (var i = 0; i<25 ; i++)
                     {
-                        if (firstEmptySpotResponse.FindFirstEmpty == 0)
+                        if (firstEmptySpotResponse.firstEmptySlot == 0)
                         {
                             Console.Write("Skip blink. ");
                             continue;
@@ -657,27 +657,27 @@ namespace BeerLiftModule
         {
             Console.WriteLine($"Executing AmbiantValuesMethodCallBack at {DateTime.UtcNow}");
 
-            var ambiantValuesResponse = new AmbiantValuesResponse{responseState = 0};
+            var ambiantResponse = new AmbiantResponse{responseState = 0};
 
             try
             {
                 var ambiantValues = ReadAmbiantValues();
             
-                ambiantValuesResponse.Temperature = ambiantValues.Temperature;
-                ambiantValuesResponse.Humidity = ambiantValues.Humidity;
-                ambiantValuesResponse.State = _state;
+                ambiantResponse.temperature = ambiantValues.Temperature;
+                ambiantResponse.humidity = ambiantValues.Humidity;
+                ambiantResponse.state = _state;
 
                 await Task.Delay(1);    
 
-                Console.WriteLine($"AmbiantValues at {DateTime.UtcNow} - Temperature:{ambiantValuesResponse.Temperature} / Humidity:{ambiantValuesResponse.Humidity} / Attempts:{ambiantValues.Attempts} / State:{_state}.");
+                Console.WriteLine($"Ambiant at {DateTime.UtcNow} - Temperature:{ambiantResponse.temperature} / Humidity:{ambiantResponse.humidity} / Attempts:{ambiantValues.Attempts} / State:{_state}.");
             }
             catch (Exception ex)
             {
-                ambiantValuesResponse.errorMessage = ex.Message;   
-                ambiantValuesResponse.responseState = -999;
+                ambiantResponse.errorMessage = ex.Message;   
+                ambiantResponse.responseState = -999;
             }
             
-            var json = JsonConvert.SerializeObject(ambiantValuesResponse);
+            var json = JsonConvert.SerializeObject(ambiantResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;
@@ -690,7 +690,7 @@ namespace BeerLiftModule
             {
                 ambiantValues.Attempts = i;
 
-                using (Dht22 dht = new Dht22(Dht22Pin))
+                using (Dht22 dht = new Dht22(DhtPin))
                 {
                     var temperature = dht.Temperature;
                     var humidity = dht.Humidity;

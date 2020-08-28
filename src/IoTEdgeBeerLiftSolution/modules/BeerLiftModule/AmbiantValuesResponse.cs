@@ -1,15 +1,15 @@
 namespace BeerLiftModule
 {
-    public class AmbiantValuesResponse 
+    public class AmbiantResponse 
     {
         public int responseState { get; set; }
 
         public string errorMessage { get; set; }
 
-        public double Temperature {get; set;}
+        public double temperature {get; set;}
 
-        public double Humidity {get; set;}
+        public double humidity {get; set;}
 
-        public string State {get; set;}
+        public string state {get; set;}
     }
 }

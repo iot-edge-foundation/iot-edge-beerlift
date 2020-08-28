@@ -1,0 +1,675 @@
+{
+  "@id": "urn:beerlift:IoTEdger_BeerLift_Module:1",
+  "@type": "CapabilityModel",
+  "implements": [
+    {
+      "@id": "urn:beerlift:IoTEdger_BeerLift_Module:4tswdx6i_:1",
+      "@type": "InterfaceInstance",
+      "displayName": {
+        "en": "BeerLift Interface"
+      },
+      "name": "IoTEdger_BeerLift_1_0_0_Interface",
+      "schema": {
+        "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:1",
+        "@type": "Interface",
+        "displayName": {
+          "en": "BeerLift Interface"
+        },
+        "contents": [
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot01:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot01"
+            },
+            "name": "Slot01",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot02:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot02"
+            },
+            "name": "Slot02",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot03:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot03"
+            },
+            "name": "Slot03",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot04:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot04"
+            },
+            "name": "Slot04",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot05:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot05"
+            },
+            "name": "Slot05",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot06:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot06"
+            },
+            "name": "Slot06",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot07:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot07"
+            },
+            "name": "Slot07",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot08:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot08"
+            },
+            "name": "Slot08",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot09:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot09"
+            },
+            "name": "Slot09",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot10:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot10"
+            },
+            "name": "Slot10",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot11:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot11"
+            },
+            "name": "Slot11",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot12:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot12"
+            },
+            "name": "Slot12",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot13:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot13"
+            },
+            "name": "Slot13",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot14:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot14"
+            },
+            "name": "Slot14",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot15:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot15"
+            },
+            "name": "Slot15",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Slot16:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "Is this slot filled or not"
+            },
+            "displayName": {
+              "en": "Slot16"
+            },
+            "name": "Slot16",
+            "schema": "boolean"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Timestamp:1",
+            "@type": "Telemetry",
+            "description": {
+              "en": "UTC date ad time of the change."
+            },
+            "displayName": {
+              "en": "Timestamp"
+            },
+            "name": "Timestamp",
+            "schema": "dateTime"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:State:1",
+            "@type": [
+              "Telemetry",
+              "SemanticType/State"
+            ],
+            "description": {
+              "en": "Last known state of the lift"
+            },
+            "displayName": {
+              "en": "State"
+            },
+            "name": "State",
+            "schema": {
+              "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:State:mmiqfn3bu:1",
+              "@type": "Enum",
+              "valueSchema": "string",
+              "enumValues": [
+                {
+                  "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:State:mmiqfn3bu:unknown:1",
+                  "@type": "EnumValue",
+                  "displayName": {
+                    "en": "unknown"
+                  },
+                  "enumValue": "unknown",
+                  "name": "unknown"
+                },
+                {
+                  "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:State:mmiqfn3bu:movingUp:1",
+                  "@type": "EnumValue",
+                  "displayName": {
+                    "en": "movingUp"
+                  },
+                  "enumValue": "movingUp",
+                  "name": "movingUp"
+                },
+                {
+                  "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:State:mmiqfn3bu:up:1",
+                  "@type": "EnumValue",
+                  "displayName": {
+                    "en": "up"
+                  },
+                  "enumValue": "up",
+                  "name": "up"
+                },
+                {
+                  "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:State:mmiqfn3bu:movingDown:1",
+                  "@type": "EnumValue",
+                  "displayName": {
+                    "en": "movingDown"
+                  },
+                  "enumValue": "movingDown",
+                  "name": "movingDown"
+                },
+                {
+                  "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:State:mmiqfn3bu:down:1",
+                  "@type": "EnumValue",
+                  "displayName": {
+                    "en": "down"
+                  },
+                  "enumValue": "down",
+                  "name": "down"
+                }
+              ]
+            }
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:interval:1",
+            "@type": "Property",
+            "comment": "In milliseconds",
+            "description": {
+              "en": "Interval used to detect slot changes"
+            },
+            "displayName": {
+              "en": "interval"
+            },
+            "name": "interval",
+            "writable": true,
+            "schema": "integer"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:upDownInterval:1",
+            "@type": "Property",
+            "comment": "In milliseconds",
+            "description": {
+              "en": "Interval used to send the lift up or down"
+            },
+            "displayName": {
+              "en": "upDownInterval"
+            },
+            "name": "upDownInterval",
+            "writable": true,
+            "schema": "integer"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:upRelayPin:1",
+            "@type": "Property",
+            "comment": "Default 17",
+            "description": {
+              "en": "GPIO pin for up relay "
+            },
+            "displayName": {
+              "en": "upRelayPin"
+            },
+            "name": "upRelayPin",
+            "writable": true,
+            "schema": "integer"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:downRelayPin:1",
+            "@type": "Property",
+            "comment": "Default 27",
+            "description": {
+              "en": "GPIO pin for down relay "
+            },
+            "displayName": {
+              "en": "downRelayPin"
+            },
+            "name": "downRelayPin",
+            "writable": true,
+            "schema": "integer"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:dhtPin:1",
+            "@type": "Property",
+            "comment": "Default 4",
+            "description": {
+              "en": "GPIO pin for temperature/humidity sensor"
+            },
+            "displayName": {
+              "en": "dhtPin"
+            },
+            "name": "dhtPin",
+            "writable": true,
+            "schema": "integer"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:i2cAddressRead:1",
+            "@type": "Property",
+            "comment": "Format is eg. '0x22'",
+            "description": {
+              "en": "Hexadecimal I2C address of the Read IO extender"
+            },
+            "displayName": {
+              "en": "i2cAddressRead"
+            },
+            "name": "i2cAddressRead",
+            "writable": true,
+            "schema": "string"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:i2cAddressWrite:1",
+            "@type": "Property",
+            "comment": "Format is eg. '0x22'",
+            "description": {
+              "en": "Hexadecimal I2C address of the Write IO extender"
+            },
+            "displayName": {
+              "en": "i2cAddressWrite"
+            },
+            "name": "i2cAddressWrite",
+            "writable": true,
+            "schema": "string"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Up:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+              "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Up:UpResponse:1",
+              "@type": "SchemaField",
+              "displayName": {
+                "en": "UpResponse"
+              },
+              "name": "UpResponse",
+              "schema": {
+                "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Up:UpResponse:yxei9geab:1",
+                "@type": "Object",
+                "displayName": {
+                  "en": "Object"
+                },
+                "fields": [
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Up:UpResponse:yxei9geab:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Up:UpResponse:yxei9geab:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "double"
+                  }
+                ]
+              }
+            },
+            "description": {
+              "en": "Moving the lift up"
+            },
+            "displayName": {
+              "en": "Up"
+            },
+            "name": "Up"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Down:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+              "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Down:DownResponse:1",
+              "@type": "SchemaField",
+              "displayName": {
+                "en": "DownResponse"
+              },
+              "name": "DownResponse",
+              "schema": {
+                "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Down:DownResponse:z06rx0xdei:1",
+                "@type": "Object",
+                "displayName": {
+                  "en": "Object"
+                },
+                "fields": [
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Down:DownResponse:z06rx0xdei:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Down:DownResponse:z06rx0xdei:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                  }
+                ]
+              }
+            },
+            "description": {
+              "en": "Moving the lift down"
+            },
+            "displayName": {
+              "en": "Down"
+            },
+            "name": "Down"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Ambiant:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+              "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Ambiant:AmbiantResponse:1",
+              "@type": "SchemaField",
+              "displayName": {
+                "en": "AmbiantResponse"
+              },
+              "name": "AmbiantResponse",
+              "schema": {
+                "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Ambiant:AmbiantResponse:d8zwn9agpn:1",
+                "@type": "Object",
+                "displayName": {
+                  "en": "Object"
+                },
+                "fields": [
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Ambiant:AmbiantResponse:d8zwn9agpn:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Ambiant:AmbiantResponse:d8zwn9agpn:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Ambiant:AmbiantResponse:d8zwn9agpn:temperature:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "temperature"
+                    },
+                    "name": "temperature",
+                    "schema": "double"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Ambiant:AmbiantResponse:d8zwn9agpn:humidity:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "humidity"
+                    },
+                    "name": "humidity",
+                    "schema": "double"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Ambiant:AmbiantResponse:d8zwn9agpn:state:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "state"
+                    },
+                    "name": "state",
+                    "schema": "string"
+                  }
+                ]
+              }
+            },
+            "description": {
+              "en": "Returns ambiant values"
+            },
+            "displayName": {
+              "en": "Ambiant"
+            },
+            "name": "Ambiant"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Circus:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+              "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Circus:CircusResponse:1",
+              "@type": "SchemaField",
+              "displayName": {
+                "en": "CircusResponse"
+              },
+              "name": "CircusResponse",
+              "schema": {
+                "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Circus:CircusResponse:j1j2ggjcjv:1",
+                "@type": "Object",
+                "displayName": {
+                  "en": "Object"
+                },
+                "fields": [
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Circus:CircusResponse:j1j2ggjcjv:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:Circus:CircusResponse:j1j2ggjcjv:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                  }
+                ]
+              }
+            },
+            "description": {
+              "en": "Lit all lights in a semi-random pattern"
+            },
+            "displayName": {
+              "en": "Circus"
+            },
+            "name": "Circus"
+          },
+          {
+            "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:FirstEmptySpot:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+              "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:FirstEmptySpot:FirstEmptySpotResponse:1",
+              "@type": "SchemaField",
+              "comment": "",
+              "displayName": {
+                "en": "FirstEmptySpotResponse"
+              },
+              "name": "FirstEmptySpotResponse",
+              "schema": {
+                "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:FirstEmptySpot:FirstEmptySpotResponse:ujxl_2ymvx:1",
+                "@type": "Object",
+                "displayName": {
+                  "en": "Object"
+                },
+                "fields": [
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:FirstEmptySpot:FirstEmptySpotResponse:ujxl_2ymvx:firstEmptySlot:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "firstEmptySlot"
+                    },
+                    "name": "firstEmptySlot",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:FirstEmptySpot:FirstEmptySpotResponse:ujxl_2ymvx:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                  },
+                  {
+                    "@id": "urn:beerlift:IoTEdger_BeerLift_1_0_0_Interface:FirstEmptySpot:FirstEmptySpotResponse:ujxl_2ymvx:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                      "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                  }
+                ]
+              }
+            },
+            "comment": "Zero when no slot available",
+            "description": {
+              "en": "Check the first empty slot in the beerlift"
+            },
+            "displayName": {
+              "en": "FirstEmptySpot"
+            },
+            "name": "FirstEmptySpot"
+          }
+        ]
+      }
+    }
+  ],
+  "displayName": {
+    "en": "BeerLift Module"
+  },
+  "@context": [
+    "http://azureiot.com/v1/contexts/IoTModel.json"
+  ]
+}

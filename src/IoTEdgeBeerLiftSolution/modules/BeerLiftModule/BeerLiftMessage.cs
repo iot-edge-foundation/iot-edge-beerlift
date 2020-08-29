@@ -59,6 +59,8 @@ namespace BeerLiftModule
         public bool slot15 {get; set;}
         public bool slot16 {get; set;}
         public DateTime timestamp {get; set;}
+        
+        // unknown, movingUp, up, movingDown, down
         public string state {get; set;}
 
         public override string ToString()

@@ -3,7 +3,7 @@
         "$edgeAgent": {
             "properties.desired": {
                 "modules": {
-                    "blp": {
+                    "beerlift": {
                         "settings": {
                             "image": "svelde/iot-edge-beerlift:0.0.22-arm32v7",
                             "createOptions": "{\"HostConfig\":{\"Privileged\":true}}"
@@ -52,8 +52,14 @@
                 }
             }
         },
-        "blp": {
+        "beerlift": {
             "properties.desired": {
+                "interval" : 5000,
+                "upDownInterval": 20000,
+                "upRelayPin": 17,
+                "downRelayPin": 27,
+                "dhtPin" : 4,
+                "i2cAddressRead": "0x20",
                 "i2cAddressWrite": "0x24"
             }
         }

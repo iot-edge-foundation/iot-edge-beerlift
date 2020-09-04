@@ -89,7 +89,7 @@ namespace BeerLiftModule
             Console.WriteLine(" |_\\___/\\__|   \\___\\__,_\\__, \\___|   |_.__/\\___\\___|_| |_|_|_|  \\__|");
             Console.WriteLine("                        |___/                                       ");
             Console.WriteLine();
-            Console.WriteLine("   Copyright © 2020 - josa josa josa josa");
+            Console.WriteLine("   Copyright © 2020 - josa josa josa josa ");
             Console.WriteLine(" ");
 
             MqttTransportSettings mqttSetting = new MqttTransportSettings(TransportType.Mqtt_Tcp_Only);

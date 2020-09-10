@@ -164,7 +164,14 @@ namespace BeerLiftModule
                 FirstEmptySpotMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: FirstEmptySpot.");   
+            Console.WriteLine("Attached method handler: FirstEmptySpot.");  
+
+            await ioTHubModuleClient.SetMethodHandlerAsync(
+                "LedTest",
+                LedTestMethodCallBack,
+                ioTHubModuleClient);
+
+            Console.WriteLine("Attached method handler: LedTest."); 
 
             SetupI2CRead();
 
@@ -613,6 +620,92 @@ namespace BeerLiftModule
             }
         }
 
+        private static async Task<MethodResponse> LedTestMethodCallBack(MethodRequest methodRequest, object userContext)
+        {
+            Console.WriteLine($"Executing LedTestMethodCallBack at {DateTime.UtcNow}");
+
+            var LedTestResponse = new LedTestResponse{responseState = 0};
+
+            dynamic request = JsonConvert.DeserializeObject(methodRequest.DataAsJson);
+
+            var ledPosition = request.ledPosition;
+
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
+                }
+
+                _ledsPlaying = true;
+
+                var beerLiftMessage = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+
+                    LedTestResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
+                    LedTestResponse.responseState = 1;
+                }
+                else
+                {
+                    mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
+
+                    var port = ledPosition <= 8 ? Port.PortA : Port.PortB;
+
+                    byte bPos = ledPosition <= 8 
+                                        ? (byte) Math.Pow(2, ledPosition -1)
+                                        : (byte) Math.Pow(2, ledPosition - 9);
+                    
+                    for (var i = 0; i<25 ; i++)
+                    {
+                        if (ledPosition == 0)
+                        {
+                            Console.Write("Skip blink. ");
+                            continue;
+                        }
+
+                        // blink led on i % 2 on else off
+                        var j = (i % 2) == 0 ? bPos : 0;
+
+                        Console.Write($"Lit {j}. ");
+
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) j , port);
+
+                        await Task.Delay(100);
+                    }
+
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine($"LedTest at {DateTime.UtcNow}.");
+            }
+            catch (Exception ex)
+            {
+                LedTestResponse.errorMessage = ex.Message;   
+                LedTestResponse.responseState = -999;
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+              
+            var json = JsonConvert.SerializeObject(LedTestResponse);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+
+            return response;  
+        }
+
         private static async Task<MethodResponse> FirstEmptySpotMethodCallBack(MethodRequest methodRequest, object userContext)
         {
             Console.WriteLine($"Executing FirstEmptySpotMethodCallBack at {DateTime.UtcNow}");
@@ -658,8 +751,6 @@ namespace BeerLiftModule
                                         ? (byte) Math.Pow(2, firstEmptySpotResponse.firstEmptySlot -1)
                                         : (byte) Math.Pow(2, firstEmptySpotResponse.firstEmptySlot - 9);
                     
-                    Console.WriteLine($"First dimming all leds to lit {bPos} op {port}.");
-
                     for (var i = 0; i<25 ; i++)
                     {
                         if (firstEmptySpotResponse.firstEmptySlot == 0)

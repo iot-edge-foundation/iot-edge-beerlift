@@ -17,8 +17,6 @@ namespace BeerLiftModule
 
     class Program
     {
-        private static DateTime _timeStampLastSentMessage = DateTime.MinValue;
-
         private static Mcp23xxx _mcp23xxxRead = null;
 
         private static Mcp23xxx _mcp23xxxWrite = null;
@@ -27,7 +25,7 @@ namespace BeerLiftModule
 
         private static bool _ledsPlaying = false;
 
-        private const int DefaultInterval = 5000;
+        private const int DefaultInterval = 1000;
 
         private const int DefaultUpDownInterval = 20000;
 
@@ -276,27 +274,22 @@ namespace BeerLiftModule
                     _lastDataPortB = dataPortB;
                     _lastState = _state;
 
-                    await LitAllEmptySpots();
+                    await LitAllEmptySpots(_lastDataPortA, _lastDataPortB);
 
-                    if (_timeStampLastSentMessage.AddMilliseconds(Interval) <= DateTime.UtcNow)
+                    var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
+                    var json = JsonConvert.SerializeObject(beerLiftMessage);
+
+                    using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
                     {
-                        var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
-                        var json = JsonConvert.SerializeObject(beerLiftMessage);
+                        pipeMessage.Properties.Add("StateLength", "16");
 
-                        using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
-                        {
-                            pipeMessage.Properties.Add("StateLength", "16");
+                        await client.SendEventAsync("output1", pipeMessage);
 
-                            await client.SendEventAsync("output1", pipeMessage);
-
-                            Console.WriteLine($"Message sent: {beerLiftMessage}");
-                        }
-
-                        _timeStampLastSentMessage = DateTime.UtcNow;
+                        Console.WriteLine($"Message sent: {beerLiftMessage}");
                     }
                 }
 
-                await Task.Delay(1000);
+                await Task.Delay(Interval);
             }
         }
 
@@ -542,10 +535,8 @@ namespace BeerLiftModule
             return response;
         }   
 
-        private static async Task LitAllEmptySpots()
+        private static async Task LitAllUsedSpots(byte lastDataPortA, byte lastDataPortB)
         {
-            Console.WriteLine($"Executing LitAllEmptySpot at {DateTime.UtcNow}");
-
             try
             {
                 while(_ledsPlaying)
@@ -569,34 +560,48 @@ namespace BeerLiftModule
                 }
                 else
                 {
-             //       mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
-              //      mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
+                    mcp23x1x.WriteByte(Register.GPIO, lastDataPortA , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, lastDataPortB, Port.PortB);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+        }
 
-             //       for (var i = 0; i<25 ; i++)
-            //        {
-                        // if (_lastDataPortA == 0 
-                        //         && _lastDataPortB == 0)
-                        // {
-                        //     Console.Write("Skip blink. ");
-                        //     continue;
-                        // }
-
-                        // blink led on i % 2 on else off
-                   //     var ja = (i % 2) == 0 ? _lastDataPortA : 0;
-                      //  var jb = (i % 2) == 0 ? _lastDataPortB : 0;
-
-               //         Console.Write($"Lit {j}. ");
-
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) _lastDataPortA , Port.PortA);
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) _lastDataPortB, Port.PortB);
-
-               //         await Task.Delay(100);
-             //       }
-
-//                    Console.WriteLine();
+        private static async Task LitAllEmptySpots(byte lastDataPortA, byte lastDataPortB)
+        {
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
                 }
 
-   //             Console.WriteLine($"AllEmptySpot at {DateTime.UtcNow}.");
+                _ledsPlaying = true;
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                }
+                else
+                {
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortA ^ 255) , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortB ^255), Port.PortB);
+                }
             }
             catch (Exception ex)
             {

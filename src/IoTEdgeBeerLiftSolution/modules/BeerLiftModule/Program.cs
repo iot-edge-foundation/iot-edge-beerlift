@@ -533,6 +533,72 @@ namespace BeerLiftModule
             return response;
         }   
 
+        private static async Task LitAllEmptySpots()
+        {
+            Console.WriteLine($"Executing LitAllEmptySpot at {DateTime.UtcNow}");
+
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
+                }
+
+                _ledsPlaying = true;
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                }
+                else
+                {
+             //       mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
+              //      mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
+
+             //       for (var i = 0; i<25 ; i++)
+            //        {
+                        // if (_lastDataPortA == 0 
+                        //         && _lastDataPortB == 0)
+                        // {
+                        //     Console.Write("Skip blink. ");
+                        //     continue;
+                        // }
+
+                        // blink led on i % 2 on else off
+                   //     var ja = (i % 2) == 0 ? _lastDataPortA : 0;
+                      //  var jb = (i % 2) == 0 ? _lastDataPortB : 0;
+
+               //         Console.Write($"Lit {j}. ");
+
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) _lastDataPortA , Port.PortA);
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) _lastDataPortB, Port.PortB);
+
+               //         await Task.Delay(100);
+             //       }
+
+//                    Console.WriteLine();
+                }
+
+   //             Console.WriteLine($"AllEmptySpot at {DateTime.UtcNow}.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+        }
+
         private static async Task<MethodResponse> FirstEmptySpotMethodCallBack(MethodRequest methodRequest, object userContext)
         {
             Console.WriteLine($"Executing FirstEmptySpotMethodCallBack at {DateTime.UtcNow}");
@@ -544,7 +610,7 @@ namespace BeerLiftModule
                 while(_ledsPlaying)
                 {
                     // let the previous light show end.
-                    await Task.Delay(20);
+                    await Task.Delay(5);
                 }
 
                 _ledsPlaying = true;
@@ -630,7 +696,7 @@ namespace BeerLiftModule
                 while(_ledsPlaying)
                 {
                     // let the previous light show end.
-                    await Task.Delay(20);
+                    await Task.Delay(5);
                 }
 
                 _ledsPlaying = true;

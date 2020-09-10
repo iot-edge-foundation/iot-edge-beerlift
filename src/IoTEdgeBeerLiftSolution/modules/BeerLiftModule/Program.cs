@@ -264,6 +264,8 @@ namespace BeerLiftModule
                 byte dataPortA = mcp23x1x.ReadByte(Register.GPIO, Port.PortA);
                 byte dataPortB = mcp23x1x.ReadByte(Register.GPIO, Port.PortB);
 
+                await LitAllEmptySpots(dataPortA, dataPortB);
+
                 Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
 
                 if (dataPortA != _lastDataPortA
@@ -273,8 +275,6 @@ namespace BeerLiftModule
                     _lastDataPortA = dataPortA;
                     _lastDataPortB = dataPortB;
                     _lastState = _state;
-
-                    await LitAllEmptySpots(_lastDataPortA, _lastDataPortB);
 
                     var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
                     var json = JsonConvert.SerializeObject(beerLiftMessage);

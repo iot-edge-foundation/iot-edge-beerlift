@@ -22,6 +22,9 @@ namespace BeerLiftModule
         private static Mcp23xxx _mcp23xxxWrite = null;
 
         private static string _state = "unknown";
+
+        private static bool _ledsPlaying = false;
+
         private const int DefaultInterval = 5000;
 
         private const int DefaultUpDownInterval = 20000;
@@ -172,6 +175,11 @@ namespace BeerLiftModule
             {
                 var thread = new Thread(() => ThreadBody(ioTHubModuleClient));
                 thread.Start();
+            }
+
+            if (_state == "unknown")
+            {
+                await DownMethodCallBack(null, ioTHubModuleClient);          
             }
         }
 
@@ -490,6 +498,11 @@ namespace BeerLiftModule
         {
             Console.WriteLine($"Executing DownMethodCallBack at {DateTime.UtcNow}");
 
+            if (methodRequest == null)
+            {
+                Console.WriteLine($"Moving to initial state");
+            }
+
             var downResponse = new DownResponse{responseState = 0};
 
             try
@@ -528,6 +541,14 @@ namespace BeerLiftModule
 
             try
             {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(20);
+                }
+
+                _ledsPlaying = true;
+
                 var beerLiftMessage = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
 
                 firstEmptySpotResponse.firstEmptySlot = beerLiftMessage.FindFirstEmptySpot();
@@ -587,7 +608,11 @@ namespace BeerLiftModule
                 firstEmptySpotResponse.errorMessage = ex.Message;   
                 firstEmptySpotResponse.responseState = -999;
             }
-            
+            finally
+            {
+                _ledsPlaying = false;
+            }
+              
             var json = JsonConvert.SerializeObject(firstEmptySpotResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
@@ -602,6 +627,14 @@ namespace BeerLiftModule
 
             try
             {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(20);
+                }
+
+                _ledsPlaying = true;
+
                 Mcp23x1x mcp23x1x = null;
                 
                 if (_mcp23xxxWrite != null)
@@ -629,11 +662,7 @@ namespace BeerLiftModule
                         mcp23x1x.WriteByte(Register.GPIO, (byte) i, Port.PortB);
 
                         await Task.Delay(20);
-
-                        //Console.Write($".{i}");   
                     }  
-
-                    //Console.WriteLine();
                 }
 
                 Console.WriteLine($"Circus at {DateTime.UtcNow}.");
@@ -642,6 +671,10 @@ namespace BeerLiftModule
             {
                 circusResponse.errorMessage = ex.Message;   
                 circusResponse.responseState = -999;
+            }
+            finally
+            {
+                _ledsPlaying = false;
             }
             
             var json = JsonConvert.SerializeObject(circusResponse);

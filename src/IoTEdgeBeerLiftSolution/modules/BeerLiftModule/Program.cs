@@ -17,6 +17,8 @@ namespace BeerLiftModule
 
     class Program
     {
+        private static DateTime _timeStampLastSentMessage = DateTime.MinValue;
+
         private static Mcp23xxx _mcp23xxxRead = null;
 
         private static Mcp23xxx _mcp23xxxWrite = null;
@@ -274,20 +276,27 @@ namespace BeerLiftModule
                     _lastDataPortB = dataPortB;
                     _lastState = _state;
 
-                    var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
-                    var json = JsonConvert.SerializeObject(beerLiftMessage);
+                    await LitAllEmptySpots();
 
-                    using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
+                    if (_timeStampLastSentMessage.AddMilliseconds(Interval) <= DateTime.UtcNow)
                     {
-                        pipeMessage.Properties.Add("StateLength", "16");
+                        var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
+                        var json = JsonConvert.SerializeObject(beerLiftMessage);
 
-                        await client.SendEventAsync("output1", pipeMessage);
+                        using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
+                        {
+                            pipeMessage.Properties.Add("StateLength", "16");
 
-                        Console.WriteLine($"Message sent: {beerLiftMessage}");
+                            await client.SendEventAsync("output1", pipeMessage);
+
+                            Console.WriteLine($"Message sent: {beerLiftMessage}");
+                        }
+
+                        _timeStampLastSentMessage = DateTime.UtcNow;
                     }
                 }
 
-                await Task.Delay(Interval);
+                await Task.Delay(1000);
             }
         }
 

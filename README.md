@@ -13,7 +13,7 @@ The lift can be moved up and down from the cloud.
 
 The lift also measures the temperature and it measures which bottles are taken out. Each bottle has its own unique position, guided by LEDs. 
 
-This beer lift is designed for up to 16 bottles.
+This beer lift is designed for up to sixteen bottles.
 
 # Materials used
 

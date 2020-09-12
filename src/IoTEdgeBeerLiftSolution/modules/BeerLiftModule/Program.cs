@@ -1006,7 +1006,7 @@ namespace BeerLiftModule
 
                     var j = UpDownInterval / sleepInterval;
 
-                    byte a = 0b_0000_0001;
+                    byte a = 0b_1000_0000;
 
                     for(var i = 0; i< j; i++)
                     {

@@ -1,0 +1,684 @@
+{
+    "@id": "urn:beerlift:Beerlift_195:1",
+    "@type": "Interface",
+    "displayName": {
+      "en": "Interface"
+    },
+    "contents": [
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:interval:1",
+            "@type": "Property",
+            "displayName": {
+            "en": "interval"
+            },
+            "name": "interval",
+            "writable": true,
+            "schema": "integer"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:upDownInterval:1",
+            "@type": "Property",
+            "displayName": {
+            "en": "upDownInterval"
+            },
+            "name": "upDownInterval",
+            "writable": true,
+            "schema": "integer"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:upRelayPin:1",
+            "@type": "Property",
+            "displayName": {
+            "en": "upRelayPin"
+            },
+            "name": "upRelayPin",
+            "writable": true,
+            "schema": "integer"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:downRelayPin:1",
+            "@type": "Property",
+            "displayName": {
+            "en": "downRelayPin"
+            },
+            "name": "downRelayPin",
+            "writable": true,
+            "schema": "integer"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:dhtPin:1",
+            "@type": "Property",
+            "displayName": {
+            "en": "dhtPin"
+            },
+            "name": "dhtPin",
+            "writable": true,
+            "schema": "integer"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:i2cAddressRead:1",
+            "@type": "Property",
+            "displayName": {
+            "en": "i2cAddressRead"
+            },
+            "name": "i2cAddressRead",
+            "writable": true,
+            "schema": "string"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:i2cAddressWrite:1",
+            "@type": "Property",
+            "displayName": {
+            "en": "i2cAddressWrite"
+            },
+            "name": "i2cAddressWrite",
+            "writable": true,
+            "schema": "string"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot01:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot01"
+            },
+            "name": "slot01",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot02:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot02"
+            },
+            "name": "slot02",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot03:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot03"
+            },
+            "name": "slot03",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot04:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot04"
+            },
+            "name": "slot04",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot05:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot05"
+            },
+            "name": "slot05",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot06:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot06"
+            },
+            "name": "slot06",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot07:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot07"
+            },
+            "name": "slot07",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot08:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot08"
+            },
+            "name": "slot08",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot09:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot09"
+            },
+            "name": "slot09",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot10:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot10"
+            },
+            "name": "slot10",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot11:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot11"
+            },
+            "name": "slot11",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot12:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot12"
+            },
+            "name": "slot12",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot13:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot13"
+            },
+            "name": "slot13",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot14:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot14"
+            },
+            "name": "slot14",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot15:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot15"
+            },
+            "name": "slot15",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:slot16:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "slot16"
+            },
+            "name": "slot16",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:state:1",
+            "@type": [
+            "Telemetry",
+            "SemanticType/State"
+            ],
+            "displayName": {
+            "en": "state"
+            },
+            "name": "state",
+            "schema": {
+            "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:1",
+            "@type": "Enum",
+            "valueSchema": "string",
+            "enumValues": [
+                {
+                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:unknown:1",
+                "@type": "EnumValue",
+                "displayName": {
+                    "en": "unknown"
+                },
+                "enumValue": "unknown",
+                "name": "unknown"
+                },
+                {
+                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:movingUp:1",
+                "@type": "EnumValue",
+                "displayName": {
+                    "en": " movingUp"
+                },
+                "enumValue": "movingUp",
+                "name": "movingUp"
+                },
+                {
+                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:up:1",
+                "@type": "EnumValue",
+                "displayName": {
+                    "en": "up"
+                },
+                "enumValue": "up",
+                "name": "up"
+                },
+                {
+                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:movingDown:1",
+                "@type": "EnumValue",
+                "displayName": {
+                    "en": "movingDown"
+                },
+                "enumValue": "movingDown",
+                "name": "movingDown"
+                },
+                {
+                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:down:1",
+                "@type": "EnumValue",
+                "displayName": {
+                    "en": "down"
+                },
+                "enumValue": "down",
+                "name": "down"
+                }
+            ]
+            }
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:timestamp:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "timestamp"
+            },
+            "name": "timestamp",
+            "schema": "dateTime"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:Up:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+            "@id": "urn:z5sav05bm:beerlift:manage:Up:UpResponse:1",
+            "@type": "SchemaField",
+            "displayName": {
+                "en": "UpResponse"
+            },
+            "name": "UpResponse",
+            "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:Up:UpResponse:_8qvnwjuz:1",
+                "@type": "Object",
+                "displayName": {
+                "en": "Object"
+                },
+                "fields": [
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Up:UpResponse:_8qvnwjuz:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Up:UpResponse:_8qvnwjuz:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                }
+                ]
+            }
+            },
+            "displayName": {
+            "en": "Up"
+            },
+            "name": "Up"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:Down:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+            "@id": "urn:z5sav05bm:beerlift:manage:Down:DownResponse:1",
+            "@type": "SchemaField",
+            "displayName": {
+                "en": "DownResponse"
+            },
+            "name": "DownResponse",
+            "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:Down:DownResponse:emtbeyuprj:1",
+                "@type": "Object",
+                "displayName": {
+                "en": "Object"
+                },
+                "fields": [
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Down:DownResponse:emtbeyuprj:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Down:DownResponse:emtbeyuprj:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                }
+                ]
+            }
+            },
+            "displayName": {
+            "en": "Down"
+            },
+            "name": "Down"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+            "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:1",
+            "@type": "SchemaField",
+            "displayName": {
+                "en": "AmbiantResponse"
+            },
+            "name": "AmbiantResponse",
+            "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:1",
+                "@type": "Object",
+                "displayName": {
+                "en": "Object"
+                },
+                "fields": [
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:temperature:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "temperature"
+                    },
+                    "name": "temperature",
+                    "schema": "double"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:humidity:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "humidity"
+                    },
+                    "name": "humidity",
+                    "schema": "double"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "state"
+                    },
+                    "name": "state",
+                    "schema": {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:1",
+                    "@type": "Enum",
+                    "displayName": {
+                        "en": "Enum"
+                    },
+                    "valueSchema": "string",
+                    "enumValues": [
+                        {
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:unknown:1",
+                        "@type": "EnumValue",
+                        "displayName": {
+                            "en": "unknown"
+                        },
+                        "enumValue": "unknown",
+                        "name": "unknown"
+                        },
+                        {
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:movingUp:1",
+                        "@type": "EnumValue",
+                        "displayName": {
+                            "en": "movingUp"
+                        },
+                        "enumValue": "movingUp",
+                        "name": "movingUp"
+                        },
+                        {
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:up:1",
+                        "@type": "EnumValue",
+                        "displayName": {
+                            "en": "up"
+                        },
+                        "enumValue": "up",
+                        "name": "up"
+                        },
+                        {
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:movingDown:1",
+                        "@type": "EnumValue",
+                        "displayName": {
+                            "en": "movingDown"
+                        },
+                        "enumValue": "movingDown",
+                        "name": "movingDown"
+                        },
+                        {
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:down:1",
+                        "@type": "EnumValue",
+                        "displayName": {
+                            "en": "down"
+                        },
+                        "enumValue": "down",
+                        "name": "down"
+                        }
+                    ]
+                    }
+                }
+                ]
+            }
+            },
+            "displayName": {
+            "en": "Ambiant"
+            },
+            "name": "Ambiant"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:Circus:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+            "@id": "urn:z5sav05bm:beerlift:manage:Circus:CircusResponse:1",
+            "@type": "SchemaField",
+            "displayName": {
+                "en": "CircusResponse"
+            },
+            "name": "CircusResponse",
+            "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:Circus:CircusResponse:sfuid6ki_k:1",
+                "@type": "Object",
+                "displayName": {
+                "en": "Object"
+                },
+                "fields": [
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Circus:CircusResponse:sfuid6ki_k:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Circus:CircusResponse:sfuid6ki_k:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                }
+                ]
+            }
+            },
+            "displayName": {
+            "en": "Circus"
+            },
+            "name": "Circus"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:1",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "response": {
+            "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:1",
+            "@type": "SchemaField",
+            "displayName": {
+                "en": "FirstEmptySpotResponse"
+            },
+            "name": "FirstEmptySpotResponse",
+            "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:1",
+                "@type": "Object",
+                "displayName": {
+                "en": "Object"
+                },
+                "fields": [
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:firstEmptySlot:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "firstEmptySlot"
+                    },
+                    "name": "firstEmptySlot",
+                    "schema": "integer"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:responseState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:errorMessage:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                }
+                ]
+            }
+            },
+            "displayName": {
+            "en": "FirstEmptySpot"
+            },
+            "name": "FirstEmptySpot"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:LedTest:2",
+            "@type": "Command",
+            "commandType": "synchronous",
+            "durable": false,
+            "request": {
+            "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:2",
+            "@type": "SchemaField",
+            "displayName": {
+                "en": "LedTestRequest"
+            },
+            "name": "LedTestRequest",
+            "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:khk3bkm6j9:2",
+                "@type": "Object",
+                "displayName": {
+                "en": "Object"
+                },
+                "fields": [
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:khk3bkm6j9:ledPosition:2",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "ledPosition"
+                    },
+                    "name": "ledPosition",
+                    "schema": "integer"
+                }
+                ]
+            }
+            },
+            "response": {
+            "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:2",
+            "@type": "SchemaField",
+            "displayName": {
+                "en": "LedTestResponse"
+            },
+            "name": "LedTestResponse",
+            "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:wk7zjbxevi:2",
+                "@type": "Object",
+                "displayName": {
+                "en": "Object"
+                },
+                "fields": [
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:wk7zjbxevi:responseState:2",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "responseState"
+                    },
+                    "name": "responseState",
+                    "schema": "integer"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:wk7zjbxevi:errorMessage:2",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "errorMessage"
+                    },
+                    "name": "errorMessage",
+                    "schema": "string"
+                }
+                ]
+            }
+            },
+            "displayName": {
+            "en": "LedTest"
+            },
+            "name": "LedTest"
+        }
+    ],
+    "@context": [
+    "http://azureiot.com/v1/contexts/IoTModel.json"
+    ]
+}

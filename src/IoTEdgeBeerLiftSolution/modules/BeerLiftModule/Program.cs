@@ -479,6 +479,8 @@ namespace BeerLiftModule
             {
                 _state = "movingUp";
 
+                await PlayUpScene();
+
                 _controller.Write(UpRelayPin, PinValue.Low); // start action
              
                 await Task.Delay(UpDownInterval);
@@ -593,7 +595,7 @@ namespace BeerLiftModule
 
                 int ledPosition = request.ledPosition;
 
-                Console.WriteLine($"Test position {ledPosition}");
+                Console.WriteLine($"Blinking position {ledPosition}");
 
                 while(_ledsPlaying)
                 {
@@ -641,14 +643,10 @@ namespace BeerLiftModule
                         // blink led on i % 2 on else off
                         var j = (i % 2) == 0 ? bPos : 0;
 
-                        Console.Write($"Lit {j}. ");
-
                         mcp23x1x.WriteByte(Register.GPIO, (byte) j , port);
 
                         await Task.Delay(100);
                     }
-
-                    Console.WriteLine();
                 }
 
                 Console.WriteLine($"LedTest at {DateTime.UtcNow}.");
@@ -937,8 +935,26 @@ namespace BeerLiftModule
                 }
                 else
                 {
-          //          mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortA ^ 255) , Port.PortA);
-          //          mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortB ^255), Port.PortB);
+                    // Use UpDownInterval to predict how long the scen must play 
+
+                    var sleepInterval = 20;
+
+                    var j = UpDownInterval / sleepInterval;
+
+                    byte a = 0b_0000_0001;
+
+                    for(var i = 0; i< j; i++)
+                    {
+                        var shifter = (i % 8);
+
+                        int b = a << shifter;
+
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) b , Port.PortA);
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) b, Port.PortB);
+
+                        await Task.Delay(sleepInterval);
+                    }
+
                 }
             }
             catch (Exception ex)

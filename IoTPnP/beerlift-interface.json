@@ -607,76 +607,76 @@
             "name": "FirstEmptySpot"
         },
         {
-            "@id": "urn:z5sav05bm:beerlift:manage:LedTest:2",
+            "@id": "urn:z5sav05bm:beerlift:manage:LedTest:1",
             "@type": "Command",
             "commandType": "synchronous",
             "durable": false,
             "request": {
-            "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:2",
-            "@type": "SchemaField",
-            "displayName": {
+                "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:1",
+                "@type": "SchemaField",
+                "displayName": {
                 "en": "LedTestRequest"
-            },
-            "name": "LedTestRequest",
-            "schema": {
-                "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:khk3bkm6j9:2",
+                },
+                "name": "LedTestRequest",
+                "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:m6xa2rodh:1",
                 "@type": "Object",
                 "displayName": {
-                "en": "Object"
+                    "en": "Object"
                 },
                 "fields": [
-                {
-                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:khk3bkm6j9:ledPosition:2",
+                    {
+                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:m6xa2rodh:ledPosition:1",
                     "@type": "SchemaField",
                     "displayName": {
-                    "en": "ledPosition"
+                        "en": "ledPosition"
                     },
                     "name": "ledPosition",
                     "schema": "integer"
-                }
+                    }
                 ]
-            }
+                }
             },
             "response": {
-            "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:2",
-            "@type": "SchemaField",
-            "displayName": {
+                "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:1",
+                "@type": "SchemaField",
+                "displayName": {
                 "en": "LedTestResponse"
-            },
-            "name": "LedTestResponse",
-            "schema": {
-                "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:wk7zjbxevi:2",
+                },
+                "name": "LedTestResponse",
+                "schema": {
+                "@id": "urn:z5sav05bm:beerlift:manage:LedTestResponse:f9wjw1k9ex:1",
                 "@type": "Object",
                 "displayName": {
-                "en": "Object"
+                    "en": "Object"
                 },
                 "fields": [
-                {
-                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:wk7zjbxevi:responseState:2",
+                    {
+                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:f9wjw1k9ex:responseState:1",
                     "@type": "SchemaField",
                     "displayName": {
-                    "en": "responseState"
+                        "en": "responseState"
                     },
                     "name": "responseState",
                     "schema": "integer"
-                },
-                {
-                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:wk7zjbxevi:errorMessage:2",
+                    },
+                    {
+                    "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:f9wjw1k9ex:errorMessage:1",
                     "@type": "SchemaField",
                     "displayName": {
-                    "en": "errorMessage"
+                        "en": "errorMessage"
                     },
                     "name": "errorMessage",
                     "schema": "string"
-                }
+                    }
                 ]
-            }
+                }
             },
             "displayName": {
-            "en": "LedTest"
+                "en": "LedTest"
             },
             "name": "LedTest"
-        }
+        } 
     ],
     "@context": [
     "http://azureiot.com/v1/contexts/IoTModel.json"

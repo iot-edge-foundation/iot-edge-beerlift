@@ -937,8 +937,8 @@ namespace BeerLiftModule
                 }
                 else
                 {
-                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortA ^ 255) , Port.PortA);
-                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortB ^255), Port.PortB);
+          //          mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortA ^ 255) , Port.PortA);
+          //          mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortB ^255), Port.PortB);
                 }
             }
             catch (Exception ex)

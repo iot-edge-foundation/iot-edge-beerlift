@@ -479,7 +479,10 @@ namespace BeerLiftModule
             {
                 _state = "movingUp";
 
-                await PlayUpScene();
+                var task = Task.Run(async () =>
+                {
+                    await PlayUpScene();
+                });
 
                 _controller.Write(UpRelayPin, PinValue.Low); // start action
              
@@ -519,6 +522,11 @@ namespace BeerLiftModule
             try
             {
                 _state = "movingDown";
+
+                var task = Task.Run(async () =>
+                {
+                    await PlayDownScene();
+                });
 
                 _controller.Write(DownRelayPin, PinValue.Low); // start action
              
@@ -937,7 +945,7 @@ namespace BeerLiftModule
                 {
                     // Use UpDownInterval to predict how long the scen must play 
 
-                    var sleepInterval = 20;
+                    var sleepInterval = 100;
 
                     var j = UpDownInterval / sleepInterval;
 
@@ -959,7 +967,64 @@ namespace BeerLiftModule
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
+                Console.WriteLine($"Error when PlayUpScene: {ex.Message}");
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+        }
+
+        private static async Task PlayDownScene()
+        {
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
+                }
+
+                _ledsPlaying = true;
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                }
+                else
+                {
+                    // Use UpDownInterval to predict how long the scen must play 
+
+                    var sleepInterval = 100;
+
+                    var j = UpDownInterval / sleepInterval;
+
+                    byte a = 0b_0000_0001;
+
+                    for(var i = 0; i< j; i++)
+                    {
+                        var shifter = ((i + 8) % 8);
+
+                        int b = a >> shifter;
+
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) b , Port.PortA);
+                        mcp23x1x.WriteByte(Register.GPIO, (byte) b, Port.PortB);
+
+                        await Task.Delay(sleepInterval);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error when PlayUpScene: {ex.Message}");
             }
             finally
             {

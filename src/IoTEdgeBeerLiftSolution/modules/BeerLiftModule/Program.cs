@@ -581,57 +581,20 @@ namespace BeerLiftModule
             }
         }
 
-        private static async Task LitAllEmptySpots(byte lastDataPortA, byte lastDataPortB)
-        {
-            try
-            {
-                while(_ledsPlaying)
-                {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
-                }
-                else
-                {
-                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortA ^ 255) , Port.PortA);
-                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortB ^255), Port.PortB);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
-            }
-            finally
-            {
-                _ledsPlaying = false;
-            }
-        }
-
         private static async Task<MethodResponse> LedTestMethodCallBack(MethodRequest methodRequest, object userContext)
         {
             Console.WriteLine($"Executing LedTestMethodCallBack at {DateTime.UtcNow}");
 
-            var LedTestResponse = new LedTestResponse{responseState = 0};
-
-            dynamic request = JsonConvert.DeserializeObject(methodRequest.DataAsJson);
-
-            var ledPosition = request.ledPosition;
+            var ledTestResponse = new LedTestResponse{responseState = 0};
 
             try
             {
+                dynamic request = JsonConvert.DeserializeObject(methodRequest.DataAsJson);
+
+                int ledPosition = request.ledPosition;
+
+                Console.WriteLine($"Test position {ledPosition}");
+
                 while(_ledsPlaying)
                 {
                     // let the previous light show end.
@@ -653,8 +616,8 @@ namespace BeerLiftModule
                 {
                     Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
 
-                    LedTestResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
-                    LedTestResponse.responseState = 1;
+                    ledTestResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
+                    ledTestResponse.responseState = 1;
                 }
                 else
                 {
@@ -692,15 +655,15 @@ namespace BeerLiftModule
             }
             catch (Exception ex)
             {
-                LedTestResponse.errorMessage = ex.Message;   
-                LedTestResponse.responseState = -999;
+                ledTestResponse.errorMessage = ex.Message;   
+                ledTestResponse.responseState = -999;
             }
             finally
             {
                 _ledsPlaying = false;
             }
               
-            var json = JsonConvert.SerializeObject(LedTestResponse);
+            var json = JsonConvert.SerializeObject(ledTestResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;  
@@ -883,6 +846,7 @@ namespace BeerLiftModule
 
             return response;
         } 
+
         private static AmbiantValues ReadAmbiantValues()
         {
              var ambiantValues = new AmbiantValues{Temperature = -273, Humidity = -1 };
@@ -908,5 +872,83 @@ namespace BeerLiftModule
 
             return ambiantValues;
         } 
+
+        private static async Task LitAllEmptySpots(byte lastDataPortA, byte lastDataPortB)
+        {
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
+                }
+
+                _ledsPlaying = true;
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                }
+                else
+                {
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortA ^ 255) , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortB ^255), Port.PortB);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+        }
+
+        private static async Task PlayUpScene()
+        {
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
+                }
+
+                _ledsPlaying = true;
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                }
+                else
+                {
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortA ^ 255) , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortB ^255), Port.PortB);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+        }
     }
 }

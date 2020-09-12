@@ -95,6 +95,7 @@ The following direct methods are available:
 * Ambiant
 * Circus
 * FirstEmptySpot
+* LedTest
 
 *Note* Method names are case sensitive
 
@@ -109,7 +110,7 @@ Sends the lift up for the duration of 'UpDownInterval' milliseconds (20000 by de
 Response:
 
 ```
-class UpResponse 
+class Response 
 {
     int responseState { get; set; }
     string errorMessage { get; set; }
@@ -127,7 +128,7 @@ Sends the lift down for the duration of 'UpDownInterval' milliseconds (20000 by 
 Response:
 
 ```
-class DownResponse 
+class Response 
 {
     int responseState { get; set; }
     string errorMessage { get; set; }
@@ -149,7 +150,7 @@ The state of the lift can be seen too.
 Response:
 
 ```
-class AmbiantValuesResponse 
+class Response 
 {
     int responseState { get; set; }
     string errorMessage { get; set; }
@@ -168,7 +169,7 @@ Lits up the LED lights in a semi-random pattern for a few seconds.
 Response:
 
 ```
-class AmbiantValuesResponse 
+class Response 
 {
     int responseState { get; set; }
     string errorMessage { get; set; }
@@ -190,11 +191,38 @@ It also flashes the LED at the empty spot found.
 Response:
 
 ```
-class AmbiantValuesResponse 
+class Response 
 {
     int responseState { get; set; }
     string errorMessage { get; set; }
     int FindFirstEmpty {get; set;}
+}
+```
+
+### Direct Method - LedTest
+
+A JSON body is needed to be send:
+
+```
+class Request 
+{
+    int ledPosition { get; set; }
+}
+```
+
+Returns the first empty spot (1-16) where no bottle is placed. 
+
+If all spots are occupied, it returns 0.
+
+It also flashes the LED at the empty spot found.
+
+Response:
+
+```
+class Response 
+{
+    int responseState { get; set; }
+    string errorMessage { get; set; }
 }
 ```
 

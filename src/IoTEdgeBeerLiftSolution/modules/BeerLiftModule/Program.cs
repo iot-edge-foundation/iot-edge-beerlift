@@ -289,8 +289,17 @@ namespace BeerLiftModule
                     var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
                     var json = JsonConvert.SerializeObject(beerLiftMessage);
 
+                    var pinValue = _controller.Read(FloodedPin); // Moisture sensor
+
+                    beerLiftMessage.flooded = pinValue.ToString().ToLower() == "low" ? false : true;
+
                     using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
                     {
+                        if (beerLiftMessage.flooded)
+                        {
+                            pipeMessage.Properties.Add("Alarm", "Flooded");
+                        }
+
                         pipeMessage.Properties.Add("StateLength", "16");
 
                         await client.SendEventAsync("output1", pipeMessage);

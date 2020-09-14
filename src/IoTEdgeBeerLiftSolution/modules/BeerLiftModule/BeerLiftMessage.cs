@@ -63,9 +63,11 @@ namespace BeerLiftModule
         // unknown, movingUp, up, movingDown, down
         public string state {get; set;}
 
+        public bool flooded {get; set;}
+
         public override string ToString()
         {
-            return $"A:{_stateA} - B:{_stateB} - state:{state}";
+            return $"A:{_stateA} - B:{_stateB} - state:{state} - flooded:{flooded}";
         }  
 
         public int FindFirstEmptySpot()

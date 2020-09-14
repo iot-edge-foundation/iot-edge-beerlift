@@ -51,8 +51,6 @@ namespace BeerLiftModule
 
         private static byte _lastDataPortB = 0;
 
-        private static bool _flooded = false;
-
         private static GpioController _controller;
 
         private static string _moduleId; 
@@ -279,20 +277,19 @@ namespace BeerLiftModule
                 await LitAllEmptySpots(dataPortA, dataPortB);
 
                 Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
-
                 
                 var pinValue = _controller.Read(FloodedPin); // Moisture sensor
 
                 var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
 
+                // send message on some change or FLOODED!
                 if (dataPortA != _lastDataPortA
                         || dataPortB != _lastDataPortB
                         || _liftState != _lastLiftState
-                        || flooded != _flooded)
+                        || flooded) 
                 {
                     _lastDataPortA = dataPortA;
                     _lastDataPortB = dataPortB;
-                    _flooded = flooded;
                     _lastLiftState = _liftState;
 
                     var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _liftState);
@@ -609,7 +606,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("LitAllUsedSpots: Unable to cast Mcp23017 Write GPIO.");   
                 }
                 else
                 {
@@ -660,9 +657,9 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("LedTestMethodCallBack: Unable to cast Mcp23017 Write GPIO.");   
 
-                    ledTestResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
+                    ledTestResponse.errorMessage = "LedTestMethodCallBack: Unable to cast Mcp23017 Write GPIO";   
                     ledTestResponse.responseState = 1;
                 }
                 else
@@ -940,7 +937,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("LitAllEmptySpots: Unable to cast Mcp23017 Write GPIO.");   
                 }
                 else
                 {
@@ -979,7 +976,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("PlayUpScene: Unable to cast Mcp23017 Write GPIO.");   
                 }
                 else
                 {
@@ -1036,7 +1033,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("PlayDownScene: Unable to cast Mcp23017 Write GPIO.");   
                 }
                 else
                 {

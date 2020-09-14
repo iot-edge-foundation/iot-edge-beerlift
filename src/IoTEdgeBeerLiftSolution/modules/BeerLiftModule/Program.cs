@@ -94,7 +94,7 @@ namespace BeerLiftModule
             Console.WriteLine(" |_\\___/\\__|   \\___\\__,_\\__, \\___|   |_.__/\\___\\___|_| |_|_|_|  \\__|");
             Console.WriteLine("                        |___/                                       ");
             Console.WriteLine();
-            Console.WriteLine("   Copyright © 2020 - josa josa josa josa ");
+            Console.WriteLine("   Copyright © 2020 - josa josa josa");
             Console.WriteLine(" ");
 
             MqttTransportSettings mqttSetting = new MqttTransportSettings(TransportType.Mqtt_Tcp_Only);
@@ -859,7 +859,7 @@ namespace BeerLiftModule
 
                 var pinValue = _controller.Read(FloodedPin); // Moisture sensor
 
-                ambiantResponse.flooded = bool.Parse(pinValue.ToString());
+                ambiantResponse.flooded = pinValue.ToString().ToLower() == "low" ? false : true;
 
                 await Task.Delay(1);    
 

@@ -35,6 +35,8 @@ namespace BeerLiftModule
         // GPIO 27 is physical pin 13
         private const int DefaultDownRelayPin = 27;
 
+        private const int DefaultFloodedPin = 23;
+
         // GPIO 4 is used for 1-Wire
         private const int DefaultDhtPin = 4;
 
@@ -123,6 +125,7 @@ namespace BeerLiftModule
 
             _controller.OpenPin(UpRelayPin, PinMode.Output);
             _controller.OpenPin(DownRelayPin, PinMode.Output);
+            _controller.OpenPin(FloodedPin, PinMode.Input);
 
             _controller.Write(UpRelayPin, PinValue.High);  //by default high
             _controller.Write(DownRelayPin, PinValue.High);  //by default high
@@ -304,6 +307,7 @@ namespace BeerLiftModule
         private static int UpDownInterval { get; set; } = DefaultUpDownInterval;
         private static int UpRelayPin { get; set; } = DefaultUpRelayPin;
         private static int DownRelayPin { get; set; } = DefaultDownRelayPin;
+        private static int FloodedPin { get; set; } = DefaultFloodedPin;
         private static int DhtPin { get; set; } = DefaultDhtPin;
         private static int I2CAddressRead { get; set; } = DefaultI2CAddressRead;
         private static int I2CAddressWrite { get; set; } = DefaultI2CAddressWrite;
@@ -391,6 +395,22 @@ namespace BeerLiftModule
                     Console.WriteLine($"DownRelayPin changed to {DownRelayPin}");
 
                     reportedProperties["downRelayPin"] = DownRelayPin;
+                }
+
+                if (desiredProperties.Contains("floodedPin")) 
+                {
+                    if (desiredProperties["floodedPin"] != null)
+                    {
+                        FloodedPin = desiredProperties["floodedPin"];
+                    }
+                    else
+                    {
+                        FloodedPin = DefaultFloodedPin;
+                    }
+
+                    Console.WriteLine($"FloodedPin changed to {FloodedPin}");
+
+                    reportedProperties["floodedPin"] = FloodedPin;
                 }
 
                 if (desiredProperties.Contains("dhtPin")) 
@@ -837,9 +857,13 @@ namespace BeerLiftModule
                 ambiantResponse.humidity = ambiantValues.Humidity;
                 ambiantResponse.state = _state;
 
+                var pinValue = _controller.Read(FloodedPin); // Moisture sensor
+
+                ambiantResponse.flooded = bool.Parse(pinValue.ToString());
+
                 await Task.Delay(1);    
 
-                Console.WriteLine($"Ambiant at {DateTime.UtcNow} - Temperature:{ambiantResponse.temperature} / Humidity:{ambiantResponse.humidity} / Attempts:{ambiantValues.Attempts} / State:{_state}.");
+                Console.WriteLine($"Ambiant at {DateTime.UtcNow} - Temperature:{ambiantResponse.temperature} / Humidity:{ambiantResponse.humidity} / Attempts:{ambiantValues.Attempts} / State:{_state} / Flooded: {pinValue}.");
             }
             catch (Exception ex)
             {

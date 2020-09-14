@@ -11,5 +11,7 @@ namespace BeerLiftModule
         public double humidity {get; set;}
 
         public string state {get; set;}
+
+        public bool flooded {get; set;}
     }
 }

@@ -157,6 +157,7 @@ class Response
     double Temperature {get; set;}
     double Humidity {get; set;}    
     string State {get; set;}
+    bool flooded {get; set;}
 }
 ```
 
@@ -234,6 +235,7 @@ The module is configurable using the desired properties of the module twin:
 * upDownInterval (in milliseconds, default 20000)
 * upRelayPin (default pin 17)
 * downRelayPin (default pin 27)
+* floodedPin (default pin 23)
 * dht22Pin (default pin 4)
 
 # Raspberry Pi

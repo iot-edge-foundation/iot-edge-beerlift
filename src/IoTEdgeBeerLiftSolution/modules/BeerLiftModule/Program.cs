@@ -21,7 +21,7 @@ namespace BeerLiftModule
 
         private static Mcp23xxx _mcp23xxxWrite = null;
 
-        private static string _state = "unknown";
+        private static string _liftState = "unknown";
 
         private static bool _ledsPlaying = false;
 
@@ -45,11 +45,13 @@ namespace BeerLiftModule
         // I2C Read banks at 0x22
         private const int DefaultI2CAddressWrite = 0x22;
 
-        private static string _lastState;
+        private static string _lastLiftState = "";
 
         private static byte _lastDataPortA = 0;
 
         private static byte _lastDataPortB = 0;
+
+        private static bool _flooded = false;
 
         private static GpioController _controller;
 
@@ -187,7 +189,7 @@ namespace BeerLiftModule
                 thread.Start();
             }
 
-            if (_state == "unknown")
+            if (_liftState == "unknown")
             {
                 await DownMethodCallBack(null, ioTHubModuleClient);          
             }
@@ -278,20 +280,25 @@ namespace BeerLiftModule
 
                 Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
 
+                
+                var pinValue = _controller.Read(FloodedPin); // Moisture sensor
+
+                var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
+
                 if (dataPortA != _lastDataPortA
                         || dataPortB != _lastDataPortB
-                        || _state != _lastState)
+                        || _liftState != _lastLiftState
+                        || flooded != _flooded)
                 {
                     _lastDataPortA = dataPortA;
                     _lastDataPortB = dataPortB;
-                    _lastState = _state;
+                    _flooded = flooded;
+                    _lastLiftState = _liftState;
 
-                    var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _state);
+                    var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _liftState);
                     var json = JsonConvert.SerializeObject(beerLiftMessage);
 
-                    var pinValue = _controller.Read(FloodedPin); // Moisture sensor
-
-                    beerLiftMessage.flooded = pinValue.ToString().ToLower() == "low" ? false : true;
+                    beerLiftMessage.flooded = flooded;
 
                     using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
                     {
@@ -506,7 +513,7 @@ namespace BeerLiftModule
 
             try
             {
-                _state = "movingUp";
+                _liftState = "movingUp";
 
                 var task = Task.Run(async () =>
                 {
@@ -521,11 +528,11 @@ namespace BeerLiftModule
 
                 Console.WriteLine($"Up at {DateTime.UtcNow}.");
 
-                _state = "up";
+                _liftState = "up";
             }
             catch (Exception ex)
             {
-                _state = "unknown";
+                _liftState = "unknown";
 
                 upResponse.errorMessage = ex.Message;   
                 upResponse.responseState = -999;
@@ -550,7 +557,7 @@ namespace BeerLiftModule
 
             try
             {
-                _state = "movingDown";
+                _liftState = "movingDown";
 
                 var task = Task.Run(async () =>
                 {
@@ -565,11 +572,11 @@ namespace BeerLiftModule
 
                 Console.WriteLine($"Down at {DateTime.UtcNow}.");
 
-                _state = "down";
+                _liftState = "down";
             }
             catch (Exception ex)
             {
-                _state = "unknown";
+                _liftState = "unknown";
 
                 downResponse.errorMessage = ex.Message;   
                 downResponse.responseState = -999;
@@ -864,7 +871,7 @@ namespace BeerLiftModule
             
                 ambiantResponse.temperature = ambiantValues.Temperature;
                 ambiantResponse.humidity = ambiantValues.Humidity;
-                ambiantResponse.state = _state;
+                ambiantResponse.liftState = _liftState;
 
                 var pinValue = _controller.Read(FloodedPin); // Moisture sensor
 
@@ -872,7 +879,7 @@ namespace BeerLiftModule
 
                 await Task.Delay(1);    
 
-                Console.WriteLine($"Ambiant at {DateTime.UtcNow} - Temperature:{ambiantResponse.temperature} / Humidity:{ambiantResponse.humidity} / Attempts:{ambiantValues.Attempts} / State:{_state} / Flooded: {pinValue}.");
+                Console.WriteLine($"Ambiant at {DateTime.UtcNow} - Temperature:{ambiantResponse.temperature} / Humidity:{ambiantResponse.humidity} / Attempts:{ambiantValues.Attempts} / State:{_liftState} / Flooded: {pinValue}.");
             }
             catch (Exception ex)
             {

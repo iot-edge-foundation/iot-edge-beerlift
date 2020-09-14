@@ -39,7 +39,7 @@ namespace BeerLiftModule
 
         public BeerLiftMessage(int stateA, int stateB, string state) : this(stateA, stateB)
         {
-            this.state = state;
+            this.liftState = state;
         }
 
         public bool slot01 {get; set;}
@@ -61,13 +61,13 @@ namespace BeerLiftModule
         public DateTime timestamp {get; set;}
         
         // unknown, movingUp, up, movingDown, down
-        public string state {get; set;}
+        public string liftState {get; set;}
 
         public bool flooded {get; set;}
 
         public override string ToString()
         {
-            return $"A:{_stateA} - B:{_stateB} - state:{state} - flooded:{flooded}";
+            return $"A:{_stateA} - B:{_stateB} - lift state:{liftState} - flooded:{flooded}";
         }  
 
         public int FindFirstEmptySpot()

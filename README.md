@@ -65,24 +65,25 @@ Message:
 ```
 class BeerLiftMessage
 {
-    public bool Slot01 {get; set;}
-    public bool Slot02 {get; set;}
-    public bool Slot03 {get; set;}
-    public bool Slot04 {get; set;}
-    public bool Slot05 {get; set;}
-    public bool Slot06 {get; set;}
-    public bool Slot07 {get; set;}
-    public bool Slot08 {get; set;}
-    public bool Slot09 {get; set;}
-    public bool Slot10 {get; set;}
-    public bool Slot11 {get; set;}
-    public bool Slot12 {get; set;}
-    public bool Slot13 {get; set;}
-    public bool Slot14 {get; set;}
-    public bool Slot15 {get; set;}
-    public bool Slot16 {get; set;}
-    DateTime Timestamp {get; set;}
-    string State {get; set;}
+    public bool slot01 {get; set;}
+    public bool slot02 {get; set;}
+    public bool slot03 {get; set;}
+    public bool slot04 {get; set;}
+    public bool slot05 {get; set;}
+    public bool slot06 {get; set;}
+    public bool slot07 {get; set;}
+    public bool slot08 {get; set;}
+    public bool slot09 {get; set;}
+    public bool slot10 {get; set;}
+    public bool slot11 {get; set;}
+    public bool slot12 {get; set;}
+    public bool slot13 {get; set;}
+    public bool slot14 {get; set;}
+    public bool slot15 {get; set;}
+    public bool slot16 {get; set;}
+    DateTime timestamp {get; set;}
+    string liftState {get; set;}
+    bool flooded {get; set;}
 }
 ```
 
@@ -154,9 +155,9 @@ class Response
 {
     int responseState { get; set; }
     string errorMessage { get; set; }
-    double Temperature {get; set;}
-    double Humidity {get; set;}    
-    string State {get; set;}
+    double temperature {get; set;}
+    double humidity {get; set;}    
+    string liftState {get; set;}
     bool flooded {get; set;}
 }
 ```

@@ -10,7 +10,7 @@ namespace BeerLiftModule
 
         public double humidity {get; set;}
 
-        public string state {get; set;}
+        public string liftState {get; set;}
 
         public bool flooded {get; set;}
     }

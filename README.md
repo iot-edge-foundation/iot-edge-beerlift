@@ -60,6 +60,8 @@ The state can be:
 
 If any bottles are taken out (or refilled) or the state is changes, a message is send.
 
+If the BeerLift detects flooding (water inside the BeerLift) this will result in cloud messages ALSO.
+
 Message:
 
 ```
@@ -86,6 +88,8 @@ class BeerLiftMessage
     bool flooded {get; set;}
 }
 ```
+
+In case of flooding, an extra message property *"Alarm": "Flooded"* is added. 
 
 ## Direct Methods
 

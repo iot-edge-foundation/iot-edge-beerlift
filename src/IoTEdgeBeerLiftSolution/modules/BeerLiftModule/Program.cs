@@ -274,13 +274,20 @@ namespace BeerLiftModule
                 byte dataPortA = mcp23x1x.ReadByte(Register.GPIO, Port.PortA);
                 byte dataPortB = mcp23x1x.ReadByte(Register.GPIO, Port.PortB);
 
-                await LitAllEmptySpots(dataPortA, dataPortB);
-
                 Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
                 
                 var pinValue = _controller.Read(FloodedPin); // Moisture sensor
 
                 var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
+
+                if (flooded)
+                {
+                    await LitFlooded();
+                }
+                else
+                {
+                    await LitAllEmptySpots(dataPortA, dataPortB);
+                }
 
                 // send message on some change or FLOODED!
                 if (dataPortA != _lastDataPortA
@@ -585,45 +592,6 @@ namespace BeerLiftModule
             return response;
         }   
 
-        private static async Task LitAllUsedSpots(byte lastDataPortA, byte lastDataPortB)
-        {
-            try
-            {
-                while(_ledsPlaying)
-                {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("LitAllUsedSpots: Unable to cast Mcp23017 Write GPIO.");   
-                }
-                else
-                {
-                    mcp23x1x.WriteByte(Register.GPIO, lastDataPortA , Port.PortA);
-                    mcp23x1x.WriteByte(Register.GPIO, lastDataPortB, Port.PortB);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
-            }
-            finally
-            {
-                _ledsPlaying = false;
-            }
-        }
-
         private static async Task<MethodResponse> LedTestMethodCallBack(MethodRequest methodRequest, object userContext)
         {
             Console.WriteLine($"Executing LedTestMethodCallBack at {DateTime.UtcNow}");
@@ -915,6 +883,97 @@ namespace BeerLiftModule
 
             return ambiantValues;
         } 
+
+
+        private static async Task LitFlooded()
+        {
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
+                }
+
+                _ledsPlaying = true;
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("LitFlooded: Unable to cast Mcp23017 Write GPIO.");   
+                }
+                else
+                {
+                    var sleep = 200;
+
+                    var interval = Interval / sleep;
+
+                    for (var i = 0; i < interval; i++)
+                    {
+                        mcp23x1x.WriteByte(Register.GPIO, 255 , Port.PortA);
+                        mcp23x1x.WriteByte(Register.GPIO, 255, Port.PortB);
+
+                        mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
+                        mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
+
+                        await Task.Delay(sleep);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error when LitFlooded: {ex.Message}");
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+        }
+
+        private static async Task LitAllUsedSpots(byte lastDataPortA, byte lastDataPortB)
+        {
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
+                }
+
+                _ledsPlaying = true;
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (_mcp23xxxWrite != null)
+                {
+                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("LitAllUsedSpots: Unable to cast Mcp23017 Write GPIO.");   
+                }
+                else
+                {
+                    mcp23x1x.WriteByte(Register.GPIO, lastDataPortA , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, lastDataPortB, Port.PortB);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error when LitAllUsedSpots: {ex.Message}");
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+        }
 
         private static async Task LitAllEmptySpots(byte lastDataPortA, byte lastDataPortB)
         {

@@ -2,16 +2,9 @@ No Down wheb already Down (other response)
 
 No Up when already up (other response)
 
-move down on reboot
-
 add property for workInPRogress to prevent moving
 
 When removing a bottle, flash the led next to it.
-
-
-
-Flooded LED alarm
-
 
 
 

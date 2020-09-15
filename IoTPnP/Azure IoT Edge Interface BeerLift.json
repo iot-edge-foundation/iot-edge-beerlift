@@ -56,6 +56,16 @@
             "schema": "integer"
         },
         {
+            "@id": "urn:z5sav05bm:beerlift:manage:floodedPin:1",
+            "@type": "Property",
+            "displayName": {
+            "en": "floodedPin"
+            },
+            "name": "floodedPin",
+            "writable": true,
+            "schema": "integer"
+        },
+        {
             "@id": "urn:z5sav05bm:beerlift:manage:i2cAddressRead:1",
             "@type": "Property",
             "displayName": {
@@ -220,22 +230,31 @@
             "schema": "boolean"
         },
         {
-            "@id": "urn:z5sav05bm:beerlift:manage:state:1",
+            "@id": "urn:z5sav05bm:beerlift:manage:flooded:1",
+            "@type": "Telemetry",
+            "displayName": {
+            "en": "flooded"
+            },
+            "name": "flooded",
+            "schema": "boolean"
+        },
+        {
+            "@id": "urn:z5sav05bm:beerlift:manage:liftState:1",
             "@type": [
             "Telemetry",
             "SemanticType/State"
             ],
             "displayName": {
-            "en": "state"
+            "en": "liftState"
             },
-            "name": "state",
+            "name": "liftState",
             "schema": {
-            "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:1",
+            "@id": "urn:z5sav05bm:beerlift:manage:liftState:12fdotvbt:1",
             "@type": "Enum",
             "valueSchema": "string",
             "enumValues": [
                 {
-                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:unknown:1",
+                "@id": "urn:z5sav05bm:beerlift:manage:liftState:12fdotvbt:unknown:1",
                 "@type": "EnumValue",
                 "displayName": {
                     "en": "unknown"
@@ -244,7 +263,7 @@
                 "name": "unknown"
                 },
                 {
-                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:movingUp:1",
+                "@id": "urn:z5sav05bm:beerlift:manage:liftState:12fdotvbt:movingUp:1",
                 "@type": "EnumValue",
                 "displayName": {
                     "en": " movingUp"
@@ -253,7 +272,7 @@
                 "name": "movingUp"
                 },
                 {
-                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:up:1",
+                "@id": "urn:z5sav05bm:beerlift:manage:liftState:12fdotvbt:up:1",
                 "@type": "EnumValue",
                 "displayName": {
                     "en": "up"
@@ -262,7 +281,7 @@
                 "name": "up"
                 },
                 {
-                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:movingDown:1",
+                "@id": "urn:z5sav05bm:beerlift:manage:liftState:12fdotvbt:movingDown:1",
                 "@type": "EnumValue",
                 "displayName": {
                     "en": "movingDown"
@@ -271,7 +290,7 @@
                 "name": "movingDown"
                 },
                 {
-                "@id": "urn:z5sav05bm:beerlift:manage:state:12fdotvbt:down:1",
+                "@id": "urn:z5sav05bm:beerlift:manage:liftState:12fdotvbt:down:1",
                 "@type": "EnumValue",
                 "displayName": {
                     "en": "down"
@@ -437,14 +456,23 @@
                     "schema": "double"
                 },
                 {
-                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:1",
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:flooded:1",
                     "@type": "SchemaField",
                     "displayName": {
-                    "en": "state"
+                    "en": "flooded"
                     },
-                    "name": "state",
+                    "name": "flooded",
+                    "schema": "boolean"
+                },
+                {
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:liftState:1",
+                    "@type": "SchemaField",
+                    "displayName": {
+                    "en": "liftState"
+                    },
+                    "name": "liftState",
                     "schema": {
-                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:1",
+                    "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:liftState:4esbikbfy:1",
                     "@type": "Enum",
                     "displayName": {
                         "en": "Enum"
@@ -452,7 +480,7 @@
                     "valueSchema": "string",
                     "enumValues": [
                         {
-                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:unknown:1",
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:liftState:4esbikbfy:unknown:1",
                         "@type": "EnumValue",
                         "displayName": {
                             "en": "unknown"
@@ -461,7 +489,7 @@
                         "name": "unknown"
                         },
                         {
-                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:movingUp:1",
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:liftState:4esbikbfy:movingUp:1",
                         "@type": "EnumValue",
                         "displayName": {
                             "en": "movingUp"
@@ -470,7 +498,7 @@
                         "name": "movingUp"
                         },
                         {
-                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:up:1",
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:liftState:4esbikbfy:up:1",
                         "@type": "EnumValue",
                         "displayName": {
                             "en": "up"
@@ -479,7 +507,7 @@
                         "name": "up"
                         },
                         {
-                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:movingDown:1",
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:liftState:4esbikbfy:movingDown:1",
                         "@type": "EnumValue",
                         "displayName": {
                             "en": "movingDown"
@@ -488,7 +516,7 @@
                         "name": "movingDown"
                         },
                         {
-                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:state:4esbikbfy:down:1",
+                        "@id": "urn:z5sav05bm:beerlift:manage:Ambiant:AmbiantResponse:pusbh8urtj:liftState:4esbikbfy:down:1",
                         "@type": "EnumValue",
                         "displayName": {
                             "en": "down"

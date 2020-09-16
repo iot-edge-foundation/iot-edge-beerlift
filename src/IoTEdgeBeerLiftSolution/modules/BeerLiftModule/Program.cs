@@ -280,10 +280,9 @@ namespace BeerLiftModule
 
                 var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
 
-                Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB} | Flooded = {flooded}");
+                Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
 
-                if (flooded
-                        && !SilentFlooding)
+                if (flooded)
                 {
                     await LitFlooded();
                 }

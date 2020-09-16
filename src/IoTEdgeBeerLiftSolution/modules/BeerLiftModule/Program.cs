@@ -275,14 +275,15 @@ namespace BeerLiftModule
             {
                 byte dataPortA = mcp23x1x.ReadByte(Register.GPIO, Port.PortA);
                 byte dataPortB = mcp23x1x.ReadByte(Register.GPIO, Port.PortB);
-
-                Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
                 
                 var pinValue = _controller.Read(FloodedPin); // Moisture sensor
 
                 var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
 
-                if (flooded)
+                Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB} | Flooded = {flooded}");
+
+                if (flooded
+                        && !SilentFlooding)
                 {
                     await LitFlooded();
                 }
@@ -295,7 +296,7 @@ namespace BeerLiftModule
                 if (dataPortA != _lastDataPortA
                         || dataPortB != _lastDataPortB
                         || _liftState != _lastLiftState
-                        || flooded) 
+                        || (flooded && !SilentFlooding)) 
                 {
                     _lastDataPortA = dataPortA;
                     _lastDataPortB = dataPortB;

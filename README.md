@@ -244,6 +244,7 @@ The module is configurable using the desired properties of the module twin:
 * dht22Pin (default pin 4)
 * i2cAddressWrite (default 0x22)
 * i2cAddressRead (default 0x20)
+* silentFlooding (default false)
 
 # Raspberry Pi
 

@@ -25,6 +25,8 @@ namespace BeerLiftModule
 
         private static bool _ledsPlaying = false;
 
+         private const bool DefaultSilentFlooding = false;
+
         private const int DefaultInterval = 1000;
 
         private const int DefaultUpDownInterval = 20000;
@@ -323,6 +325,7 @@ namespace BeerLiftModule
             }
         }
 
+        private static bool SilentFlooding { get; set; } = DefaultSilentFlooding;
         private static int Interval { get; set; } = DefaultInterval;
         private static int UpDownInterval { get; set; } = DefaultUpDownInterval;
         private static int UpRelayPin { get; set; } = DefaultUpRelayPin;
@@ -466,6 +469,22 @@ namespace BeerLiftModule
                     Console.WriteLine($"Restart module to access new address.");
 
                     reportedProperties["i2cAddressRead"] = I2CAddressRead;
+                }
+
+                if (desiredProperties.Contains("silentFlooding")) 
+                {
+                    if (desiredProperties["silentFlooding"] != null)
+                    {
+                        SilentFlooding = desiredProperties["silentFlooding"];
+                    }
+                    else
+                    {
+                        SilentFlooding = DefaultSilentFlooding;
+                    }
+
+                    Console.WriteLine($"SilentFlooding changed to {SilentFlooding}");
+
+                    reportedProperties["silentFlooding"] = SilentFlooding;
                 }
 
                 if (desiredProperties.Contains("i2cAddressWrite")) 
@@ -887,6 +906,11 @@ namespace BeerLiftModule
 
         private static async Task LitFlooded()
         {
+            if (SilentFlooding)
+            {
+                return;
+            }
+
             try
             {
                 while(_ledsPlaying)

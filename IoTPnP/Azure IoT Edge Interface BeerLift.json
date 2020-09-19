@@ -76,14 +76,14 @@
         "schema": "string"
       },
       {
-        "@id": "urn:z5sav05bm:beerlift:manage:i2cAddressWrite:1",
+        "@id": "urn:z5sav05bm:beerlift:manage:silentFlooding:1",
         "@type": "Property",
         "displayName": {
-          "en": "i2cAddressWrite"
+          "en": "silentFlooding"
         },
-        "name": "i2cAddressWrite",
+        "name": "silentFlooding",
         "writable": true,
-        "schema": "string"
+        "schema": "boolean"
       },
       {
         "@id": "urn:z5sav05bm:beerlift:manage:slot01:1",

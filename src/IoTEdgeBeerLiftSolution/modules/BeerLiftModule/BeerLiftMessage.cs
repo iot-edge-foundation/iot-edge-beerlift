@@ -11,7 +11,7 @@ namespace BeerLiftModule
         public BeerLiftMessage()
         {
             timestamp = DateTime.UtcNow;
-            isFlooded = false;
+            isFlooded = true;
         }
 
         public BeerLiftMessage(int stateA, int stateB) : this()

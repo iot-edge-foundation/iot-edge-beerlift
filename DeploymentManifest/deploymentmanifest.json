@@ -60,7 +60,9 @@
                 "downRelayPin": 27,
                 "dhtPin" : 4,
                 "i2cAddressRead": "0x20",
-                "i2cAddressWrite": "0x24"
+                "i2cAddressWrite": "0x24",
+                "silentFlooding": false,
+                "floodedPin" : 23
             }
         }
     }

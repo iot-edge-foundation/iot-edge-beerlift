@@ -475,7 +475,9 @@ namespace BeerLiftModule
                 {
                     if (desiredProperties["silentFlooding"] != null)
                     {
-                        SilentFlooding = bool.Parse(desiredProperties["silentFlooding"]);
+                        var silentFlooding = ((string) desiredProperties["silentFlooding"]).ToLower() == "true";
+
+                        SilentFlooding = silentFlooding;
                     }
                     else
                     {

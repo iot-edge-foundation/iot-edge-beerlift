@@ -302,10 +302,10 @@ namespace BeerLiftModule
                     _lastLiftState = _liftState;
 
                     var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _liftState);
-                    var json = JsonConvert.SerializeObject(beerLiftMessage);
 
                     beerLiftMessage.isFlooded = flooded;
 
+                    var json = JsonConvert.SerializeObject(beerLiftMessage);
                     using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
                     {
                         if (beerLiftMessage.isFlooded)

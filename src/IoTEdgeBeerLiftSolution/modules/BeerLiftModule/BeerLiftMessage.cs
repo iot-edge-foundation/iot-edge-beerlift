@@ -11,6 +11,7 @@ namespace BeerLiftModule
         public BeerLiftMessage()
         {
             timestamp = DateTime.UtcNow;
+            isFlooded = false;
         }
 
         public BeerLiftMessage(int stateA, int stateB) : this()
@@ -63,11 +64,11 @@ namespace BeerLiftModule
         // unknown, movingUp, up, movingDown, down
         public string liftState {get; set;}
 
-        public bool flooded {get; set;}
+        public bool isFlooded {get; set;}
 
         public override string ToString()
         {
-            return $"A:{_stateA} - B:{_stateB} - lift state:{liftState} - flooded:{flooded}";
+            return $"A:{_stateA} - B:{_stateB} - lift state:{liftState} - flooded:{isFlooded}";
         }  
 
         public int FindFirstEmptySpot()

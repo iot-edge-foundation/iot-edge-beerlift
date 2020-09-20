@@ -5,7 +5,7 @@
                 "modules": {
                     "beerlift": {
                         "settings": {
-                            "image": "svelde/iot-edge-beerlift:0.0.45-arm32v7",
+                            "image": "svelde/iot-edge-beerlift:0.0.46-arm32v7",
                             "createOptions": "{\"HostConfig\":{\"Privileged\":true}}"
                         },
                         "type": "docker",

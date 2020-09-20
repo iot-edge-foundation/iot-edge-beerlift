@@ -230,12 +230,12 @@
       "schema": "boolean"
     },
     {
-      "@id": "urn:z5sav05bm:beerlift:manage:flooded:1",
+      "@id": "urn:z5sav05bm:beerlift:manage:isFlooded:1",
       "@type": "Telemetry",
       "displayName": {
-        "en": "flooded"
+        "en": "isFlooded"
       },
-      "name": "flooded",
+      "name": "isFlooded",
       "schema": "boolean"
     },
     {

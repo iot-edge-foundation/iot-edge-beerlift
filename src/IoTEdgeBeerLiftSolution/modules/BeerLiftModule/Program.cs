@@ -49,6 +49,8 @@ namespace BeerLiftModule
 
         private static string _lastLiftState = "";
 
+        private static bool _lastIsFlooded = false;
+
         private static byte _lastDataPortA = 0;
 
         private static byte _lastDataPortB = 0;
@@ -295,12 +297,13 @@ namespace BeerLiftModule
                 if (dataPortA != _lastDataPortA
                         || dataPortB != _lastDataPortB
                         || _liftState != _lastLiftState
-                        || (flooded && !SilentFlooding)) 
+                        || (flooded && !_lastIsFlooded && !SilentFlooding)) 
                 {
                     _lastDataPortA = dataPortA;
                     _lastDataPortB = dataPortB;
                     _lastLiftState = _liftState;
-
+                    _lastIsFlooded = flooded;
+ 
                     var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _liftState);
 
                     beerLiftMessage.isFlooded = flooded;

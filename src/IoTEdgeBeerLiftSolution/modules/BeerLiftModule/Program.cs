@@ -297,7 +297,8 @@ namespace BeerLiftModule
                 if (dataPortA != _lastDataPortA
                         || dataPortB != _lastDataPortB
                         || _liftState != _lastLiftState
-                        || (flooded && !_lastIsFlooded && !SilentFlooding)) 
+                        || ((flooded != _lastIsFlooded) 
+                                && !SilentFlooding)) 
                 {
                     _lastDataPortA = dataPortA;
                     _lastDataPortB = dataPortB;

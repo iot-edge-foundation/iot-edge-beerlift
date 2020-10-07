@@ -41,8 +41,8 @@ This beer lift is designed for up to sixteen bottles.
 * DHT22 AM2302 Digital temperature and humidity sensor
 * One 10K resistor for the DHT22
 * Two MCP23017 - i2c 16 input/output port expanders
+* Soil moisture sensor (Robodyn has an alog one which can also be used on a digital port)
 * Prototyping PCB boards, wires, etc
-
 
 # Azure IoT Edge
 

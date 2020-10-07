@@ -1,7 +1,11 @@
 # iot-edge-beerlift
 Beer lift connected to the Azure cloud using Azure IoT edge.
 
-*Note*: This is still a work in progress. 
+*Note*: This is still a work in progress:
+
+![alt text](assets/beerlift-proto2.png "Prototype 2")
+
+beerlift-proto2.png
 
 # Introduction
 

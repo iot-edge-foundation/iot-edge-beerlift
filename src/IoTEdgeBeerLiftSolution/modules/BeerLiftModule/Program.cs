@@ -21,9 +21,7 @@ namespace BeerLiftModule
 
         private static Mcp23xxx _mcp23xxxWrite = null;
 
-        private static string _liftState = "unknown";
-
-        private static bool _ledsPlaying = false;
+        private static LiftState _liftState = LiftState.Unknown;
 
          private const bool DefaultSilentFlooding = false;
 
@@ -47,7 +45,7 @@ namespace BeerLiftModule
         // I2C Read banks at 0x22
         private const int DefaultI2CAddressWrite = 0x22;
 
-        private static string _lastLiftState = "";
+        private static LiftState _lastLiftState = LiftState.Unknown;
 
         private static bool _lastIsFlooded = false;
 
@@ -191,8 +189,9 @@ namespace BeerLiftModule
                 thread.Start();
             }
 
-            if (_liftState == "unknown")
+            if (_liftState == LiftState.Unknown)
             {
+                // move the lift down (initial state) in case of 'unknown' state
                 await DownMethodCallBack(null, ioTHubModuleClient);          
             }
         }
@@ -286,11 +285,19 @@ namespace BeerLiftModule
 
                 if (flooded)
                 {
-                    await LitFlooded();
+                    await LedScenarios.LitFlooded(_mcp23xxxWrite, Interval, SilentFlooding);
                 }
                 else
                 {
-                    await LitAllEmptySpots(dataPortA, dataPortB);
+                    if (_lastLiftState == LiftState.Down)
+                    {
+                        // switch off all light when lift is at bottom
+                        await LedScenarios.SwitchOffAllSpots(_mcp23xxxWrite, dataPortA, dataPortB);
+                    }
+                    else
+                    {
+                        await LedScenarios.LitAllEmptySpots(_mcp23xxxWrite, dataPortA, dataPortB);                        
+                    }
                 }
 
                 // send message on some change or FLOODED!
@@ -542,11 +549,11 @@ namespace BeerLiftModule
 
             try
             {
-                _liftState = "movingUp";
+                _liftState = LiftState.MovingUp;
 
                 var task = Task.Run(async () =>
                 {
-                    await PlayUpScene();
+                    await LedScenarios.PlayUpScene(_mcp23xxxWrite, UpDownInterval);
                 });
 
                 _controller.Write(UpRelayPin, PinValue.Low); // start action
@@ -557,11 +564,11 @@ namespace BeerLiftModule
 
                 Console.WriteLine($"Up at {DateTime.UtcNow}.");
 
-                _liftState = "up";
+                _liftState = LiftState.Up;
             }
             catch (Exception ex)
             {
-                _liftState = "unknown";
+                _liftState = LiftState.Unknown;
 
                 upResponse.errorMessage = ex.Message;   
                 upResponse.responseState = -999;
@@ -586,11 +593,11 @@ namespace BeerLiftModule
 
             try
             {
-                _liftState = "movingDown";
+                _liftState = LiftState.MovingDown;
 
                 var task = Task.Run(async () =>
                 {
-                    await PlayDownScene();
+                    await LedScenarios.PlayDownScene(_mcp23xxxWrite, UpDownInterval);
                 });
 
                 _controller.Write(DownRelayPin, PinValue.Low); // start action
@@ -601,11 +608,11 @@ namespace BeerLiftModule
 
                 Console.WriteLine($"Down at {DateTime.UtcNow}.");
 
-                _liftState = "down";
+                _liftState = LiftState.Down;
             }
             catch (Exception ex)
             {
-                _liftState = "unknown";
+                _liftState = LiftState.Unknown;
 
                 downResponse.errorMessage = ex.Message;   
                 downResponse.responseState = -999;
@@ -631,56 +638,12 @@ namespace BeerLiftModule
 
                 Console.WriteLine($"Blinking position {ledPosition}");
 
-                while(_ledsPlaying)
+                var result = await LedScenarios.DirectLedTest(_mcp23xxxWrite, ledPosition);
+
+                if (!result)
                 {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                var beerLiftMessage = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("LedTestMethodCallBack: Unable to cast Mcp23017 Write GPIO.");   
-
                     ledTestResponse.errorMessage = "LedTestMethodCallBack: Unable to cast Mcp23017 Write GPIO";   
                     ledTestResponse.responseState = 1;
-                }
-                else
-                {
-                    mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
-                    mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
-
-                    var port = ledPosition <= 8 ? Port.PortA : Port.PortB;
-
-                    byte bPos = ledPosition <= 8 
-                                        ? (byte) Math.Pow(2, ledPosition -1)
-                                        : (byte) Math.Pow(2, ledPosition - 9);
-                    
-                    for (var i = 0; i<25 ; i++)
-                    {
-                        if (ledPosition == 0)
-                        {
-                            Console.Write("Skip blink. ");
-                            continue;
-                        }
-
-                        // blink led on i % 2 on else off
-                        var j = (i % 2) == 0 ? bPos : 0;
-
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) j , port);
-
-                        await Task.Delay(100);
-                    }
                 }
 
                 Console.WriteLine($"LedTest at {DateTime.UtcNow}.");
@@ -689,10 +652,6 @@ namespace BeerLiftModule
             {
                 ledTestResponse.errorMessage = ex.Message;   
                 ledTestResponse.responseState = -999;
-            }
-            finally
-            {
-                _ledsPlaying = false;
             }
               
             var json = JsonConvert.SerializeObject(ledTestResponse);
@@ -709,62 +668,13 @@ namespace BeerLiftModule
 
             try
             {
-                while(_ledsPlaying)
+                // Find the actual empty spot
+                var result = await LedScenarios.DirectLedTest(_mcp23xxxWrite, firstEmptySpotResponse.firstEmptySlot);
+
+                if (!result)
                 {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                var beerLiftMessage = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
-
-                firstEmptySpotResponse.firstEmptySlot = beerLiftMessage.FindFirstEmptySpot();
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
-
-                    firstEmptySpotResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
+                    firstEmptySpotResponse.errorMessage = "FirstEmptySpotMethodCallBack: Unable to cast Mcp23017 Write GPIO";   
                     firstEmptySpotResponse.responseState = 1;
-                }
-                else
-                {
-                    mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
-                    mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
-
-                    var port = firstEmptySpotResponse.firstEmptySlot <= 8 ? Port.PortA : Port.PortB;
-
-                    byte bPos = firstEmptySpotResponse.firstEmptySlot <= 8 
-                                        ? (byte) Math.Pow(2, firstEmptySpotResponse.firstEmptySlot -1)
-                                        : (byte) Math.Pow(2, firstEmptySpotResponse.firstEmptySlot - 9);
-                    
-                    for (var i = 0; i<25 ; i++)
-                    {
-                        if (firstEmptySpotResponse.firstEmptySlot == 0)
-                        {
-                            Console.Write("Skip blink. ");
-                            continue;
-                        }
-
-                        // blink led on i % 2 on else off
-                        var j = (i % 2) == 0 ? bPos : 0;
-
-                        Console.Write($"Lit {j}. ");
-
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) j , port);
-
-                        await Task.Delay(100);
-                    }
-
-                    Console.WriteLine();
                 }
 
                 Console.WriteLine($"FirstEmptySpot at {DateTime.UtcNow}.");
@@ -773,10 +683,6 @@ namespace BeerLiftModule
             {
                 firstEmptySpotResponse.errorMessage = ex.Message;   
                 firstEmptySpotResponse.responseState = -999;
-            }
-            finally
-            {
-                _ledsPlaying = false;
             }
               
             var json = JsonConvert.SerializeObject(firstEmptySpotResponse);
@@ -793,42 +699,12 @@ namespace BeerLiftModule
 
             try
             {
-                while(_ledsPlaying)
+                var result = await LedScenarios.DirectCircus(_mcp23xxxWrite);
+
+                if (!result)
                 {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                  mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("Unable to cast Mcp23017 Write GPIO.");   
-
                     circusResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
                     circusResponse.responseState = 1;
-                }
-                else
-                {
-                    Console.WriteLine("Ra da da da da da da da Circus");
-                    Console.WriteLine("Da da da da da da da da");
-                    Console.WriteLine("Afro Circus, Afro Circus, Afro");
-                    Console.WriteLine("Polka dot, polka dot, polka dot, Afro!");
-
-                    for(var i = 0; i< 256; i++)
-                    {
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) i , Port.PortA);
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) i, Port.PortB);
-
-                        await Task.Delay(20);
-                    }  
                 }
 
                 Console.WriteLine($"Circus at {DateTime.UtcNow}.");
@@ -837,10 +713,6 @@ namespace BeerLiftModule
             {
                 circusResponse.errorMessage = ex.Message;   
                 circusResponse.responseState = -999;
-            }
-            finally
-            {
-                _ledsPlaying = false;
             }
             
             var json = JsonConvert.SerializeObject(circusResponse);
@@ -853,7 +725,7 @@ namespace BeerLiftModule
         {
             Console.WriteLine($"Executing AmbiantValuesMethodCallBack at {DateTime.UtcNow}");
 
-            var ambiantResponse = new AmbiantResponse{responseState = 0};
+            var ambiantResponse = new AmbiantResponse(_liftState);
 
             try
             {
@@ -861,7 +733,6 @@ namespace BeerLiftModule
             
                 ambiantResponse.temperature = ambiantValues.Temperature;
                 ambiantResponse.humidity = ambiantValues.Humidity;
-                ambiantResponse.liftState = _liftState;
 
                 var pinValue = _controller.Read(FloodedPin); // Moisture sensor
 
@@ -908,254 +779,5 @@ namespace BeerLiftModule
 
             return ambiantValues;
         } 
-
-
-        private static async Task LitFlooded()
-        {
-            if (SilentFlooding)
-            {
-                return;
-            }
-
-            try
-            {
-                while(_ledsPlaying)
-                {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("LitFlooded: Unable to cast Mcp23017 Write GPIO.");   
-                }
-                else
-                {
-                    var sleep = 200;
-
-                    var interval = Interval / sleep;
-
-                    for (var i = 0; i < interval; i++)
-                    {
-                        mcp23x1x.WriteByte(Register.GPIO, 255 , Port.PortA);
-                        mcp23x1x.WriteByte(Register.GPIO, 255, Port.PortB);
-
-                        mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
-                        mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
-
-                        await Task.Delay(sleep);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when LitFlooded: {ex.Message}");
-            }
-            finally
-            {
-                _ledsPlaying = false;
-            }
-        }
-
-        private static async Task LitAllUsedSpots(byte lastDataPortA, byte lastDataPortB)
-        {
-            try
-            {
-                while(_ledsPlaying)
-                {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("LitAllUsedSpots: Unable to cast Mcp23017 Write GPIO.");   
-                }
-                else
-                {
-                    mcp23x1x.WriteByte(Register.GPIO, lastDataPortA , Port.PortA);
-                    mcp23x1x.WriteByte(Register.GPIO, lastDataPortB, Port.PortB);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when LitAllUsedSpots: {ex.Message}");
-            }
-            finally
-            {
-                _ledsPlaying = false;
-            }
-        }
-
-        private static async Task LitAllEmptySpots(byte lastDataPortA, byte lastDataPortB)
-        {
-            try
-            {
-                while(_ledsPlaying)
-                {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("LitAllEmptySpots: Unable to cast Mcp23017 Write GPIO.");   
-                }
-                else
-                {
-                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortA ^ 255) , Port.PortA);
-                    mcp23x1x.WriteByte(Register.GPIO, (byte) (lastDataPortB ^255), Port.PortB);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
-            }
-            finally
-            {
-                _ledsPlaying = false;
-            }
-        }
-
-        private static async Task PlayUpScene()
-        {
-            try
-            {
-                while(_ledsPlaying)
-                {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("PlayUpScene: Unable to cast Mcp23017 Write GPIO.");   
-                }
-                else
-                {
-                    // Use UpDownInterval to predict how long the scen must play 
-
-                    var sleepInterval = 100;
-
-                    var j = UpDownInterval / sleepInterval;
-
-                    byte a = 0b_0000_0001;
-
-                    for(var i = 0; i< j; i++)
-                    {
-                        var shifter = (i % 8);
-
-                        int b = a << shifter;
-
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) b , Port.PortA);
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) b, Port.PortB);
-
-                        await Task.Delay(sleepInterval);
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when PlayUpScene: {ex.Message}");
-            }
-            finally
-            {
-                _ledsPlaying = false;
-            }
-        }
-
-        private static async Task PlayDownScene()
-        {
-            try
-            {
-                while(_ledsPlaying)
-                {
-                    // let the previous light show end.
-                    await Task.Delay(5);
-                }
-
-                _ledsPlaying = true;
-
-                Mcp23x1x mcp23x1x = null;
-                
-                if (_mcp23xxxWrite != null)
-                {
-                    mcp23x1x = _mcp23xxxWrite as Mcp23x1x;
-                }
-
-                if (mcp23x1x == null)
-                {
-                    Console.WriteLine("PlayDownScene: Unable to cast Mcp23017 Write GPIO.");   
-                }
-                else
-                {
-                    // Use UpDownInterval to predict how long the scen must play 
-
-                    var sleepInterval = 100;
-
-                    var j = UpDownInterval / sleepInterval;
-
-                    byte a = 0b_1000_0000;
-
-                    for(var i = 0; i< j; i++)
-                    {
-                        var shifter = ((i + 8) % 8);
-
-                        int b = a >> shifter;
-
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) b , Port.PortA);
-                        mcp23x1x.WriteByte(Register.GPIO, (byte) b, Port.PortB);
-
-                        await Task.Delay(sleepInterval);
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when PlayUpScene: {ex.Message}");
-            }
-            finally
-            {
-                _ledsPlaying = false;
-            }
-        }
     }
 }

@@ -38,9 +38,9 @@ namespace BeerLiftModule
             slot16 = (stateB & 128) == 128;
         }
 
-        public BeerLiftMessage(int stateA, int stateB, string state) : this(stateA, stateB)
+        public BeerLiftMessage(int stateA, int stateB, LiftState state) : this(stateA, stateB)
         {
-            this.liftState = state;
+            this.liftState = state.ToString();
         }
 
         public bool slot01 {get; set;}

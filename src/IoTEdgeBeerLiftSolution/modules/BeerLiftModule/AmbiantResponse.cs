@@ -2,6 +2,12 @@ namespace BeerLiftModule
 {
     public class AmbiantResponse 
     {
+        public AmbiantResponse(LiftState state)
+        {
+            liftState = state.ToString();
+            responseState = 0;
+        }
+
         public int responseState { get; set; }
 
         public string errorMessage { get; set; }

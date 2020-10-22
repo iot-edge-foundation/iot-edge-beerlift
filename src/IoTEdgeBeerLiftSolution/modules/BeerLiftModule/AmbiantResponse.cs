@@ -19,5 +19,7 @@ namespace BeerLiftModule
         public string liftState {get; set;}
 
         public bool flooded {get; set;}
+
+        public int attempts {get; set;}
     }
 }

@@ -71,6 +71,7 @@ namespace BeerLiftModule
             return $"A:{_stateA} - B:{_stateB} - lift state:{liftState} - flooded:{isFlooded}";
         }  
 
+        // Returns a value between 1 and 16 (or 0 is all occupied) 
         public int FindFirstEmptySpot()
         {
             if (!slot01) return 1;

@@ -307,6 +307,8 @@ namespace BeerLiftModule
 
         public static async Task<bool> DirectLedTest(Mcp23xxx mcp23xxxWrite, int ledPosition)
         {
+             // ledPosition is a value between 1 and 16 (or 0 is all occupied) 
+
             try
             {
                 while(_ledsPlaying)
@@ -341,7 +343,7 @@ namespace BeerLiftModule
                                         ? (byte) Math.Pow(2, ledPosition -1)
                                         : (byte) Math.Pow(2, ledPosition - 9);
                     
-                    for (var i = 0; i<25 ; i++)
+                    for (var i = 0; i<50 ; i++)
                     {
                         if (ledPosition == 0)
                         {
@@ -356,6 +358,8 @@ namespace BeerLiftModule
 
                         await Task.Delay(100);
                     }
+
+                    // TODO : blinking for 0 => alle positions occupied
                 }
             }
             catch (Exception)

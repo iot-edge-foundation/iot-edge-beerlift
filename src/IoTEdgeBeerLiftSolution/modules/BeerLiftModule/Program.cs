@@ -319,6 +319,9 @@ namespace BeerLiftModule
                     var json = JsonConvert.SerializeObject(beerLiftMessage);
                     using (var pipeMessage = new Message(Encoding.UTF8.GetBytes(json)))
                     {
+                        pipeMessage.ContentType = "application/json";
+                        pipeMessage.ContentEncoding = "utf-8";
+
                         if (beerLiftMessage.isFlooded)
                         {
                             pipeMessage.Properties.Add("Alarm", "Flooded");
@@ -668,7 +671,15 @@ namespace BeerLiftModule
 
             try
             {
-                // Find the actual empty spot
+                //// Find the actual empty spot
+
+                var beerLiftMessageToFindEmptySpot = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
+
+                // Returns a value between 1 and 16 (or 0 is all occupied) 
+                firstEmptySpotResponse.firstEmptySlot = beerLiftMessageToFindEmptySpot.FindFirstEmptySpot();
+
+                //// Lit the right led
+
                 var result = await LedScenarios.DirectLedTest(_mcp23xxxWrite, firstEmptySpotResponse.firstEmptySlot);
 
                 if (!result)
@@ -729,10 +740,11 @@ namespace BeerLiftModule
 
             try
             {
-                var ambiantValues = ReadAmbiantValues();
+                var ambiantValues = ReadAmbiantValues(); // DHT20 sensor
             
                 ambiantResponse.temperature = ambiantValues.Temperature;
                 ambiantResponse.humidity = ambiantValues.Humidity;
+                ambiantResponse.attempts = ambiantValues.Attempts;
 
                 var pinValue = _controller.Read(FloodedPin); // Moisture sensor
 

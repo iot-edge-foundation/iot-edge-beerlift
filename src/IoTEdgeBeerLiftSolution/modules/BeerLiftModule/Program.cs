@@ -678,6 +678,8 @@ namespace BeerLiftModule
                 // Returns a value between 1 and 16 (or 0 is all occupied) 
                 firstEmptySpotResponse.firstEmptySlot = beerLiftMessageToFindEmptySpot.FindFirstEmptySpot();
 
+                Console.WriteLine($"First empty spot is at position {firstEmptySpotResponse.firstEmptySlot} (0 when all spots occupied)");
+
                 //// Lit the right led
 
                 var result = await LedScenarios.DirectLedTest(_mcp23xxxWrite, firstEmptySpotResponse.firstEmptySlot);

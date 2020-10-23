@@ -165,6 +165,13 @@ namespace BeerLiftModule
             Console.WriteLine("Attached method handler: Circus.");   
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
+                "Advertise",
+                AdvertiseMethodCallBack,
+                ioTHubModuleClient);
+
+            Console.WriteLine("Attached method handler: Circus.");   
+
+            await ioTHubModuleClient.SetMethodHandlerAsync(
                 "FirstEmptySpot",
                 FirstEmptySpotMethodCallBack,
                 ioTHubModuleClient);
@@ -729,6 +736,36 @@ namespace BeerLiftModule
             }
             
             var json = JsonConvert.SerializeObject(circusResponse);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+
+            return response;                
+        }
+
+        private static async Task<MethodResponse> AdvertiseMethodCallBack(MethodRequest methodRequest, object userContext)    
+        {
+            Console.WriteLine($"Executing AdvertiseMethodCallBack at {DateTime.UtcNow}");
+
+            var advertiseResponse = new AdvertiseResponse{responseState = 0};
+
+            try
+            {
+                var result = await LedScenarios.DirectAdvertise(_mcp23xxxWrite);
+
+                if (!result)
+                {
+                    advertiseResponse.errorMessage = "Unable to cast Mcp23017 Write GPIO";   
+                    advertiseResponse.responseState = 1;
+                }
+
+                Console.WriteLine($"Advertise ended at {DateTime.UtcNow}.");
+            }
+            catch (Exception ex)
+            {
+                advertiseResponse.errorMessage = ex.Message;   
+                advertiseResponse.responseState = -999;
+            }
+            
+            var json = JsonConvert.SerializeObject(advertiseResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;                

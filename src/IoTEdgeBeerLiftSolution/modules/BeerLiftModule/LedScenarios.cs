@@ -251,6 +251,53 @@ namespace BeerLiftModule
             return true;
         }
 
+        public static async Task<bool> DirectAdvertise(Mcp23xxx mcp23xxxWrite)
+        {
+            try
+            {
+                while(_ledsPlaying)
+                {
+                    // let the previous light show end.
+                    await Task.Delay(5);
+                }
+
+                _ledsPlaying = true;
+
+                Mcp23x1x mcp23x1x = null;
+                
+                if (mcp23xxxWrite != null)
+                {
+                    mcp23x1x = mcp23xxxWrite as Mcp23x1x;
+                }
+
+                if (mcp23x1x == null)
+                {
+                    Console.WriteLine("DirectAdvertise: Unable to cast Mcp23017 Write GPIO.");   
+
+                    return false;
+                }
+                else
+                {
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) 255 , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) 255, Port.PortB);
+
+                    await Task.Delay(10000);
+
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) 0 , Port.PortA);
+                    mcp23x1x.WriteByte(Register.GPIO, (byte) 0, Port.PortB);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                _ledsPlaying = false;
+            }
+
+            return true;
+        }
 
         public static async Task<bool> DirectCircus(Mcp23xxx mcp23xxxWrite)
         {

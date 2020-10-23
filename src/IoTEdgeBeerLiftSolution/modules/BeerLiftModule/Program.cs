@@ -288,7 +288,7 @@ namespace BeerLiftModule
 
                 var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
 
-                Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB}");
+                Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB} at {DateTime.Now}");
 
                 if (flooded)
                 {
@@ -572,7 +572,7 @@ namespace BeerLiftModule
 
                 _controller.Write(UpRelayPin, PinValue.High); // stop action
 
-                Console.WriteLine($"Up at {DateTime.UtcNow}.");
+                Console.WriteLine($"Up ended at {DateTime.UtcNow}.");
 
                 _liftState = LiftState.Up;
             }
@@ -616,7 +616,7 @@ namespace BeerLiftModule
 
                 _controller.Write(DownRelayPin, PinValue.High); // stop action
 
-                Console.WriteLine($"Down at {DateTime.UtcNow}.");
+                Console.WriteLine($"Down ended at {DateTime.UtcNow}.");
 
                 _liftState = LiftState.Down;
             }
@@ -656,7 +656,7 @@ namespace BeerLiftModule
                     ledTestResponse.responseState = 1;
                 }
 
-                Console.WriteLine($"LedTest at {DateTime.UtcNow}.");
+                Console.WriteLine($"LedTest ended at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
@@ -697,7 +697,7 @@ namespace BeerLiftModule
                     firstEmptySpotResponse.responseState = 1;
                 }
 
-                Console.WriteLine($"FirstEmptySpot at {DateTime.UtcNow}.");
+                Console.WriteLine($"FirstEmptySpot ended at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
@@ -727,7 +727,7 @@ namespace BeerLiftModule
                     circusResponse.responseState = 1;
                 }
 
-                Console.WriteLine($"Circus at {DateTime.UtcNow}.");
+                Console.WriteLine($"Circus ended at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
@@ -791,7 +791,7 @@ namespace BeerLiftModule
 
                 await Task.Delay(1);    
 
-                Console.WriteLine($"Ambiant at {DateTime.UtcNow} - Temperature:{ambiantResponse.temperature} / Humidity:{ambiantResponse.humidity} / Attempts:{ambiantValues.Attempts} / State:{_liftState} / Flooded: {pinValue}.");
+                Console.WriteLine($"Ambiant ended at {DateTime.UtcNow} - Temperature:{ambiantResponse.temperature} / Humidity:{ambiantResponse.humidity} / Attempts:{ambiantValues.Attempts} / State:{_liftState} / Flooded: {pinValue}.");
             }
             catch (Exception ex)
             {

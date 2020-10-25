@@ -64,7 +64,7 @@ namespace BeerLiftModule
             }
         }
 
-        public static async Task LitAllEmptySpots(Mcp23xxx mcp23xxxWrite, byte lastDataPortA, byte lastDataPortB)
+        public static async Task LitAllEmptySlots(Mcp23xxx mcp23xxxWrite, byte lastDataPortA, byte lastDataPortB)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("LitAllEmptySpots: Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("LitAllEmptySlots: Unable to cast Mcp23017 Write GPIO.");   
                 }
                 else
                 {
@@ -95,7 +95,7 @@ namespace BeerLiftModule
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when LitAllEmptySpots: {ex.Message}");
+                Console.WriteLine($"Error when LitAllEmptySlots: {ex.Message}");
             }
             finally
             {
@@ -103,7 +103,7 @@ namespace BeerLiftModule
             }
         }
 
-        public static async Task LitAllUsedSpots(Mcp23xxx mcp23xxxWrite, byte lastDataPortA, byte lastDataPortB)
+        public static async Task LitAllUsedSlots(Mcp23xxx mcp23xxxWrite, byte lastDataPortA, byte lastDataPortB)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("LitAllUsedSpots: Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("LitAllUsedSlots: Unable to cast Mcp23017 Write GPIO.");   
                 }
                 else
                 {
@@ -134,7 +134,7 @@ namespace BeerLiftModule
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when LitAllUsedSpots: {ex.Message}");
+                Console.WriteLine($"Error when LitAllUsedSlots: {ex.Message}");
             }
             finally
             {
@@ -143,8 +143,10 @@ namespace BeerLiftModule
         }
 
 
-        public static async Task SwitchOffAllSpots(Mcp23xxx mcp23xxxWrite, byte lastDataPortA, byte lastDataPortB)
+        public static async Task SwitchOffAllSlots(Mcp23xxx mcp23xxxWrite, byte lastDataPortA, byte lastDataPortB)
         {
+            // all LEDs are dimmed.
+
             try
             {
                 while(_ledsPlaying)
@@ -164,7 +166,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("SwtichoffAllSpots: Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("SwtichoffAllSlots: Unable to cast Mcp23017 Write GPIO.");   
                 }
                 else
                 {
@@ -174,7 +176,7 @@ namespace BeerLiftModule
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when SwtichoffAllSpots: {ex.Message}");
+                Console.WriteLine($"Error when SwtichoffAllSlots: {ex.Message}");
             }
             finally
             {
@@ -182,7 +184,7 @@ namespace BeerLiftModule
             }
         }
 
-        public static async Task<bool> DirectFirstEmptySpot(Mcp23xxx mcp23xxxWrite, int firstEmptySlot)
+        public static async Task<bool> DirectFirstEmptySlot(Mcp23xxx mcp23xxxWrite, int firstEmptySlot)
         {
             if (firstEmptySlot == 0)
             {
@@ -209,7 +211,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("DirectFirstEmptySpot: Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("DirectFirstEmptySlot: Unable to cast Mcp23017 Write GPIO.");   
 
                     return false;
                 }
@@ -352,9 +354,9 @@ namespace BeerLiftModule
             return true;
         }
 
-        public static async Task<bool> DirectLedTest(Mcp23xxx mcp23xxxWrite, int ledPosition)
+        public static async Task<bool> DirectMarkPosition(Mcp23xxx mcp23xxxWrite, int position)
         {
-             // ledPosition is a value between 1 and 16 (or 0 is all occupied) 
+             // Position is a value between 1 and 16 (or 0 is all occupied) 
 
             try
             {
@@ -375,7 +377,7 @@ namespace BeerLiftModule
 
                 if (mcp23x1x == null)
                 {
-                    Console.WriteLine("DirectLedTest: Unable to cast Mcp23017 Write GPIO.");   
+                    Console.WriteLine("DirectMarkPosition: Unable to cast Mcp23017 Write GPIO.");   
 
                     return false;
                 }
@@ -384,15 +386,15 @@ namespace BeerLiftModule
                     mcp23x1x.WriteByte(Register.GPIO, 0 , Port.PortA);
                     mcp23x1x.WriteByte(Register.GPIO, 0, Port.PortB);
 
-                    var port = ledPosition <= 8 ? Port.PortA : Port.PortB;
+                    var port = position <= 8 ? Port.PortA : Port.PortB;
 
-                    byte bPos = ledPosition <= 8 
-                                        ? (byte) Math.Pow(2, ledPosition -1)
-                                        : (byte) Math.Pow(2, ledPosition - 9);
+                    byte bPos = position <= 8 
+                                        ? (byte) Math.Pow(2, position -1)
+                                        : (byte) Math.Pow(2, position - 9);
                     
                     for (var i = 0; i<50 ; i++)
                     {
-                        if (ledPosition == 0)
+                        if (position == 0)
                         {
                             Console.Write("Skip blink. ");
                             continue;

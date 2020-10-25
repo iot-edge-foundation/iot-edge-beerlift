@@ -111,8 +111,8 @@ The following direct methods are available:
 * Down
 * Ambiant
 * Circus
-* FirstEmptySpot
-* LedTest
+* FindEmptySlot
+* MarkPosition
 * Advertise
 
 *Note* Method names are case sensitive
@@ -199,15 +199,15 @@ class Response
 
 *Note*: Enjoy the show.
 
-### Direct Method - FirstEmptySpot
+### Direct Method - FindEmptySlot
 
 No JSON body needed to be send.
 
-Returns the first empty spot (1-16) where no bottle is placed. 
+Returns the first empty slot (1-16) where no bottle is placed. 
 
-If all spots are occupied, it returns 0.
+If all slots are occupied, it returns 0.
 
-It also flashes the LED at the empty spot found.
+It also flashes the LED at the empty slot found.
 
 Response:
 
@@ -216,26 +216,22 @@ class Response
 {
     int responseState { get; set; }
     string errorMessage { get; set; }
-    int FindFirstEmpty {get; set;}
+    int emptySlot {get; set;}
 }
 ```
 
-### Direct Method - LedTest
+### Direct Method - MarkPosition
 
 A JSON body is needed to be send:
 
 ```
 class Request 
 {
-    int ledPosition { get; set; }
+    int position { get; set; }
 }
 ```
 
-Returns the first empty spot (1-16) where no bottle is placed. 
-
-If all spots are occupied, it returns 0.
-
-It also flashes the LED at the empty spot found.
+It flashes the LED at the markted slot.
 
 Response:
 

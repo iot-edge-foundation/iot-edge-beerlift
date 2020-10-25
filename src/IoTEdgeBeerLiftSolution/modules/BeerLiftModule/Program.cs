@@ -172,18 +172,18 @@ namespace BeerLiftModule
             Console.WriteLine("Attached method handler: Circus.");   
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
-                "FirstEmptySpot",
-                FirstEmptySpotMethodCallBack,
+                "FindEmptySlot",
+                FindEmptySlotMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: FirstEmptySpot.");  
+            Console.WriteLine("Attached method handler: FindEmptySlot.");  
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
-                "LedTest",
-                LedTestMethodCallBack,
+                "MarkPosition",
+                MarkPositionMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: LedTest."); 
+            Console.WriteLine("Attached method handler: MarkPosition."); 
 
             SetupI2CRead();
 
@@ -299,11 +299,11 @@ namespace BeerLiftModule
                     if (_lastLiftState == LiftState.Down)
                     {
                         // switch off all light when lift is at bottom
-                        await LedScenarios.SwitchOffAllSpots(_mcp23xxxWrite, dataPortA, dataPortB);
+                        await LedScenarios.SwitchOffAllSlots(_mcp23xxxWrite, dataPortA, dataPortB);
                     }
                     else
                     {
-                        await LedScenarios.LitAllEmptySpots(_mcp23xxxWrite, dataPortA, dataPortB);                        
+                        await LedScenarios.LitAllEmptySlots(_mcp23xxxWrite, dataPortA, dataPortB);                        
                     }
                 }
 
@@ -634,78 +634,78 @@ namespace BeerLiftModule
             return response;
         }   
 
-        private static async Task<MethodResponse> LedTestMethodCallBack(MethodRequest methodRequest, object userContext)
+        private static async Task<MethodResponse> MarkPositionMethodCallBack(MethodRequest methodRequest, object userContext)
         {
-            Console.WriteLine($"Executing LedTestMethodCallBack at {DateTime.UtcNow}");
+            Console.WriteLine($"Executing MarkPositionMethodCallBack at {DateTime.UtcNow}");
 
-            var ledTestResponse = new LedTestResponse{responseState = 0};
+            var markPositionResponse = new MarkPositionResponse{responseState = 0};
 
             try
             {
                 dynamic request = JsonConvert.DeserializeObject(methodRequest.DataAsJson);
 
-                int ledPosition = request.ledPosition;
+                int position = request.position;
 
-                Console.WriteLine($"Blinking position {ledPosition}");
+                Console.WriteLine($"Blinking position {position}");
 
-                var result = await LedScenarios.DirectLedTest(_mcp23xxxWrite, ledPosition);
+                var result = await LedScenarios.DirectMarkPosition(_mcp23xxxWrite, position);
 
                 if (!result)
                 {
-                    ledTestResponse.errorMessage = "LedTestMethodCallBack: Unable to cast Mcp23017 Write GPIO";   
-                    ledTestResponse.responseState = 1;
+                    markPositionResponse.errorMessage = "MarkPositionMethodCallBack: Unable to cast Mcp23017 Write GPIO";   
+                    markPositionResponse.responseState = 1;
                 }
 
-                Console.WriteLine($"LedTest ended at {DateTime.UtcNow}.");
+                Console.WriteLine($"MarkPosition ended at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
-                ledTestResponse.errorMessage = ex.Message;   
-                ledTestResponse.responseState = -999;
+                markPositionResponse.errorMessage = ex.Message;   
+                markPositionResponse.responseState = -999;
             }
               
-            var json = JsonConvert.SerializeObject(ledTestResponse);
+            var json = JsonConvert.SerializeObject(markPositionResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;  
         }
 
-        private static async Task<MethodResponse> FirstEmptySpotMethodCallBack(MethodRequest methodRequest, object userContext)
+        private static async Task<MethodResponse> FindEmptySlotMethodCallBack(MethodRequest methodRequest, object userContext)
         {
-            Console.WriteLine($"Executing FirstEmptySpotMethodCallBack at {DateTime.UtcNow}");
+            Console.WriteLine($"Executing FindEmptySlotMethodCallBack at {DateTime.UtcNow}");
 
-            var firstEmptySpotResponse = new FirstEmptySpotResponse{responseState = 0};
+            var findEmptySlotResponse = new FindEmptySlotResponse{responseState = 0};
 
             try
             {
-                //// Find the actual empty spot
+                //// Find the actual empty slot
 
-                var beerLiftMessageToFindEmptySpot = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
+                var beerLiftMessageToFindEmptySlot = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
 
                 // Returns a value between 1 and 16 (or 0 is all occupied) 
-                firstEmptySpotResponse.firstEmptySlot = beerLiftMessageToFindEmptySpot.FindFirstEmptySpot();
+                findEmptySlotResponse.emptySlot = beerLiftMessageToFindEmptySlot.FindEmptySlot();
 
-                Console.WriteLine($"First empty spot is at position {firstEmptySpotResponse.firstEmptySlot} (0 when all spots occupied)");
+                Console.WriteLine($"Empty slot found at position {findEmptySlotResponse.emptySlot} (0 when all slots occupied)");
 
                 //// Lit the right led
 
-                var result = await LedScenarios.DirectLedTest(_mcp23xxxWrite, firstEmptySpotResponse.firstEmptySlot);
+                var result = await LedScenarios.DirectMarkPosition(_mcp23xxxWrite, findEmptySlotResponse.emptySlot);
 
                 if (!result)
                 {
-                    firstEmptySpotResponse.errorMessage = "FirstEmptySpotMethodCallBack: Unable to cast Mcp23017 Write GPIO";   
-                    firstEmptySpotResponse.responseState = 1;
+                    findEmptySlotResponse.errorMessage = "FindEmptySlotMethodCallBack: Unable to cast Mcp23017 Write GPIO";   
+                    findEmptySlotResponse.responseState = 1;
                 }
 
-                Console.WriteLine($"FirstEmptySpot ended at {DateTime.UtcNow}.");
+                Console.WriteLine($"FindEmptySlot ended at {DateTime.UtcNow}.");
             }
             catch (Exception ex)
             {
-                firstEmptySpotResponse.errorMessage = ex.Message;   
-                firstEmptySpotResponse.responseState = -999;
+                findEmptySlotResponse.errorMessage = ex.Message;   
+                findEmptySlotResponse.responseState = -999;
             }
               
-            var json = JsonConvert.SerializeObject(firstEmptySpotResponse);
+            var json = JsonConvert.SerializeObject(findEmptySlotResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;  

@@ -584,35 +584,35 @@
                     "name": "Circus"
                   },
                   {
-                    "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:1",
+                    "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:1",
                     "@type": "Command",
                     "commandType": "synchronous",
                     "durable": false,
                     "response": {
-                      "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:1",
+                      "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:1",
                       "@type": "SchemaField",
                       "displayName": {
-                        "en": "FirstEmptySpotResponse"
+                        "en": "FindEmptySlotResponse"
                       },
-                      "name": "FirstEmptySpotResponse",
+                      "name": "FindEmptySlotResponse",
                       "schema": {
-                        "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:1",
+                        "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:pfl_pivdqm:1",
                         "@type": "Object",
                         "displayName": {
                           "en": "Object"
                         },
                         "fields": [
                           {
-                            "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:firstEmptySlot:1",
+                            "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:pfl_pivdqm:emptySlot:1",
                             "@type": "SchemaField",
                             "displayName": {
-                              "en": "firstEmptySlot"
+                              "en": "emptySlot"
                             },
-                            "name": "firstEmptySlot",
+                            "name": "emptySlot",
                             "schema": "integer"
                           },
                           {
-                            "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:responseState:1",
+                            "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:pfl_pivdqm:responseState:1",
                             "@type": "SchemaField",
                             "displayName": {
                               "en": "responseState"
@@ -621,7 +621,7 @@
                             "schema": "integer"
                           },
                           {
-                            "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:errorMessage:1",
+                            "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:pfl_pivdqm:errorMessage:1",
                             "@type": "SchemaField",
                             "displayName": {
                               "en": "errorMessage"
@@ -633,57 +633,57 @@
                       }
                     },
                     "displayName": {
-                      "en": "FirstEmptySpot"
+                      "en": "FindEmptySlot"
                     },
-                    "name": "FirstEmptySpot"
+                    "name": "FindEmptySlot"
                   },
                   {
-                    "@id": "urn:z5sav05bm:beerlift:manage:ledTest:2",
+                    "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:2",
                     "@type": "Command",
                     "commandType": "synchronous",
                     "durable": false,
                     "request": {
-                      "@id": "urn:z5sav05bm:beerlift:manage:ledTest:LedTestRequest:2",
+                      "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionRequest:2",
                       "@type": "SchemaField",
                       "displayName": {
-                        "en": "LedTestRequest"
+                        "en": "MarkPositionRequest"
                       },
-                      "name": "LedTestRequest",
+                      "name": "MarkPositionRequest",
                       "schema": {
-                        "@id": "urn:z5sav05bm:beerlift:manage:ledTest:LedTestRequest:khk3bkm6j9:2",
+                        "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionRequest:khk3bkm6j9:2",
                         "@type": "Object",
                         "displayName": {
                           "en": "Object"
                         },
                         "fields": [
                           {
-                            "@id": "urn:z5sav05bm:beerlift:manage:ledTest:LedTestRequest:khk3bkm6j9:ledPosition:2",
+                            "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionRequest:khk3bkm6j9:position:2",
                             "@type": "SchemaField",
                             "displayName": {
-                              "en": "ledPosition"
+                              "en": "position"
                             },
-                            "name": "ledPosition",
+                            "name": "position",
                             "schema": "integer"
                           }
                         ]
                       }
                     },
                     "response": {
-                      "@id": "urn:z5sav05bm:beerlift:manage:ledTest:LedTestResponse:2",
+                      "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionResponse:2",
                       "@type": "SchemaField",
                       "displayName": {
-                        "en": "LedTestResponse"
+                        "en": "MarkPositionResponse"
                       },
-                      "name": "LedTestResponse",
+                      "name": "MarkPositionResponse",
                       "schema": {
-                        "@id": "urn:z5sav05bm:beerlift:manage:ledTest:LedTestResponse:wk7zjbxevi:2",
+                        "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionResponse:wk7zjbxevi:2",
                         "@type": "Object",
                         "displayName": {
                           "en": "Object"
                         },
                         "fields": [
                           {
-                            "@id": "urn:z5sav05bm:beerlift:manage:ledTest:LedTestResponse:wk7zjbxevi:responseState:2",
+                            "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionResponse:wk7zjbxevi:responseState:2",
                             "@type": "SchemaField",
                             "displayName": {
                               "en": "responseState"
@@ -692,7 +692,7 @@
                             "schema": "integer"
                           },
                           {
-                            "@id": "urn:z5sav05bm:beerlift:manage:ledTest:LedTestResponse:wk7zjbxevi:errorMessage:2",
+                            "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionResponse:wk7zjbxevi:errorMessage:2",
                             "@type": "SchemaField",
                             "displayName": {
                               "en": "errorMessage"
@@ -704,9 +704,9 @@
                       }
                     },
                     "displayName": {
-                      "en": "ledTest"
+                      "en": "MarkPosition"
                     },
-                    "name": "ledTest"
+                    "name": "MarkPosition"
                   }
                 ]
               }

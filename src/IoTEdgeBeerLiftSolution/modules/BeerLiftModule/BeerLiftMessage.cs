@@ -72,7 +72,7 @@ namespace BeerLiftModule
         }  
 
         // Returns a value between 1 and 16 (or 0 is all occupied) 
-        public int FindFirstEmptySpot()
+        public int FindEmptySlot()
         {
             if (!slot01) return 1;
             if (!slot02) return 2;

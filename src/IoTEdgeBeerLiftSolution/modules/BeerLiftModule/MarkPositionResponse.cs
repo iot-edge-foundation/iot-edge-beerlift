@@ -1,6 +1,6 @@
 namespace BeerLiftModule
 {
-    public class LedTestResponse
+    public class MarkPositionResponse
     {        
         public int responseState { get; set; }
 

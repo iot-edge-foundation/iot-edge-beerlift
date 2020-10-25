@@ -1,8 +1,8 @@
 namespace BeerLiftModule
 {
-    public class FirstEmptySpotResponse
+    public class FindEmptySlotResponse
     {
-        public int firstEmptySlot {get; set;}
+        public int emptySlot {get; set;}
         
         public int responseState { get; set; }
 

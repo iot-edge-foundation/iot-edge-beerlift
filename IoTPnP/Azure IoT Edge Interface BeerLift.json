@@ -581,35 +581,35 @@
       "name": "Circus"
     },
     {
-      "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:1",
+      "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:1",
       "@type": "Command",
       "commandType": "synchronous",
       "durable": false,
       "response": {
-        "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:1",
+        "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:1",
         "@type": "SchemaField",
         "displayName": {
-          "en": "FirstEmptySpotResponse"
+          "en": "FindEmptySlotResponse"
         },
-        "name": "FirstEmptySpotResponse",
+        "name": "FindEmptySlotResponse",
         "schema": {
-          "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:1",
+          "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:pfl_pivdqm:1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:firstEmptySlot:1",
+              "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:pfl_pivdqm:emptySlot:1",
               "@type": "SchemaField",
               "displayName": {
-                "en": "firstEmptySlot"
+                "en": "emptySlot"
               },
-              "name": "firstEmptySlot",
+              "name": "emptySlot",
               "schema": "integer"
             },
             {
-              "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:responseState:1",
+              "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:pfl_pivdqm:responseState:1",
               "@type": "SchemaField",
               "displayName": {
                 "en": "responseState"
@@ -618,7 +618,7 @@
               "schema": "integer"
             },
             {
-              "@id": "urn:z5sav05bm:beerlift:manage:FirstEmptySpot:FirstEmptySpotResponse:pfl_pivdqm:errorMessage:1",
+              "@id": "urn:z5sav05bm:beerlift:manage:FindEmptySlot:FindEmptySlotResponse:pfl_pivdqm:errorMessage:1",
               "@type": "SchemaField",
               "displayName": {
                 "en": "errorMessage"
@@ -630,57 +630,57 @@
         }
       },
       "displayName": {
-        "en": "FirstEmptySpot"
+        "en": "FindEmptySlot"
       },
-      "name": "FirstEmptySpot"
+      "name": "FindEmptySlot"
     },
     {
-      "@id": "urn:z5sav05bm:beerlift:manage:LedTest:1",
+      "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:1",
       "@type": "Command",
       "commandType": "synchronous",
       "durable": false,
       "request": {
-        "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:1",
+        "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionRequest:1",
         "@type": "SchemaField",
         "displayName": {
-          "en": "LedTestRequest"
+          "en": "MarkPositionRequest"
         },
-        "name": "LedTestRequest",
+        "name": "MarkPositionRequest",
         "schema": {
-          "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:m6xa2rodh:1",
+          "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionRequest:m6xa2rodh:1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestRequest:m6xa2rodh:ledPosition:1",
+              "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionRequest:m6xa2rodh:position:1",
               "@type": "SchemaField",
               "displayName": {
-                "en": "ledPosition"
+                "en": "position"
               },
-              "name": "ledPosition",
+              "name": "position",
               "schema": "integer"
             }
           ]
         }
       },
       "response": {
-        "@id": "urn:z5sav05bm:beerlift:manage:LedTest:LedTestResponse:1",
+        "@id": "urn:z5sav05bm:beerlift:manage:MarkPosition:MarkPositionResponse:1",
         "@type": "SchemaField",
         "displayName": {
-          "en": "LedTestResponse"
+          "en": "MarkPositionResponse"
         },
-        "name": "LedTestResponse",
+        "name": "MarkPositionResponse",
         "schema": {
-          "@id": "urn:z5sav05bm:beerlift:manage:LedTestResponse:f9wjw1k9ex:1",
+          "@id": "urn:z5sav05bm:beerlift:manage:MarkPositionResponse:f9wjw1k9ex:1",
           "@type": "Object",
           "displayName": {
             "en": "Object"
           },
           "fields": [
             {
-              "@id": "urn:z5sav05bm:beerlift:manage:LedTestResponse:f9wjw1k9ex:responseState:1",
+              "@id": "urn:z5sav05bm:beerlift:manage:MarkPositionResponse:f9wjw1k9ex:responseState:1",
               "@type": "SchemaField",
               "displayName": {
                 "en": "responseState"
@@ -689,7 +689,7 @@
               "schema": "integer"
             },
             {
-              "@id": "urn:z5sav05bm:beerlift:manage:LedTestResponse:f9wjw1k9ex:errorMessage:1",
+              "@id": "urn:z5sav05bm:beerlift:manage:MarkPositionResponse:f9wjw1k9ex:errorMessage:1",
               "@type": "SchemaField",
               "displayName": {
                 "en": "errorMessage"
@@ -701,9 +701,9 @@
         }
       },
       "displayName": {
-        "en": "LedTest"
+        "en": "MarkPosition"
       },
-      "name": "LedTest"
+      "name": "MarkPosition"
     },
     {
       "@id": "urn:beerlift:Beerlift_195:silentFlooding:1",

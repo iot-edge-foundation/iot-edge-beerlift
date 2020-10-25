@@ -169,7 +169,7 @@ namespace BeerLiftModule
                 AdvertiseMethodCallBack,
                 ioTHubModuleClient);
 
-            Console.WriteLine("Attached method handler: Circus.");   
+            Console.WriteLine("Attached method handler: Advertise.");   
 
             await ioTHubModuleClient.SetMethodHandlerAsync(
                 "FindEmptySlot",

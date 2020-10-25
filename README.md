@@ -26,8 +26,12 @@ A moisture/water sensor can detect any leackage in the construction.
 # Materials used
 
 ## For the Beer Lift
-* thread screw bar (1+ meter)
+
+It's up to you to build your own beerlift. These are the (second hand) components I use:
+
+* Thread screw bar (~1 meter) + nut
 * Lenze electromotor with gearbox - type SSN31-1UHAR-056C21 (second hand) (340V 3 Phase downscaled to 220V 1 Phase)
+* Gerwah DKN-100 Miniature metal bellows coupling with clamping hubs
 * Capacitor 12.0uF (for switching back to 1 phase)
 * Two relays, Siemens Sirius 3RT1015-1BB41 (For switching 220V on the motor, one in each direction)
 * Two Snap-Action Switches with roller Lever; 3-Pin (for normally closed usage)

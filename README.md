@@ -9,15 +9,19 @@ beerlift-proto2.png
 
 # Introduction
 
-This project involves a beer lift that will pop out of the floor when summoned.
+This project involves a beer lift that will pop out of the floor when summoned using a two-way motor.
 
-The beer lift is connected to the Azure cloud using an Azure IoT Edge module running of a Raspberry Pi. 
+The beer lift is connected to the Azure cloud using an Azure IoT Edge module running of a Raspberry Pi (ow another device with GPIO capabilities (at least I2C, SPI and multiple digital pins)). 
 
 The lift can be moved up and down from the cloud. 
 
-The lift also measures the temperature and it measures which bottles are taken out. Each bottle has its own unique position, guided by LEDs. 
+The solution also measures the temperature and it measures which bottles are taken out. Each bottle has its own unique position, guided by LEDs. 
 
 This beer lift is designed for up to sixteen bottles.
+
+Empty beer bottle holders are lit using a LED. A micro switch detect the absence of a bottle. Once a bottle is placed in the holder, the LED is dimmed (to protect the bee quality).
+
+A moisture/water sensor can detect any leackage in the construction.
 
 # Materials used
 
@@ -105,6 +109,7 @@ The following direct methods are available:
 * Circus
 * FirstEmptySpot
 * LedTest
+* Advertise
 
 *Note* Method names are case sensitive
 
@@ -132,7 +137,9 @@ No JSON body needed to be send.
 
 Sends the lift down for the duration of 'UpDownInterval' milliseconds (20000 by default).
 
-*Note*: due to the time to complete this action, a time out can occur.
+*Note*: due to the time to complete this action, a directmethod time out could occur.
+
+After Down is executed, all leds are dimmed.
 
 Response:
 
@@ -225,6 +232,22 @@ Returns the first empty spot (1-16) where no bottle is placed.
 If all spots are occupied, it returns 0.
 
 It also flashes the LED at the empty spot found.
+
+Response:
+
+```
+class Response 
+{
+    int responseState { get; set; }
+    string errorMessage { get; set; }
+}
+```
+
+### Direct Method - Advertise
+
+No JSON body needed to be send.
+
+Lits up all LED lights for 20 seconds so all bottle lables are shown and therefor 'advertised'.
 
 Response:
 

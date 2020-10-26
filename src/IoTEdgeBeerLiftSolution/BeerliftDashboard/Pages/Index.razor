@@ -1,0 +1,66 @@
+﻿@page "/"
+
+@inherits IndexBase
+
+<h1>Beerlift overview</h1>
+
+<p>
+    <input @bind="deviceId" placeholder="Device id" /> Device id: @deviceId
+</p>
+
+<p>
+    <input @bind="moduleName" placeholder="Module name" /> Module name: @moduleName
+</p>
+
+<p>
+    <button class="btn btn-primary" @onclick="Up">Up</button>
+    <button class="btn btn-primary" @onclick="Down">Down</button>
+    <button class="btn btn-primary" @onclick="Circus">Circus</button>
+    <button class="btn btn-primary" @onclick="Advertise">Advertise</button>
+</p>
+
+<p>
+<p>
+    Temperature: @temperature
+</p>
+
+<p>
+    Humidity: @humidity
+</p>
+
+<p>
+    Flooded: @flooded
+</p>
+
+<p>
+    Attempts: @attempts
+</p>
+
+<p>
+    Lift state: @liftState
+</p>
+
+<button class="btn btn-primary" @onclick="Ambiant">Ambiant</button>
+</p>
+
+<p>
+<p>
+    Empty slot: @emptySlot
+</p>
+<button class="btn btn-primary" @onclick="FindEmptySlot">Find empty slot</button>
+</p>
+
+<p>
+<p>
+    <input @bind="position" placeholder="Position" /> Position: @position
+</p>
+<button class="btn btn-primary" @onclick="MarkPosition">Mark position</button>
+</p>
+
+<p>
+    Incoming telemetry: @telemetryMessage
+</p>
+
+<p>
+    Sqlite: @message
+</p>

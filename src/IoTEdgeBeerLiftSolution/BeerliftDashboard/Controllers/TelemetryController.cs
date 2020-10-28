@@ -20,7 +20,7 @@ namespace BeerliftDashboard.Controllers
             _telemetryService = telemetryService;
         }
 
-        // POST api/<ValuesController>
+        // POST api/<Telemetry>
         [HttpPost]
         public async Task Post([FromBody] BeerliftMessage beerliftMessage)
         {

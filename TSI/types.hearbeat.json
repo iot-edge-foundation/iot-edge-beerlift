@@ -1,0 +1,21 @@
+{
+  "put": [
+    {
+      "id": "1be09af9-f089-4d6b-9f0b-48018b5f7393",
+      "name": "Heartbeat",
+      "description": "This is the Heartbeat message",
+      "variables": {
+
+        "counter": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event.counter.Long"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        }
+      }
+    }
+  ]
+}

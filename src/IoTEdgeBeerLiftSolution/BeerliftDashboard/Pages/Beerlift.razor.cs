@@ -21,6 +21,9 @@ namespace BeerliftDashboard
         public TelemetryService _telemetryService { get; set; }
 
         [Inject]
+        public HeartbeatService _heartbeatService { get; set; }
+
+        [Inject]
         public SessionService _sessionService { get; set; }
 
         public double temperature;
@@ -39,6 +42,8 @@ namespace BeerliftDashboard
 
         public string telemetryMessage;
 
+        public string heartbeatMessage;
+
         public string message;
 
         public string deviceId { get; set; }
@@ -49,7 +54,9 @@ namespace BeerliftDashboard
 
         protected override void OnInitialized()
         {
-            _telemetryService.InputMessageReceived += OnInputMessageReceived;
+            _telemetryService.InputMessageReceived += OnInputTelemetryReceived;
+
+            _heartbeatService.InputMessageReceived += OnInputHeartbeatReceived;
 
             deviceId = _sqliteService.ReadSetting("deviceId");
 
@@ -67,7 +74,9 @@ namespace BeerliftDashboard
 
         void IDisposable.Dispose()
         {
-            _telemetryService.InputMessageReceived -= OnInputMessageReceived;
+            _heartbeatService.InputMessageReceived -= OnInputHeartbeatReceived;
+
+            _telemetryService.InputMessageReceived -= OnInputTelemetryReceived;
         }
 
         public async Task Up()
@@ -114,9 +123,16 @@ namespace BeerliftDashboard
             }
         }
 
-        private async void OnInputMessageReceived(object sender, BeerliftMessage message)
+        private async void OnInputTelemetryReceived(object sender, BeerliftMessage message)
         {
             telemetryMessage = message.ToString();
+
+            await InvokeAsync(() => StateHasChanged());
+        }
+
+        private async void OnInputHeartbeatReceived(object sender, HeartbeatMessage message)
+        {
+            heartbeatMessage = message.ToString();
 
             await InvokeAsync(() => StateHasChanged());
         }

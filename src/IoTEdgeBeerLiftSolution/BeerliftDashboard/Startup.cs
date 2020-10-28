@@ -47,6 +47,7 @@ namespace BeerliftDashboard
             services.AddSingleton(sqliteService);
 
             services.AddSingleton<TelemetryService>();
+            services.AddSingleton<HeartbeatService>();
 
             services.AddScoped<SessionService>();
 

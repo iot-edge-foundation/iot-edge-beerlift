@@ -95,7 +95,8 @@ class BeerLiftMessage
     public bool slot14 {get; set;}
     public bool slot15 {get; set;}
     public bool slot16 {get; set;}
-    DateTime timestamp {get; set;}
+    string deviceId {get; set;}
+    DateTime timeStamp {get; set;}
     string liftState {get; set;}
     bool flooded {get; set;}
 }

@@ -1,0 +1,245 @@
+{
+  "put": [
+    {
+      "id": "1be09af9-f089-4d6b-9f0b-48018b5f7393",
+      "name": "Heartbeat",
+      "description": "This is the Heartbeat",
+      "variables": {
+        "EventCount": {
+          "kind": "aggregate",
+          "aggregation": {
+            "tsx": "count()"
+          }
+        },
+        "counter": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event.counter.Long"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        }
+      }
+    },
+    {
+      "id": "23a71a3f-eea4-49c7-87b8-ce0c3c048758",
+      "name": "Beerlift",
+      "description": "This is the Beerlift message ",
+      "variables": {
+        "slot01": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot01'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot02": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot02'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot03": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot03'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "liftState": {
+          "kind": "categorical",
+          "value": {
+            "tsx": "$event.liftState.String"
+          },
+          "filter": {
+            "tsx": "($event.liftState.String) != null"
+          },
+          "interpolation": {
+            "kind": "step",
+            "boundary": {
+              "span": "PT5M"
+            }
+          },
+          "categories": [
+            {
+              "label": "movingUp",
+              "values": [
+                "movingUp"
+              ],
+              "annotations": {
+                "color": "#C8E139"
+              }
+            },
+            {
+              "label": "up",
+              "values": [
+                "up"
+              ],
+              "annotations": {
+                "color": "rgb(31, 102, 66)"
+              }
+            },
+            {
+              "label": "movingDown",
+              "values": [
+                "movingDown"
+              ],
+              "annotations": {
+                "color": "#93CFFB"
+              }
+            },
+            {
+              "label": "down",
+              "values": [
+                "down"
+              ],
+              "annotations": {
+                "color": "#0078D7"
+              }
+            }
+          ],
+          "defaultCategory": {
+            "label": "unknown",
+            "annotations": {
+              "color": "#FFF100"
+            }
+          }
+        },
+        "isFlooded": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['isFlooded'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot04": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot04'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot05": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot05'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot06": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot06'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot07": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot07'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot08": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot08'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot09": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot09'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot10": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot10'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot11": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot11'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot12": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot12'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot13": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot13'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot14": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot14'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot15": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot15'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        },
+        "slot16": {
+          "kind": "numeric",
+          "value": {
+            "tsx": "$event['slot16'].Double"
+          },
+          "aggregation": {
+            "tsx": "avg($value)"
+          }
+        }
+      }
+    }
+  ]
+}

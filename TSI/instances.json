@@ -1,0 +1,18 @@
+{
+  "put": [
+    {
+      "typeId": "1be09af9-f089-4d6b-9f0b-48018b5f7393",
+      "timeSeriesId": [
+        "hb"
+      ],
+      "name": "heartbeat"
+    },
+    {
+      "typeId": "23a71a3f-eea4-49c7-87b8-ce0c3c048758",
+      "timeSeriesId": [
+        "bl"
+      ],
+      "name": "beerlift"
+    }
+  ]
+}

@@ -107,6 +107,15 @@
                     "schema": "string"
                   },
                   {
+                    "@id": "urn:z5sav05bm:beerlift:manage:deviceId:1",
+                    "@type": "Telemetry",
+                    "displayName": {
+                      "en": "deviceId"
+                    },
+                    "name": "deviceId",
+                    "schema": "string"
+                  },
+                  {
                     "@id": "urn:z5sav05bm:beerlift:manage:slot01:1",
                     "@type": "Telemetry",
                     "displayName": {
@@ -314,12 +323,12 @@
                     }
                   },
                   {
-                    "@id": "urn:z5sav05bm:beerlift:manage:timestamp:1",
+                    "@id": "urn:z5sav05bm:beerlift:manage:timeStamp:1",
                     "@type": "Telemetry",
                     "displayName": {
-                      "en": "timestamp"
+                      "en": "timeStamp"
                     },
-                    "name": "timestamp",
+                    "name": "timeStamp",
                     "schema": "dateTime"
                   },
                   {

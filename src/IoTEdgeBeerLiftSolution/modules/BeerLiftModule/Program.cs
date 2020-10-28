@@ -319,7 +319,7 @@ namespace BeerLiftModule
                     _lastLiftState = _liftState;
                     _lastIsFlooded = flooded;
  
-                    var beerLiftMessage = new BeerLiftMessage(dataPortA, dataPortB, _liftState);
+                    var beerLiftMessage = new BeerLiftMessage(_deviceId, dataPortA, dataPortB, _liftState);
 
                     beerLiftMessage.isFlooded = flooded;
 
@@ -680,7 +680,7 @@ namespace BeerLiftModule
             {
                 //// Find the actual empty slot
 
-                var beerLiftMessageToFindEmptySlot = new BeerLiftMessage(_lastDataPortA, _lastDataPortB);
+                var beerLiftMessageToFindEmptySlot = new BeerLiftMessage("dummy", _lastDataPortA, _lastDataPortB);
 
                 // Returns a value between 1 and 16 (or 0 is all occupied) 
                 findEmptySlotResponse.emptySlot = beerLiftMessageToFindEmptySlot.FindEmptySlot();

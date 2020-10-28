@@ -10,12 +10,14 @@ namespace BeerLiftModule
 
         public BeerLiftMessage()
         {
-            timestamp = DateTime.UtcNow;
+            timeStamp = DateTime.UtcNow;
             isFlooded = true;
         }
 
-        public BeerLiftMessage(int stateA, int stateB) : this()
+        public BeerLiftMessage(string deviceId, int stateA, int stateB) : this()
         {
+            this.deviceId = deviceId;
+
             _stateA = stateA;
             _stateB = stateB;
             
@@ -38,10 +40,12 @@ namespace BeerLiftModule
             slot16 = (stateB & 128) == 128;
         }
 
-        public BeerLiftMessage(int stateA, int stateB, LiftState state) : this(stateA, stateB)
+        public BeerLiftMessage(string deviceId, int stateA, int stateB, LiftState state) : this(deviceId, stateA, stateB)
         {
             this.liftState = state.ToString();
         }
+        
+        public string deviceId {get; set;}
 
         public bool slot01 {get; set;}
         public bool slot02 {get; set;}
@@ -59,7 +63,7 @@ namespace BeerLiftModule
         public bool slot14 {get; set;}
         public bool slot15 {get; set;}
         public bool slot16 {get; set;}
-        public DateTime timestamp {get; set;}
+        public DateTime timeStamp {get; set;}
         
         // unknown, movingUp, up, movingDown, down
         public string liftState {get; set;}

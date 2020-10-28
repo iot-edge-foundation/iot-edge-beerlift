@@ -31,7 +31,7 @@ namespace BeerliftDashboard
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            var csIoTHub = Configuration.GetConnectionString("ioTHubServiceClientService");
+            var csIoTHub = Configuration["Azure:IoTHub:ConnectionString"];
 
             var ioTHubServiceClientService = new IoTHubServiceClientService(csIoTHub);
 

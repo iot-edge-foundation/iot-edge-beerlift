@@ -6,43 +6,43 @@
 
 @if (Validated)
 {
-<p>
-    <button class="btn btn-primary" @onclick="Up">Up</button>
-    <button class="btn btn-primary" @onclick="Down">Down</button>
-    <button class="btn btn-primary" @onclick="Circus">Circus</button>
-    <button class="btn btn-primary" @onclick="Advertise">Advertise</button>
-</p>
+    <p>
+        <button class="btn btn-primary" @onclick="Up">Up</button>
+        <button class="btn btn-primary" @onclick="Down">Down</button>
+        <button class="btn btn-primary" @onclick="Circus">Circus</button>
+        <button class="btn btn-primary" @onclick="Advertise">Advertise</button>
+    </p>
 
-<p>
-    <button class="btn btn-primary" @onclick="Ambiant">Ambiant</button>
-    Temperature: @temperature;
-    Humidity: @humidity;
-    Flooded: @flooded;
-    Lift state: @liftState;
-    Attempts: @attempts
-</p>
+    <p>
+        <button class="btn btn-primary" @onclick="Ambiant">Ambiant</button>
+        Temperature: @temperature;
+        Humidity: @humidity;
+        Flooded: @flooded;
+        Lift state: @liftState;
+        Attempts: @attempts
+    </p>
 
-<p>
-    <button class="btn btn-primary" @onclick="FindEmptySlot">Find empty slot</button>
-    Empty slot: @emptySlotId
-</p>
+    <p>
+        <button class="btn btn-primary" @onclick="FindEmptySlot">Find empty slot</button>
+        Empty slot: @emptySlotId
+    </p>
 
-<p>
-    Incoming telemetry: @telemetryMessage
-</p>
+    <p>
+        Incoming telemetry: @telemetryMessage
+    </p>
 
-<BottleHolderComponent Bottleholders="Bottleholders"
-                       deviceId="deviceId"
-                       moduleName="moduleName"
-                       BottleholderSelectEvent="BottleholderSelected" />
+    <BottleHolderComponent Bottleholders="@Bottleholders"
+                           deviceId="@deviceId"
+                           moduleName="@moduleName"
+                           BottleholderSelectEvent="BottleholderSelected" />
 
-<p>
-    Message: @message
-</p>
+    <p>
+        Message: @message
+    </p>
 }
 else
 {
-<p>
-    Not validated yet
-</p>
+    <p>
+        Not validated yet
+    </p>
 }

@@ -41,23 +41,19 @@ namespace BeerliftDashboard
 
         public string message;
 
-        private string _dbpassword;
+        public string deviceId { get; set; }
+
+        public string moduleName { get; set; }
 
         public List<Bottleholder> Bottleholders { get; set; }
 
-        private string _deviceId;
-
-        private string _moduleName;
-
         protected override void OnInitialized()
         {
-            _dbpassword = _sqliteService.ReadSetting("password");
-
             _telemetryService.InputMessageReceived += OnInputMessageReceived;
 
-            _deviceId = _sqliteService.ReadSetting("deviceId");
+            deviceId = _sqliteService.ReadSetting("deviceId");
 
-            _moduleName = _sqliteService.ReadSetting("moduleName");
+            moduleName = _sqliteService.ReadSetting("moduleName");
         }
 
         protected override void OnParametersSet()
@@ -66,7 +62,7 @@ namespace BeerliftDashboard
 
             InitializeBeerliftTable();
 
-            Bottleholders = _sqliteService.GetBottleHolders(_deviceId, _moduleName);
+            Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
         }
 
         void IDisposable.Dispose()
@@ -76,27 +72,27 @@ namespace BeerliftDashboard
 
         public async Task Up()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<UpRequest, UpResponse>(_deviceId, _moduleName, "Up", new UpRequest());
+            var response = await _ioTHubServiceClientService.SendDirectMethod<UpRequest, UpResponse>(deviceId, moduleName, "Up", new UpRequest());
         }
 
         public async Task Down()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<DownRequest, DownResponse>(_deviceId, _moduleName, "Down", new DownRequest());
+            var response = await _ioTHubServiceClientService.SendDirectMethod<DownRequest, DownResponse>(deviceId, moduleName, "Down", new DownRequest());
         }
 
         public async Task Circus()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<CircusRequest, CircusResponse>(_deviceId, _moduleName, "Circus", new CircusRequest());
+            var response = await _ioTHubServiceClientService.SendDirectMethod<CircusRequest, CircusResponse>(deviceId, moduleName, "Circus", new CircusRequest());
         }
 
         public async Task Advertise()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<AdvertiseRequest, AdvertiseResponse>(_deviceId, _moduleName, "Advertise", new AdvertiseRequest());
+            var response = await _ioTHubServiceClientService.SendDirectMethod<AdvertiseRequest, AdvertiseResponse>(deviceId, moduleName, "Advertise", new AdvertiseRequest());
         }
 
         public async Task Ambiant()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<AmbiantRequest, AmbiantResponse>(_deviceId, _moduleName, "Ambiant", new AmbiantRequest());
+            var response = await _ioTHubServiceClientService.SendDirectMethod<AmbiantRequest, AmbiantResponse>(deviceId, moduleName, "Ambiant", new AmbiantRequest());
 
             if (response.ResponseStatus == 200)
             {
@@ -110,7 +106,7 @@ namespace BeerliftDashboard
 
         public async Task FindEmptySlot()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<FindEmptySlotRequest, FindEmptySlotResponse>(_deviceId, _moduleName, "FindEmptySlot", new FindEmptySlotRequest());
+            var response = await _ioTHubServiceClientService.SendDirectMethod<FindEmptySlotRequest, FindEmptySlotResponse>(deviceId, moduleName, "FindEmptySlot", new FindEmptySlotRequest());
 
             if (response.ResponseStatus == 200)
             {
@@ -135,10 +131,10 @@ namespace BeerliftDashboard
 
         private void InitializeBeerliftTable()
         {
-            if (!string.IsNullOrEmpty(_deviceId)
-                    && !string.IsNullOrEmpty(_moduleName))
+            if (!string.IsNullOrEmpty(deviceId)
+                    && !string.IsNullOrEmpty(moduleName))
             {
-                _sqliteService.IntializeBeerlift(_deviceId, _moduleName);
+                _sqliteService.IntializeBeerlift(deviceId, moduleName);
             }
         }
 

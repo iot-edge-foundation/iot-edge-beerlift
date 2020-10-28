@@ -8,11 +8,11 @@ namespace IoTEdgeConversationDashboard.Data
         {
         }
 
-        public MarkPositionPayload LedTestPayload { get; private set; }
+        public MarkPositionPayload MarkPositionPayload { get; private set; }
 
         public override void DeserializePayload(string json)
         {
-            LedTestPayload = JsonConvert.DeserializeObject<MarkPositionPayload>(json);
+            MarkPositionPayload = JsonConvert.DeserializeObject<MarkPositionPayload>(json);
         }
     }
 }

@@ -49,6 +49,10 @@ namespace BeerliftDashboard
             services.AddSingleton<TelemetryService>();
 
             services.AddScoped<SessionService>();
+
+            // ApiController support
+            services.AddMvc(options => options.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers().AddNewtonsoftJson();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +73,9 @@ namespace BeerliftDashboard
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            // ApiController support
+            app.UseMvcWithDefaultRoute();
 
             app.UseEndpoints(endpoints =>
             {

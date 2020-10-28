@@ -114,9 +114,9 @@ namespace BeerliftDashboard
             }
         }
 
-        private async void OnInputMessageReceived(object sender, string messageString)
+        private async void OnInputMessageReceived(object sender, BeerliftMessage message)
         {
-            telemetryMessage = messageString;
+            telemetryMessage = message.ToString();
 
             await InvokeAsync(() => StateHasChanged());
         }

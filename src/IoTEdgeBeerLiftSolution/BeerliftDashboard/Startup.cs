@@ -28,11 +28,14 @@ namespace BeerliftDashboard
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Connecting to Azure SignalR
+            var csSignalR = Configuration["Azure:SignalR:ConnectionString"];
+            services.AddSignalR().AddAzureSignalR(csSignalR);
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
             var csIoTHub = Configuration["Azure:IoTHub:ConnectionString"];
-
             var ioTHubServiceClientService = new IoTHubServiceClientService(csIoTHub);
 
             services.AddSingleton(ioTHubServiceClientService);
@@ -44,6 +47,8 @@ namespace BeerliftDashboard
             services.AddSingleton(sqliteService);
 
             services.AddSingleton<TelemetryService>();
+
+            services.AddScoped<SessionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

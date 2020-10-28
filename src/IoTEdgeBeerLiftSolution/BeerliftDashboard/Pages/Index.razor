@@ -2,7 +2,7 @@
 
 @inherits IndexBase
 
-<h1>Beerlift overview</h1>
+<h1>Welcome to the Beerlift dashboard</h1>
 
 <p>
     <input @bind="deviceId" placeholder="Device id" />
@@ -13,38 +13,9 @@
 </p>
 
 <p>
-    <button class="btn btn-primary" @onclick="Up">Up</button>
-    <button class="btn btn-primary" @onclick="Down">Down</button>
-    <button class="btn btn-primary" @onclick="Circus">Circus</button>
-    <button class="btn btn-primary" @onclick="Advertise">Advertise</button>
+    <button class="btn btn-primary" @onclick="Validate">Validate</button>
 </p>
 
 <p>
-    <button class="btn btn-primary" @onclick="Ambiant">Ambiant</button>
-    Temperature: @temperature;
-    Humidity: @humidity;
-    Flooded: @flooded;
-    Lift state: @liftState;
-    Attempts: @attempts
+    Message: @message
 </p>
-
-<p>
-    <button class="btn btn-primary" @onclick="FindEmptySlot">Find empty slot</button>
-    Empty slot: @emptySlot
-</p>
-
-<p>
-    <button class="btn btn-primary" @onclick="MarkPosition">Mark position</button>
-    <input @bind="position" placeholder="Position" /> Position: @position
-</p>
-
-<p>
-    Incoming telemetry: @telemetryMessage
-</p>
-
-<select size="16" style="width:100%">
-    @foreach (var bottleholder in Bottleholders)
-    {
-        <option value="@bottleholder.id">@bottleholder.id - @bottleholder.name - @bottleholder.state</option>
-    }
-</select>

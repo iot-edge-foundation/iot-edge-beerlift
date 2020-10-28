@@ -1,0 +1,23 @@
+﻿@inherits BottleHolderComponentBase
+
+<h3>Beerlift- Bottle holders</h3>
+
+<select @onchange="BottleHolderSelected" size="16" style="width:100%">
+    @foreach (var bottleholder in Bottleholders)
+    {
+        <option value="@bottleholder.id">@bottleholder.id - @bottleholder.name - @bottleholder.state</option>
+    }
+</select>
+
+@if (selectedBottleHolder != null)
+{
+    <p>
+        <button class="btn btn-primary" @onclick="MarkPosition">Mark position</button> @markedText
+    </p>
+    <input @bind="@selectedBottleHolder.name"
+           @bind:event="oninput" />
+    <span style="color:red">@selectedBottleHolder.name&nbsp;selected</span>
+
+    <br />
+    <br />
+}

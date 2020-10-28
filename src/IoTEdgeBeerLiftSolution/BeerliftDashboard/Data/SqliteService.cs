@@ -142,7 +142,7 @@ namespace BeerliftDashboard.Data
             cmd.CommandText = $"INSERT INTO {C_TABLE_SETTING}({C_COLUMN_KEY}, {C_COLUMN_VALUE}) VALUES('moduleName', '')";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = $"INSERT INTO {C_TABLE_SETTING}({C_COLUMN_KEY}, {C_COLUMN_VALUE}) VALUES('password', '1234')";
+            cmd.CommandText = $"INSERT INTO {C_TABLE_SETTING}({C_COLUMN_KEY}, {C_COLUMN_VALUE}) VALUES('password', 'bl1234!')";
             cmd.ExecuteNonQuery();
 
             Console.WriteLine($"Table {C_TABLE_SETTING} in {con.Database} created");

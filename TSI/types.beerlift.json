@@ -8,7 +8,7 @@
         "slot01": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot01'].Bool"
+            "tsx": "$event['slot01'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -17,7 +17,7 @@
         "slot02": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot02'].Bool"
+            "tsx": "$event['slot02'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -26,7 +26,7 @@
         "slot03": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot03'].Bool"
+            "tsx": "$event['slot03'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -94,7 +94,7 @@
         "isFlooded": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['isFlooded'].Bool"
+            "tsx": "$event['isFlooded'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -103,7 +103,7 @@
         "slot04": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot04'].Bool"
+            "tsx": "$event['slot04'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -112,7 +112,7 @@
         "slot05": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot05'].Bool"
+            "tsx": "$event['slot05'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -121,7 +121,7 @@
         "slot06": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot06'].Bool"
+            "tsx": "$event['slot06'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -130,7 +130,7 @@
         "slot07": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot07'].Bool"
+            "tsx": "$event['slot07'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -139,7 +139,7 @@
         "slot08": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot08'].Bool"
+            "tsx": "$event['slot08'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -148,7 +148,7 @@
         "slot09": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot09'].Bool"
+            "tsx": "$event['slot09'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -157,7 +157,7 @@
         "slot10": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot10'].Bool"
+            "tsx": "$event['slot10'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -166,7 +166,7 @@
         "slot11": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot11'].Bool"
+            "tsx": "$event['slot11'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -175,7 +175,7 @@
         "slot12": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot12'].Bool"
+            "tsx": "$event['slot12'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -184,7 +184,7 @@
         "slot13": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot13'].Bool"
+            "tsx": "$event['slot13'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -193,7 +193,7 @@
         "slot14": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot14'].Bool"
+            "tsx": "$event['slot14'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -202,7 +202,7 @@
         "slot15": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot15'].Bool"
+            "tsx": "$event['slot15'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"
@@ -211,7 +211,7 @@
         "slot16": {
           "kind": "numeric",
           "value": {
-            "tsx": "$event['slot16'].Bool"
+            "tsx": "$event['slot16'].Long"
           },
           "aggregation": {
             "tsx": "avg($value)"

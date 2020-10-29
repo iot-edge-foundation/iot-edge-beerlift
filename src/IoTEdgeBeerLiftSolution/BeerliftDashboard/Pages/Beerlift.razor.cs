@@ -61,6 +61,16 @@ namespace BeerliftDashboard
             deviceId = _sqliteService.ReadSetting("deviceId");
 
             moduleName = _sqliteService.ReadSetting("moduleName");
+
+            if (_sessionService.BeerliftMessage != null)
+            {
+                telemetryMessage = _sessionService.BeerliftMessage.ToString();
+            }
+
+            if (_sessionService.HeartbeatMessage != null)
+            {
+                heartbeatMessage = _sessionService.HeartbeatMessage.ToString();
+            }
         }
 
         protected override void OnParametersSet()
@@ -125,6 +135,8 @@ namespace BeerliftDashboard
 
         private async void OnInputTelemetryReceived(object sender, BeerliftMessage message)
         {
+            _sessionService.BeerliftMessage = message;
+
             telemetryMessage = message.ToString();
 
             await InvokeAsync(() => StateHasChanged());
@@ -132,6 +144,8 @@ namespace BeerliftDashboard
 
         private async void OnInputHeartbeatReceived(object sender, HeartbeatMessage message)
         {
+            _sessionService.HeartbeatMessage = message;
+
             heartbeatMessage = message.ToString();
 
             await InvokeAsync(() => StateHasChanged());

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace BeerliftDashboard.Pages
@@ -33,9 +34,9 @@ namespace BeerliftDashboard.Pages
 
         public List<Bottleholder> Bottleholders { get; set; }
 
-        public Bottleholder selectedBottleHolder = null;
+        public Bottleholder UserSelectedBottleHolder = null;
 
-        private BeerliftMessage _beerliftMessage = null;
+        private BeerliftMessage _lastBeerliftMessage = null;
 
         protected override void OnInitialized()
         {
@@ -51,29 +52,35 @@ namespace BeerliftDashboard.Pages
             _telemetryService.InputMessageReceived -= OnInputTelemetryReceived;
         }
 
-        public async Task MarkPosition()
+        public void AddBottle()
+        {
+        }
+
+        private async Task MarkPosition()
         {
             markedText = string.Empty;
 
-            if (selectedBottleHolder == null)
+            if (UserSelectedBottleHolder == null)
             {
                 return;
             }
 
             markedText = "marking...";
 
-            await _ioTHubServiceClientService.SendDirectMethod<MarkPositionRequest, MarkPositionResponse>(deviceId, moduleName, "MarkPosition", new MarkPositionRequest { position = selectedBottleHolder.id });
+            await _ioTHubServiceClientService.SendDirectMethod<MarkPositionRequest, MarkPositionResponse>(deviceId, moduleName, "MarkPosition", new MarkPositionRequest { position = UserSelectedBottleHolder.id });
 
-            markedText = $"marked {selectedBottleHolder.id}";
+            markedText = $"marked {UserSelectedBottleHolder.id}";
         }
 
-        public void BottleHolderSelected(ChangeEventArgs args)
+        public async Task BottleHolderSelected(ChangeEventArgs args)
         {
-            selectedBottleHolder = (from x in Bottleholders
-                                    where x.id.ToString() == args.Value.ToString()
-                                    select x).First();
+            UserSelectedBottleHolder = (from x in Bottleholders
+                                        where x.id.ToString() == args.Value.ToString()
+                                        select x).First();
 
-            BottleholderSelectEvent.InvokeAsync(selectedBottleHolder).Wait();
+            BottleholderSelectEvent.InvokeAsync(UserSelectedBottleHolder).Wait();
+
+            await MarkPosition();
         }
 
         private async void OnInputTelemetryReceived(object sender, BeerliftMessage message)
@@ -84,15 +91,59 @@ namespace BeerliftDashboard.Pages
                 return;
             }
 
-            ProcessChanges(_beerliftMessage, message);
+            ProcessChanges(_lastBeerliftMessage, message);
 
-            _beerliftMessage = message;
+            _lastBeerliftMessage = message;
 
             await InvokeAsync(() => StateHasChanged());
         }
 
-        private void ProcessChanges(BeerliftMessage beerliftMessage, BeerliftMessage message)
+        private void ProcessChanges(BeerliftMessage lastBeerliftMessage, BeerliftMessage message)
         {
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot01 != message.slot01)
+            {
+                Bottleholders[0].state = message.slot01 ? "occupied" : "      ";
+            }
+
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot02 != message.slot02)
+            {
+                Bottleholders[1].state = message.slot02 ? "occupied" : "      ";
+            }
+
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot03 != message.slot03)
+            {
+                Bottleholders[2].state = message.slot03 ? "occupied" : "      ";
+            }
+
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot04 != message.slot04)
+            {
+                Bottleholders[3].state = message.slot04 ? "occupied" : "      ";
+            }
+
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot05 != message.slot05)
+            {
+                Bottleholders[4].state = message.slot05 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot06 != message.slot06)
+            {
+                Bottleholders[5].state = message.slot06 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot07 != message.slot07)
+            {
+                Bottleholders[6].state = message.slot07 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot08 != message.slot08)
+            {
+                Bottleholders[7].state = message.slot08 ? "occupied" : "      ";
+            }
         }
     }
 }

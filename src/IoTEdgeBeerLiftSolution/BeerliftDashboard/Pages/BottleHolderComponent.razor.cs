@@ -12,6 +12,10 @@ namespace BeerliftDashboard.Pages
 {
     public class BottleHolderComponentBase : ComponentBase, IDisposable
     {
+        public Bottleholder UserSelectedBottleHolder = null;
+
+        private BeerliftMessage _lastBeerliftMessage = null;
+
         [Inject]
         public IoTHubServiceClientService _ioTHubServiceClientService { get; set; }
 
@@ -30,13 +34,13 @@ namespace BeerliftDashboard.Pages
         [Parameter]
         public EventCallback<Bottleholder> BottleholderSelectEvent { get; set; }
 
-        public string markedText;
+        public string MarkedText;
 
-        public List<Bottleholder> Bottleholders { get; set; }
+        public string AddBottleText;
 
-        public Bottleholder UserSelectedBottleHolder = null;
+        public List<Bottleholder> Bottleholders;
 
-        private BeerliftMessage _lastBeerliftMessage = null;
+        public string BottleBrandAndMake;
 
         protected override void OnInitialized()
         {
@@ -52,24 +56,89 @@ namespace BeerliftDashboard.Pages
             _telemetryService.InputMessageReceived -= OnInputTelemetryReceived;
         }
 
-        public void AddBottle()
+        public async Task AddBottle()
         {
+            var emptySlotId = 0;
+
+            AddBottleText = "";
+
+            if (string.IsNullOrEmpty(BottleBrandAndMake))
+            {
+                AddBottleText = "Enter brand and make";
+                return;
+            }
+
+            AddBottleText = "Searching for empty slot...";
+
+            var response = await _ioTHubServiceClientService.SendDirectMethod<FindEmptySlotRequest, FindEmptySlotResponse>(deviceId, moduleName, "FindEmptySlot", new FindEmptySlotRequest());
+
+            if (response.ResponseStatus == 200)
+            {
+                emptySlotId = response.FindEmptySlotPayload.emptySlot;
+            }
+
+            if (emptySlotId == 0)
+            {
+                AddBottleText = "No empty slot available ";
+
+                return;
+            }
+
+            AddBottleText = $"Found empty slot {emptySlotId}, Place the bottle";
+
+            //       await InvokeAsync(() => StateHasChanged());
+
+            var placed = false;
+
+            var i = 0;
+
+            while (!placed)
+            {
+                if (i == 20)
+                {
+                    break;
+                }
+
+                i++;
+
+                AddBottleText = $"Found empty slot {emptySlotId}, Place the bottle {i}";
+
+                if (_lastBeerliftMessage.IsSlotInUse(emptySlotId))
+                {
+                    placed = true;
+                }
+                else
+                {
+                    await Task.Delay(1000);
+                }
+            }
+
+            if (placed)
+            {
+                AddBottleText = $"Timed out, please try again";
+
+                // put in DB
+            }
+            else
+            {
+                AddBottleText = $"Timed out, please try again";
+            }
         }
 
         private async Task MarkPosition()
         {
-            markedText = string.Empty;
+            MarkedText = string.Empty;
 
             if (UserSelectedBottleHolder == null)
             {
                 return;
             }
 
-            markedText = "marking...";
+            MarkedText = "marking...";
 
             await _ioTHubServiceClientService.SendDirectMethod<MarkPositionRequest, MarkPositionResponse>(deviceId, moduleName, "MarkPosition", new MarkPositionRequest { position = UserSelectedBottleHolder.id });
 
-            markedText = $"marked {UserSelectedBottleHolder.id}";
+            MarkedText = $"marked {UserSelectedBottleHolder.id}";
         }
 
         public async Task BottleHolderSelected(ChangeEventArgs args)
@@ -100,6 +169,8 @@ namespace BeerliftDashboard.Pages
 
         private void ProcessChanges(BeerliftMessage lastBeerliftMessage, BeerliftMessage message)
         {
+            // bank A
+
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot01 != message.slot01)
             {
@@ -143,6 +214,49 @@ namespace BeerliftDashboard.Pages
                     || lastBeerliftMessage.slot08 != message.slot08)
             {
                 Bottleholders[7].state = message.slot08 ? "occupied" : "      ";
+            }
+
+            // bank B
+
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot09 != message.slot09)
+            {
+                Bottleholders[8].state = message.slot09 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot10 != message.slot10)
+            {
+                Bottleholders[9].state = message.slot10 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot11 != message.slot11)
+            {
+                Bottleholders[10].state = message.slot11 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot12 != message.slot12)
+            {
+                Bottleholders[11].state = message.slot12 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot13 != message.slot13)
+            {
+                Bottleholders[12].state = message.slot13 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot14 != message.slot14)
+            {
+                Bottleholders[13].state = message.slot14 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot15 != message.slot15)
+            {
+                Bottleholders[14].state = message.slot15 ? "occupied" : "      ";
+            }
+            if (lastBeerliftMessage == null
+                    || lastBeerliftMessage.slot16 != message.slot16)
+            {
+                Bottleholders[15].state = message.slot16 ? "occupied" : "      ";
             }
         }
     }

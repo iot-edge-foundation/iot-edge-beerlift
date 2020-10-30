@@ -185,6 +185,13 @@ namespace BeerLiftModule
 
             Console.WriteLine("Attached method handler: MarkPosition."); 
 
+            await ioTHubModuleClient.SetMethodHandlerAsync(
+                "BottleHolders",
+                BottleHoldersMethodCallBack,
+                ioTHubModuleClient);
+
+            Console.WriteLine("Attached method handler: BottleHolders."); 
+
             SetupI2CRead();
 
             SetupI2CWrite();
@@ -633,6 +640,48 @@ namespace BeerLiftModule
 
             return response;
         }   
+
+        private static async Task<MethodResponse> BottleHoldersMethodCallBack(MethodRequest methodRequest, object userContext)
+        {
+            Console.WriteLine($"Executing BottleHoldersMethodCallBack at {DateTime.UtcNow}");
+
+            var bottleHoldersResponse = new BottleHoldersResponse{responseState = 0};
+
+            try
+            {
+                var  mcp23x1x = _mcp23xxxRead as Mcp23x1x;
+
+                if (mcp23x1x == null)
+                {
+                    bottleHoldersResponse.errorMessage = "Unable to cast Mcp23017 Read GPIO.";   
+                    bottleHoldersResponse.responseState = 1;
+                }
+                else
+                {
+                    byte dataPortA = mcp23x1x.ReadByte(Register.GPIO, Port.PortA);
+                    byte dataPortB = mcp23x1x.ReadByte(Register.GPIO, Port.PortB);
+
+                    var beerLiftMessage = new BeerLiftMessage(_deviceId, dataPortA, dataPortB, _liftState);
+
+                    bottleHoldersResponse.BeerLiftMessage = beerLiftMessage;
+
+                    Console.WriteLine($"BottleHolders ended at {DateTime.UtcNow}.");
+
+                    await Task.Delay(1);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                bottleHoldersResponse.errorMessage = ex.Message;   
+                bottleHoldersResponse.responseState = -999;
+            }
+              
+            var json = JsonConvert.SerializeObject(bottleHoldersResponse);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+
+            return response;  
+        }
 
         private static async Task<MethodResponse> MarkPositionMethodCallBack(MethodRequest methodRequest, object userContext)
         {

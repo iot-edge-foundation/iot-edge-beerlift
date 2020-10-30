@@ -39,8 +39,6 @@ namespace BeerliftDashboard
 
         public string password;
 
-        public int emptySlotId;
-
         public string telemetryMessage;
 
         public string heartbeatMessage;
@@ -121,16 +119,6 @@ namespace BeerliftDashboard
                 flooded = response.AmbiantPayload.flooded;
                 attempts = response.AmbiantPayload.attempts;
                 liftState = response.AmbiantPayload.liftState;
-            }
-        }
-
-        public async Task FindEmptySlot()
-        {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<FindEmptySlotRequest, FindEmptySlotResponse>(deviceId, moduleName, "FindEmptySlot", new FindEmptySlotRequest());
-
-            if (response.ResponseStatus == 200)
-            {
-                emptySlotId = response.FindEmptySlotPayload.emptySlot;
             }
         }
 

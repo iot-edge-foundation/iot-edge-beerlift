@@ -12,8 +12,6 @@ namespace BeerliftDashboard.Pages
 {
     public class BottleHolderComponentBase : ComponentBase, IDisposable
     {
-        public Bottleholder UserSelectedBottleHolder = null;
-
         private BeerliftMessage _lastBeerliftMessage = null;
 
         [Inject]
@@ -86,7 +84,7 @@ namespace BeerliftDashboard.Pages
 
             AddBottleText = $"Found empty slot {emptySlotId}, Place the bottle";
 
-            //       await InvokeAsync(() => StateHasChanged());
+            await InvokeAsync(() => StateHasChanged());
 
             var placed = false;
 
@@ -94,28 +92,36 @@ namespace BeerliftDashboard.Pages
 
             while (!placed)
             {
-                if (i == 20)
+                if (i == 4)
                 {
                     break;
                 }
 
                 i++;
 
-                AddBottleText = $"Found empty slot {emptySlotId}, Place the bottle {i}";
+                AddBottleText = $"Found empty slot {emptySlotId}, Place the bottle... ({i})";
 
-                if (_lastBeerliftMessage.IsSlotInUse(emptySlotId))
+                await InvokeAsync(() => StateHasChanged());
+
+                var beerHoldersResponse = await _ioTHubServiceClientService.SendDirectMethod<BottleHoldersRequest, BottleHoldersResponse>(deviceId, moduleName, "BottleHolders", new BottleHoldersRequest());
+
+                if (beerHoldersResponse.ResponseStatus == 200)
                 {
-                    placed = true;
+                    _lastBeerliftMessage = beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage;
+
+                    if (_lastBeerliftMessage.IsSlotInUse(emptySlotId))
+                    {
+                        placed = true;
+                        break;
+                    }
                 }
-                else
-                {
-                    await Task.Delay(1000);
-                }
+
+                await MarkPosition(emptySlotId);
             }
 
             if (placed)
             {
-                AddBottleText = $"Timed out, please try again";
+                AddBottleText = $"Bottle is placed";
 
                 // put in DB
             }
@@ -125,31 +131,24 @@ namespace BeerliftDashboard.Pages
             }
         }
 
-        private async Task MarkPosition()
+        private async Task MarkPosition(int position)
         {
-            MarkedText = string.Empty;
-
-            if (UserSelectedBottleHolder == null)
-            {
-                return;
-            }
-
             MarkedText = "marking...";
 
-            await _ioTHubServiceClientService.SendDirectMethod<MarkPositionRequest, MarkPositionResponse>(deviceId, moduleName, "MarkPosition", new MarkPositionRequest { position = UserSelectedBottleHolder.id });
+            await _ioTHubServiceClientService.SendDirectMethod<MarkPositionRequest, MarkPositionResponse>(deviceId, moduleName, "MarkPosition", new MarkPositionRequest { position = position });
 
-            MarkedText = $"marked {UserSelectedBottleHolder.id}";
+            MarkedText = $"marked {position}";
         }
 
         public async Task BottleHolderSelected(ChangeEventArgs args)
         {
-            UserSelectedBottleHolder = (from x in Bottleholders
+            var selectedBottleHolder = (from x in Bottleholders
                                         where x.id.ToString() == args.Value.ToString()
                                         select x).First();
 
-            BottleholderSelectEvent.InvokeAsync(UserSelectedBottleHolder).Wait();
+            BottleholderSelectEvent.InvokeAsync(selectedBottleHolder).Wait();
 
-            await MarkPosition();
+            await MarkPosition(selectedBottleHolder.id);
         }
 
         private async void OnInputTelemetryReceived(object sender, BeerliftMessage message)

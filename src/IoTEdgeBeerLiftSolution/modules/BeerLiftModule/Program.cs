@@ -288,7 +288,7 @@ namespace BeerLiftModule
 
                 var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
 
-                Console.WriteLine($"Ports read: A = {dataPortA} - B = {dataPortB}; Flooded = {flooded}; State = {LiftState} at {DateTime.Now}");
+                Console.WriteLine($"Ports read: A = {dataPortA} - B = {dataPortB}; Flooded = {flooded}; State = {_liftState} at {DateTime.Now}");
 
                 // send message on some change or FLOODED!
                 if (dataPortA != _lastDataPortA

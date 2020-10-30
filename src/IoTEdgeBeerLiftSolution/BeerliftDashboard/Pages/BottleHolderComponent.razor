@@ -5,7 +5,7 @@
 <select @onchange="BottleHolderSelected" size="16" style="width:100%">
     @foreach (var bottleholder in Bottleholders)
     {
-    <option value="@bottleholder.id">@bottleholder.id - @bottleholder.name - @bottleholder.state</option>
+        <option value="@bottleholder.indexer">@bottleholder.indexer - @bottleholder.name - @bottleholder.state</option>
     }
 </select>
 

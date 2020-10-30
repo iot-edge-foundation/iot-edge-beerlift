@@ -7,7 +7,7 @@ namespace BeerliftDashboard.Models
 {
     public class Bottleholder
     {
-        public int id { get; set; }
+        public int indexer { get; set; }
 
         public string name { get; set; }
 

@@ -16,6 +16,7 @@ namespace BeerliftDashboard.Data
         private const string C_COLUMN_STATE = "state";
         private const string C_COLUMN_DEVICEID = "deviceid";
         private const string C_COLUMN_MODULENAME = "modulename";
+        private const string C_COLUMN_INDEXER = "indexer";
 
         private SQLiteConnection con = null;
 
@@ -103,9 +104,9 @@ namespace BeerliftDashboard.Data
 
             if (count == 0)
             {
-                for (int i = 0; i < 16; i++)
+                for (int i = 1; i <= 16; i++)
                 {
-                    cmd.CommandText = $"INSERT INTO {C_TABLE_BEERLIFT}({C_COLUMN_DEVICEID}, {C_COLUMN_MODULENAME}, {C_COLUMN_NAME}, {C_COLUMN_STATE}) VALUES('{deviceId}', '{moduleName}', '', '')";
+                    cmd.CommandText = $"INSERT INTO {C_TABLE_BEERLIFT}({C_COLUMN_DEVICEID}, {C_COLUMN_MODULENAME}, {C_COLUMN_INDEXER}, {C_COLUMN_NAME}, {C_COLUMN_STATE}) VALUES('{deviceId}', '{moduleName}', {i}, '', '')";
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -117,16 +118,24 @@ namespace BeerliftDashboard.Data
 
             using var cmd = new SQLiteCommand(con);
 
-            cmd.CommandText = $"select {C_COLUMN_ID}, {C_COLUMN_NAME}, {C_COLUMN_STATE} from {C_TABLE_BEERLIFT} where {C_COLUMN_DEVICEID} = '{deviceId}' and {C_COLUMN_MODULENAME} = '{moduleName}' order by {C_COLUMN_ID}";
+            cmd.CommandText = $"select {C_COLUMN_INDEXER}, {C_COLUMN_NAME}, {C_COLUMN_STATE} from {C_TABLE_BEERLIFT} where {C_COLUMN_DEVICEID} = '{deviceId}' and {C_COLUMN_MODULENAME} = '{moduleName}' order by {C_COLUMN_INDEXER}";
 
             using SQLiteDataReader rdr = cmd.ExecuteReader();
 
             while (rdr.Read())
             {
-                result.Add(new Bottleholder { id = rdr.GetInt32(0), name = rdr.GetString(1), state = rdr.GetString(2) });
+                result.Add(new Bottleholder { indexer = rdr.GetInt32(0), name = rdr.GetString(1), state = rdr.GetString(2) });
             }
 
             return result;
+        }
+
+        public void PutBottleHolder(string deviceId, string moduleName, int index, string bottleBrandAndMake, string state)
+        {
+            //       using var cmd = new SQLiteCommand(con);
+
+            //        cmd.CommandText = $"INSERT INTO {C_TABLE_BEERLIFT}({C_COLUMN_DEVICEID}, {C_COLUMN_MODULENAME}, {C_COLUMN_NAME}, {C_COLUMN_STATE}) VALUES('{deviceId}', '{moduleName}', '', '')";
+            //        cmd.ExecuteNonQuery();
         }
 
         private void CreateStructure()
@@ -147,7 +156,7 @@ namespace BeerliftDashboard.Data
 
             Console.WriteLine($"Table {C_TABLE_SETTING} in {con.Database} created");
 
-            cmd.CommandText = $"CREATE TABLE {C_TABLE_BEERLIFT}(id INTEGER PRIMARY KEY, {C_COLUMN_NAME} TEXT, {C_COLUMN_STATE} TEXT, {C_COLUMN_DEVICEID} TEXT, {C_COLUMN_MODULENAME} TEXT)";
+            cmd.CommandText = $"CREATE TABLE {C_TABLE_BEERLIFT}(id INTEGER PRIMARY KEY, {C_COLUMN_NAME} TEXT, {C_COLUMN_STATE} TEXT, {C_COLUMN_INDEXER} INTEGER, {C_COLUMN_DEVICEID} TEXT, {C_COLUMN_MODULENAME} TEXT)";
             cmd.ExecuteNonQuery();
         }
 

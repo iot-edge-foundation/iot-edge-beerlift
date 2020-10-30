@@ -171,7 +171,7 @@ namespace BeerliftDashboard
 
         public void BottleholderSelected(Bottleholder bottleholder)
         {
-            message = $"Event Raised. bottleholder Selected: {bottleholder.name} with id {bottleholder.id}";
+            message = $"Event Raised. bottleholder Selected: {bottleholder.name} with index {bottleholder.indexer}";
         }
     }
 }

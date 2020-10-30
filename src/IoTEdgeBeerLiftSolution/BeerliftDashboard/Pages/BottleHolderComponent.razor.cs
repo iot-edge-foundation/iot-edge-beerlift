@@ -123,7 +123,7 @@ namespace BeerliftDashboard.Pages
             {
                 AddBottleText = $"Bottle is placed";
 
-                // put in DB
+                _sqliteService.PutBottleHolder(deviceId, moduleName, emptySlotId, BottleBrandAndMake, "occupied");
             }
             else
             {
@@ -143,12 +143,12 @@ namespace BeerliftDashboard.Pages
         public async Task BottleHolderSelected(ChangeEventArgs args)
         {
             var selectedBottleHolder = (from x in Bottleholders
-                                        where x.id.ToString() == args.Value.ToString()
+                                        where x.indexer.ToString() == args.Value.ToString()
                                         select x).First();
 
             BottleholderSelectEvent.InvokeAsync(selectedBottleHolder).Wait();
 
-            await MarkPosition(selectedBottleHolder.id);
+            await MarkPosition(selectedBottleHolder.indexer);
         }
 
         private async void OnInputTelemetryReceived(object sender, BeerliftMessage message)

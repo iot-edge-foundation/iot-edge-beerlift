@@ -1,5 +1,6 @@
 ﻿using BeerliftDashboard.Data;
 using BeerliftDashboard.Models;
+using BeerliftDashboard.Pages;
 using IoTEdgeConversationDashboard.Data;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -54,6 +55,8 @@ namespace BeerliftDashboard
 
         protected override void OnInitialized()
         {
+            base.OnInitialized();
+
             _telemetryService.InputMessageReceived += OnInputTelemetryReceived;
 
             _heartbeatService.InputMessageReceived += OnInputHeartbeatReceived;
@@ -78,8 +81,6 @@ namespace BeerliftDashboard
             base.OnParametersSet();
 
             InitializeBeerliftTable();
-
-            Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
         }
 
         void IDisposable.Dispose()
@@ -135,6 +136,12 @@ namespace BeerliftDashboard
 
         private async void OnInputTelemetryReceived(object sender, BeerliftMessage message)
         {
+            if (message == null
+                    || message.deviceId != deviceId)
+            {
+                return;
+            }
+
             _sessionService.BeerliftMessage = message;
 
             telemetryMessage = message.ToString();
@@ -144,6 +151,12 @@ namespace BeerliftDashboard
 
         private async void OnInputHeartbeatReceived(object sender, HeartbeatMessage message)
         {
+            if (message == null
+                    || message.deviceId != deviceId)
+            {
+                return;
+            }
+
             _sessionService.HeartbeatMessage = message;
 
             heartbeatMessage = message.ToString();

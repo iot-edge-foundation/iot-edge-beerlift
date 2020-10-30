@@ -124,6 +124,8 @@ namespace BeerliftDashboard.Pages
                 AddBottleText = $"Bottle is placed";
 
                 _sqliteService.PutBottleHolder(deviceId, moduleName, emptySlotId, BottleBrandAndMake, "occupied");
+
+                Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
             }
             else
             {

@@ -130,12 +130,19 @@ namespace BeerliftDashboard.Data
             return result;
         }
 
-        public void PutBottleHolder(string deviceId, string moduleName, int index, string bottleBrandAndMake, string state)
+        public void PutBottleHolder(string deviceId, string moduleName, int indexer, string bottleBrandAndMake, string state)
         {
-            //       using var cmd = new SQLiteCommand(con);
+            try
+            {
+                using var cmd = new SQLiteCommand(con);
 
-            //        cmd.CommandText = $"INSERT INTO {C_TABLE_BEERLIFT}({C_COLUMN_DEVICEID}, {C_COLUMN_MODULENAME}, {C_COLUMN_NAME}, {C_COLUMN_STATE}) VALUES('{deviceId}', '{moduleName}', '', '')";
-            //        cmd.ExecuteNonQuery();
+                cmd.CommandText = $"Update {C_TABLE_BEERLIFT} set {C_COLUMN_NAME} = '{bottleBrandAndMake}', {C_COLUMN_STATE} = '{state}' where {C_COLUMN_DEVICEID} = '{deviceId}' and {C_COLUMN_MODULENAME} = '{moduleName}' and {C_COLUMN_INDEXER} = {indexer}";
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void CreateStructure()

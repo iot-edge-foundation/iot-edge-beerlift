@@ -25,3 +25,8 @@ public static void Run(string myIoTHubMessage, ILogger log)
 
     Console.WriteLine($"Response {response.StatusCode}");
 }
+
+
+--
+
+beerlift-weu-fa

@@ -288,24 +288,7 @@ namespace BeerLiftModule
 
                 var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
 
-                Console.WriteLine($"Ports read. A = {dataPortA} - B = {dataPortB} at {DateTime.Now}");
-
-                if (flooded)
-                {
-                    await LedScenarios.LitFlooded(_mcp23xxxWrite, Interval, SilentFlooding);
-                }
-                else
-                {
-                    if (_lastLiftState == LiftState.Down)
-                    {
-                        // switch off all light when lift is at bottom
-                        await LedScenarios.SwitchOffAllSlots(_mcp23xxxWrite, dataPortA, dataPortB);
-                    }
-                    else
-                    {
-                        await LedScenarios.LitAllEmptySlots(_mcp23xxxWrite, dataPortA, dataPortB);                        
-                    }
-                }
+                Console.WriteLine($"Ports read: A = {dataPortA} - B = {dataPortB}; Flooded = {flooded}; State = {LiftState} at {DateTime.Now}");
 
                 // send message on some change or FLOODED!
                 if (dataPortA != _lastDataPortA
@@ -339,6 +322,23 @@ namespace BeerLiftModule
                         await client.SendEventAsync("output1", pipeMessage);
 
                         Console.WriteLine($"Message sent: {beerLiftMessage}");
+                    }
+                }
+
+                if (flooded)
+                {
+                    await LedScenarios.LitFlooded(_mcp23xxxWrite, Interval, SilentFlooding);
+                }
+                else
+                {
+                    if (_lastLiftState == LiftState.Down)
+                    {
+                        // switch off all light when lift is at bottom
+                        await LedScenarios.SwitchOffAllSlots(_mcp23xxxWrite, dataPortA, dataPortB);
+                    }
+                    else
+                    {
+                        await LedScenarios.LitAllEmptySlots(_mcp23xxxWrite, dataPortA, dataPortB);                        
                     }
                 }
 

@@ -58,7 +58,7 @@ namespace BeerliftDashboard.Pages
         {
             var emptySlotId = 0;
 
-            AddBottleText = "";
+            AddBottleText = string.Empty;
 
             if (string.IsNullOrEmpty(BottleBrandAndMake))
             {
@@ -142,7 +142,7 @@ namespace BeerliftDashboard.Pages
             MarkedText = $"marked {position}";
         }
 
-        public async Task BottleHolderSelected(ChangeEventArgs args)
+        public async Task BottleHolderElementSelected(ChangeEventArgs args)
         {
             var selectedBottleHolder = (from x in Bottleholders
                                         where x.indexer.ToString() == args.Value.ToString()
@@ -161,60 +161,82 @@ namespace BeerliftDashboard.Pages
                 return;
             }
 
-            ProcessChanges(_lastBeerliftMessage, message);
+            var changedIndex = ProcessChanges(_lastBeerliftMessage, message);
+
+            if (changedIndex != 0)
+            {
+                if (!message.IsSlotInUse(changedIndex))
+                {
+                    AddBottleText = $"Bottle is removed";
+
+                    _sqliteService.DropBottle(deviceId, moduleName, changedIndex);
+
+                    await MarkPosition(changedIndex);
+                }
+            }
 
             _lastBeerliftMessage = message;
 
             await InvokeAsync(() => StateHasChanged());
         }
 
-        private void ProcessChanges(BeerliftMessage lastBeerliftMessage, BeerliftMessage message)
+        private int ProcessChanges(BeerliftMessage lastBeerliftMessage, BeerliftMessage message)
         {
+            var changedIndex = 0; // not a single bottle change eg. flooding
+
             // bank A
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot01 != message.slot01)
             {
                 Bottleholders[0].state = message.slot01 ? "occupied" : "      ";
+                changedIndex = 1;
             }
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot02 != message.slot02)
             {
                 Bottleholders[1].state = message.slot02 ? "occupied" : "      ";
+                changedIndex = 2;
             }
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot03 != message.slot03)
             {
                 Bottleholders[2].state = message.slot03 ? "occupied" : "      ";
+                changedIndex = 3;
             }
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot04 != message.slot04)
             {
                 Bottleholders[3].state = message.slot04 ? "occupied" : "      ";
+                changedIndex = 4;
             }
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot05 != message.slot05)
             {
                 Bottleholders[4].state = message.slot05 ? "occupied" : "      ";
+                changedIndex = 5;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot06 != message.slot06)
             {
                 Bottleholders[5].state = message.slot06 ? "occupied" : "      ";
+                changedIndex = 6;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot07 != message.slot07)
             {
                 Bottleholders[6].state = message.slot07 ? "occupied" : "      ";
+                changedIndex = 7;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot08 != message.slot08)
             {
                 Bottleholders[7].state = message.slot08 ? "occupied" : "      ";
+                changedIndex = 8;
             }
 
             // bank B
@@ -223,42 +245,52 @@ namespace BeerliftDashboard.Pages
                     || lastBeerliftMessage.slot09 != message.slot09)
             {
                 Bottleholders[8].state = message.slot09 ? "occupied" : "      ";
+                changedIndex = 9;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot10 != message.slot10)
             {
                 Bottleholders[9].state = message.slot10 ? "occupied" : "      ";
+                changedIndex = 10;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot11 != message.slot11)
             {
                 Bottleholders[10].state = message.slot11 ? "occupied" : "      ";
+                changedIndex = 11;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot12 != message.slot12)
             {
                 Bottleholders[11].state = message.slot12 ? "occupied" : "      ";
+                changedIndex = 12;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot13 != message.slot13)
             {
                 Bottleholders[12].state = message.slot13 ? "occupied" : "      ";
+                changedIndex = 13;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot14 != message.slot14)
             {
                 Bottleholders[13].state = message.slot14 ? "occupied" : "      ";
+                changedIndex = 14;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot15 != message.slot15)
             {
                 Bottleholders[14].state = message.slot15 ? "occupied" : "      ";
+                changedIndex = 15;
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot16 != message.slot16)
             {
                 Bottleholders[15].state = message.slot16 ? "occupied" : "      ";
+                changedIndex = 16;
             }
+
+            return changedIndex;
         }
     }
 }

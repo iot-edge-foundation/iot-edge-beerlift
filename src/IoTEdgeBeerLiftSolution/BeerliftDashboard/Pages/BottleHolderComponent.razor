@@ -2,7 +2,7 @@
 
 <h3>Beerlift- Bottle holders</h3>
 
-<select @onchange="BottleHolderSelected" size="16" style="width:100%">
+<select @onchange="BottleHolderElementSelected" size="16" style="width:100%">
     @foreach (var bottleholder in Bottleholders)
     {
         <option value="@bottleholder.indexer">@bottleholder.indexer - @bottleholder.name - @bottleholder.state</option>
@@ -18,11 +18,6 @@
     <button class="btn btn-primary" @onclick="AddBottle">Add bottle</button>
     @AddBottleText
 </p>
-
-@*<input @bind="@UserSelectedBottleHolder.name"
-    @bind:event="oninput" />*@
-
-@*<span style="color:red">@UserSelectedBottleHolder.name&nbsp;selected</span>*@
 
 <br />
 <br />

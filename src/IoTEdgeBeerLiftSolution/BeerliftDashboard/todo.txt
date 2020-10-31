@@ -1,10 +1,11 @@
-﻿als een biervles op een lege plek gezet wordt dan automatisch UNKNOWN plaatsen
+﻿
 
-Tekst vervangen van een geselecteerde plek. dan tijdelijk update en terug naar add of zo
+
+bij plaatsen/verwijderen alle flesjes nalopen en state veranderen
+
 
 ui blokkeren tijdens animatie van selected
 
 ui blokkeren tijdens flow van add
 
-selected tweee keer dezelfde -> deselected?
 

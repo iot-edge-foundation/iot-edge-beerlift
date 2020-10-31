@@ -145,6 +145,21 @@ namespace BeerliftDashboard.Data
             }
         }
 
+        internal void UpdateBottleHolderState(string deviceId, string moduleName, int indexer, string state)
+        {
+            try
+            {
+                using var cmd = new SQLiteCommand(con);
+
+                cmd.CommandText = $"Update {C_TABLE_BEERLIFT} set {C_COLUMN_STATE} = '{state}', {C_COLUMN_STATE} = '{state}' where {C_COLUMN_DEVICEID} = '{deviceId}' and {C_COLUMN_MODULENAME} = '{moduleName}' and {C_COLUMN_INDEXER} = {indexer}";
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         internal void DropBottle(string deviceId, string moduleName, int indexer)
         {
             try

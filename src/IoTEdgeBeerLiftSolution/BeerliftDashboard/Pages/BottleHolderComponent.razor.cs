@@ -51,6 +51,15 @@ namespace BeerliftDashboard.Pages
             Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
         }
 
+        //var beerHoldersResponse = _ioTHubServiceClientService.SendDirectMethod<BottleHoldersRequest, BottleHoldersResponse>(deviceId, moduleName, "BottleHolders", new BottleHoldersRequest()).GetAwaiter().GetResult();
+
+        //if (beerHoldersResponse.ResponseStatus == 200)
+        //{
+        //    var beerliftMessage = beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage;
+
+        //    OnInputTelemetryReceived(null, beerliftMessage);
+        //}
+
         void IDisposable.Dispose()
         {
             _telemetryService.InputMessageReceived -= OnInputTelemetryReceived;
@@ -123,7 +132,7 @@ namespace BeerliftDashboard.Pages
 
             if (placed)
             {
-                AddBottleText = $"Bottle is placed";
+                AddBottleText = $"Bottle is '{BottleBrandAndMake}' placed";
 
                 _sqliteService.PutBottleHolder(deviceId, moduleName, emptySlotId, BottleBrandAndMake, "occupied");
 
@@ -165,9 +174,9 @@ namespace BeerliftDashboard.Pages
                 return;
             }
 
-            var changedIndex = ProcessChanges(_lastBeerliftMessage, message);
+            var changedIndexers = ProcessChanges(_lastBeerliftMessage, message);
 
-            if (changedIndex != 0)
+            foreach(var changedIndex in changedIndexers)
             {
                 var bottleHolder = (from x in Bottleholders
                                     where x.indexer.ToString() == changedIndex.ToString()
@@ -175,23 +184,23 @@ namespace BeerliftDashboard.Pages
 
                 var state = message.IsSlotInUse(changedIndex) ? "occupied" : "";
 
-                _sqliteService.PutBottleHolder(deviceId, moduleName, changedIndex, bottleHolder.name, state);
-
-                Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
-
-                AddBottleText = $"Bottle is updated";
-
-                // Remember
-
-                _lastBeerliftMessage = message;
-
-                await InvokeAsync(() => StateHasChanged());
+                _sqliteService.UpdateBottleHolderState(deviceId, moduleName, changedIndex, state);
             }
+
+            Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
+
+            AddBottleText = $"Bottle is updated";
+
+            // Remember
+
+            _lastBeerliftMessage = message;
+
+            await InvokeAsync(() => StateHasChanged());
         }
 
-        private int ProcessChanges(BeerliftMessage lastBeerliftMessage, BeerliftMessage message)
+        private List<int> ProcessChanges(BeerliftMessage lastBeerliftMessage, BeerliftMessage message)
         {
-            var changedIndex = 0; // not a single bottle change eg. flooding
+            var result = new List<int>();
 
             // bank A
 
@@ -199,53 +208,53 @@ namespace BeerliftDashboard.Pages
                     || lastBeerliftMessage.slot01 != message.slot01)
             {
                 Bottleholders[0].state = message.slot01 ? "occupied" : "      ";
-                changedIndex = 1;
+                result.Add(1);
             }
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot02 != message.slot02)
             {
                 Bottleholders[1].state = message.slot02 ? "occupied" : "      ";
-                changedIndex = 2;
+                result.Add(2);
             }
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot03 != message.slot03)
             {
                 Bottleholders[2].state = message.slot03 ? "occupied" : "      ";
-                changedIndex = 3;
+                result.Add(3);
             }
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot04 != message.slot04)
             {
                 Bottleholders[3].state = message.slot04 ? "occupied" : "      ";
-                changedIndex = 4;
+                result.Add(4);
             }
 
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot05 != message.slot05)
             {
                 Bottleholders[4].state = message.slot05 ? "occupied" : "      ";
-                changedIndex = 5;
+                result.Add(5);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot06 != message.slot06)
             {
                 Bottleholders[5].state = message.slot06 ? "occupied" : "      ";
-                changedIndex = 6;
+                result.Add(6);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot07 != message.slot07)
             {
                 Bottleholders[6].state = message.slot07 ? "occupied" : "      ";
-                changedIndex = 7;
+                result.Add(7);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot08 != message.slot08)
             {
                 Bottleholders[7].state = message.slot08 ? "occupied" : "      ";
-                changedIndex = 8;
+                result.Add(8);
             }
 
             // bank B
@@ -254,52 +263,52 @@ namespace BeerliftDashboard.Pages
                     || lastBeerliftMessage.slot09 != message.slot09)
             {
                 Bottleholders[8].state = message.slot09 ? "occupied" : "      ";
-                changedIndex = 9;
+                result.Add(9);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot10 != message.slot10)
             {
                 Bottleholders[9].state = message.slot10 ? "occupied" : "      ";
-                changedIndex = 10;
+                result.Add(10);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot11 != message.slot11)
             {
                 Bottleholders[10].state = message.slot11 ? "occupied" : "      ";
-                changedIndex = 11;
+                result.Add(11);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot12 != message.slot12)
             {
                 Bottleholders[11].state = message.slot12 ? "occupied" : "      ";
-                changedIndex = 12;
+                result.Add(12);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot13 != message.slot13)
             {
                 Bottleholders[12].state = message.slot13 ? "occupied" : "      ";
-                changedIndex = 13;
+                result.Add(13);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot14 != message.slot14)
             {
                 Bottleholders[13].state = message.slot14 ? "occupied" : "      ";
-                changedIndex = 14;
+                result.Add(14);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot15 != message.slot15)
             {
                 Bottleholders[14].state = message.slot15 ? "occupied" : "      ";
-                changedIndex = 15;
+                result.Add(15);
             }
             if (lastBeerliftMessage == null
                     || lastBeerliftMessage.slot16 != message.slot16)
             {
                 Bottleholders[15].state = message.slot16 ? "occupied" : "      ";
-                changedIndex = 16;
+                result.Add(16);
             }
 
-            return changedIndex;
+            return result;
         }
 
         public async Task RemoveBottle()

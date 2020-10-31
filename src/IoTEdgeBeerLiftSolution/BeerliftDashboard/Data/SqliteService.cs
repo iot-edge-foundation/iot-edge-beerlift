@@ -151,7 +151,7 @@ namespace BeerliftDashboard.Data
             {
                 using var cmd = new SQLiteCommand(con);
 
-                cmd.CommandText = $"Update {C_TABLE_BEERLIFT} set {C_COLUMN_NAME} = '', {C_COLUMN_STATE} = '' where {C_COLUMN_DEVICEID} = '{deviceId}' and {C_COLUMN_MODULENAME} = '{moduleName}' and {C_COLUMN_INDEXER} = {indexer}";
+                cmd.CommandText = $"Update {C_TABLE_BEERLIFT} set {C_COLUMN_NAME} = '' where {C_COLUMN_DEVICEID} = '{deviceId}' and {C_COLUMN_MODULENAME} = '{moduleName}' and {C_COLUMN_INDEXER} = {indexer}";
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)

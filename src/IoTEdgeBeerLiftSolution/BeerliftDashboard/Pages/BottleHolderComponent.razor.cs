@@ -40,6 +40,8 @@ namespace BeerliftDashboard.Pages
 
         public string BottleBrandAndMake;
 
+        private Bottleholder _selectedBottleHolder = null;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -126,6 +128,8 @@ namespace BeerliftDashboard.Pages
                 _sqliteService.PutBottleHolder(deviceId, moduleName, emptySlotId, BottleBrandAndMake, "occupied");
 
                 Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
+
+                BottleBrandAndMake = string.Empty;
             }
             else
             {
@@ -144,13 +148,13 @@ namespace BeerliftDashboard.Pages
 
         public async Task BottleHolderElementSelected(ChangeEventArgs args)
         {
-            var selectedBottleHolder = (from x in Bottleholders
-                                        where x.indexer.ToString() == args.Value.ToString()
-                                        select x).First();
+            _selectedBottleHolder = (from x in Bottleholders
+                                     where x.indexer.ToString() == args.Value.ToString()
+                                     select x).First();
 
-            BottleholderSelectEvent.InvokeAsync(selectedBottleHolder).Wait();
+            BottleholderSelectEvent.InvokeAsync(_selectedBottleHolder).Wait();
 
-            await MarkPosition(selectedBottleHolder.indexer);
+            await MarkPosition(_selectedBottleHolder.indexer);
         }
 
         private async void OnInputTelemetryReceived(object sender, BeerliftMessage message)
@@ -165,19 +169,24 @@ namespace BeerliftDashboard.Pages
 
             if (changedIndex != 0)
             {
-                if (!message.IsSlotInUse(changedIndex))
-                {
-                    AddBottleText = $"Bottle is removed";
+                var bottleHolder = (from x in Bottleholders
+                                    where x.indexer.ToString() == changedIndex.ToString()
+                                    select x).First();
 
-                    _sqliteService.DropBottle(deviceId, moduleName, changedIndex);
+                var state = message.IsSlotInUse(changedIndex) ? "occupied" : "";
 
-                    await MarkPosition(changedIndex);
-                }
+                _sqliteService.PutBottleHolder(deviceId, moduleName, changedIndex, bottleHolder.name, state);
+
+                Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
+
+                AddBottleText = $"Bottle is updated";
+
+                // Remember
+
+                _lastBeerliftMessage = message;
+
+                await InvokeAsync(() => StateHasChanged());
             }
-
-            _lastBeerliftMessage = message;
-
-            await InvokeAsync(() => StateHasChanged());
         }
 
         private int ProcessChanges(BeerliftMessage lastBeerliftMessage, BeerliftMessage message)
@@ -291,6 +300,20 @@ namespace BeerliftDashboard.Pages
             }
 
             return changedIndex;
+        }
+
+        public async Task RemoveBottle()
+        {
+            if (_selectedBottleHolder != null)
+            {
+                _sqliteService.DropBottle(deviceId, moduleName, _selectedBottleHolder.indexer);
+
+                Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
+
+                AddBottleText = $"Bottle is removed";
+
+                await MarkPosition(_selectedBottleHolder.indexer);
+            }
         }
     }
 }

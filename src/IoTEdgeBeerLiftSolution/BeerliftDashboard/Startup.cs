@@ -62,6 +62,8 @@ namespace BeerliftDashboard
 
             services.AddScoped<SessionService>();
 
+            services.AddScoped<BusyService>();
+
             // ApiController support
             services.AddMvc(options => options.EnableEndpointRouting = false).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddControllers().AddNewtonsoftJson();

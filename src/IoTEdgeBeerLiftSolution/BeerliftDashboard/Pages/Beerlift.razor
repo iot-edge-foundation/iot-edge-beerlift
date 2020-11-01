@@ -6,35 +6,34 @@
 
 @if (Validated)
 {
-<p>
-    <button class="btn btn-primary" @onclick="Up" disabled="@disabled"><Icon Name="IconName.ArrowUp" /></button>
-    <button class="btn btn-primary" @onclick="Down" disabled="@disabled"><Icon Name="IconName.ArrowDown" /></button>
-    <button class="btn btn-primary" @onclick="Circus" disabled="@disabled"><Icon Name="IconName.WineBottle" /></button>
-    <button class="btn btn-primary" @onclick="Advertise" disabled="@disabled"><Icon Name="IconName.Bell" /></button>
-</p>
+    <p>
+        <button class="btn btn-primary" @onclick="Up" disabled="@disabled"><Icon Name="IconName.ArrowUp" /></button>
+        <button class="btn btn-primary" @onclick="Down" disabled="@disabled"><Icon Name="IconName.ArrowDown" /></button>
+        <button class="btn btn-primary" @onclick="Circus" disabled="@disabled"><Icon Name="IconName.WineBottle" /></button>
+        <button class="btn btn-primary" @onclick="Advertise" disabled="@disabled"><Icon Name="IconName.Bell" /></button>
+    </p>
 
-<p>
-    <button class="btn btn-primary" @onclick="Ambiant" disabled="@disabled"><Icon Name="IconName.Heart" /></button>
-    Temperature: @temperature;
-    Humidity: @humidity;
-    Flooded: @flooded;
-    Lift state: @liftState;
-    Attempts: @attempts
-</p>
+    <p>
+        <button class="btn btn-primary" @onclick="Ambiant" disabled="@disabled"><Icon Name="IconName.Heart" /></button>
+        Temperature: @temperature;
+        Humidity: @humidity;
+        Flooded: @flooded;
+        Lift state: @liftState;
+        Attempts: @attempts
+    </p>
 
-<BottleHolderComponent deviceId="@deviceId"
-                       moduleName="@moduleName"
-                       BusyEvent="BusySelected" />
+    <BottleHolderComponent deviceId="@deviceId"
+                           moduleName="@moduleName" />
 
-<p>
-    Incoming telemetry: @telemetryMessage
-    <br />
-    Incoming heartbeat: @heartbeatMessage
-</p>
+    <p>
+        Incoming telemetry: @telemetryMessage
+        <br />
+        Incoming heartbeat: @heartbeatMessage
+    </p>
 }
 else
 {
-<p>
-    Not validated yet
-</p>
+    <p>
+        Not validated yet
+    </p>
 }

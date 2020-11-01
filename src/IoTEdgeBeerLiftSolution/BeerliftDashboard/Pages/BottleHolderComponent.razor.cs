@@ -15,6 +15,9 @@ namespace BeerliftDashboard.Pages
         private BeerliftMessage _lastBeerliftMessage = null;
 
         [Inject]
+        public BusyService _busyService { get; set; }
+
+        [Inject]
         public IoTHubServiceClientService _ioTHubServiceClientService { get; set; }
 
         [Inject]
@@ -28,9 +31,6 @@ namespace BeerliftDashboard.Pages
 
         [Parameter]
         public string moduleName { get; set; }
-
-        [Parameter]
-        public EventCallback<bool> BusyEvent { get; set; }
 
         public string AddBottleText;
 
@@ -50,21 +50,23 @@ namespace BeerliftDashboard.Pages
 
             _telemetryService.InputMessageReceived += OnInputTelemetryReceived;
 
+            _busyService.BusyEvent += _busyService_BusyEvent;
+
             Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
         }
 
-        //var beerHoldersResponse = _ioTHubServiceClientService.SendDirectMethod<BottleHoldersRequest, BottleHoldersResponse>(deviceId, moduleName, "BottleHolders", new BottleHoldersRequest()).GetAwaiter().GetResult();
-
-        //if (beerHoldersResponse.ResponseStatus == 200)
-        //{
-        //    var beerliftMessage = beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage;
-
-        //    OnInputTelemetryReceived(null, beerliftMessage);
-        //}
-
         void IDisposable.Dispose()
         {
+            _busyService.BusyEvent -= _busyService_BusyEvent;
+
             _telemetryService.InputMessageReceived -= OnInputTelemetryReceived;
+        }
+
+        private void _busyService_BusyEvent(object sender, bool busy)
+        {
+            disabled = busy;
+
+            InvokeAsync(() => StateHasChanged()).Wait();
         }
 
         public async Task AddBottle()
@@ -155,9 +157,7 @@ namespace BeerliftDashboard.Pages
 
         public async Task BottleHolderElementSelected(ChangeEventArgs args)
         {
-            BusyEvent.InvokeAsync(true).Wait();
-
-            disabled = true;
+            _busyService.SetBusy(true);
 
             try
             {
@@ -169,9 +169,7 @@ namespace BeerliftDashboard.Pages
             }
             finally
             {
-                BusyEvent.InvokeAsync(false).Wait();
-
-                disabled = false;
+                _busyService.SetBusy(false);
             }
         }
 
@@ -322,9 +320,7 @@ namespace BeerliftDashboard.Pages
 
         public async Task RemoveBottle()
         {
-            disabled = true;
-
-            BusyEvent.InvokeAsync(true).Wait();
+            _busyService.SetBusy(true);
 
             try
             {
@@ -338,8 +334,7 @@ namespace BeerliftDashboard.Pages
             }
             finally
             {
-                disabled = false;
-                BusyEvent.InvokeAsync(false).Wait();
+                _busyService.SetBusy(false);
             }
         }
     }

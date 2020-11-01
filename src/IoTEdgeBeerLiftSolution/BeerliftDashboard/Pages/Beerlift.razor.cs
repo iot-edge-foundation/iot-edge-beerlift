@@ -13,6 +13,9 @@ namespace BeerliftDashboard
     public class BeerliftBase : ComponentBase, IDisposable
     {
         [Inject]
+        public BusyService _busyService { get; set; }
+
+        [Inject]
         public IoTHubServiceClientService _ioTHubServiceClientService { get; set; }
 
         [Inject]
@@ -74,6 +77,8 @@ namespace BeerliftDashboard
             {
                 heartbeatMessage = _sessionService.HeartbeatMessage.ToString();
             }
+
+            _busyService.BusyEvent += _busyService_BusyEvent;
         }
 
         protected override void OnParametersSet()
@@ -85,66 +90,75 @@ namespace BeerliftDashboard
 
         void IDisposable.Dispose()
         {
+            _busyService.BusyEvent -= _busyService_BusyEvent;
+
             _heartbeatService.InputMessageReceived -= OnInputHeartbeatReceived;
 
             _telemetryService.InputMessageReceived -= OnInputTelemetryReceived;
         }
 
+        private void _busyService_BusyEvent(object sender, bool busy)
+        {
+            disabled = busy;
+
+            InvokeAsync(() => StateHasChanged()).Wait();
+        }
+
         public async Task Up()
         {
-            disabled = true;
+            _busyService.SetBusy(true);
             try
             {
                 var response = await _ioTHubServiceClientService.SendDirectMethod<UpRequest, UpResponse>(deviceId, moduleName, "Up", new UpRequest());
             }
             finally
             {
-                disabled = false;
+                _busyService.SetBusy(false);
             }
         }
 
         public async Task Down()
         {
-            disabled = true;
+            _busyService.SetBusy(true);
             try
             {
                 var response = await _ioTHubServiceClientService.SendDirectMethod<DownRequest, DownResponse>(deviceId, moduleName, "Down", new DownRequest());
             }
             finally
             {
-                disabled = false;
+                _busyService.SetBusy(false);
             }
         }
 
         public async Task Circus()
         {
-            disabled = true;
+            _busyService.SetBusy(true);
             try
             {
                 var response = await _ioTHubServiceClientService.SendDirectMethod<CircusRequest, CircusResponse>(deviceId, moduleName, "Circus", new CircusRequest());
             }
             finally
             {
-                disabled = false;
+                _busyService.SetBusy(false);
             }
         }
 
         public async Task Advertise()
         {
-            disabled = true;
+            _busyService.SetBusy(true);
             try
             {
                 var response = await _ioTHubServiceClientService.SendDirectMethod<AdvertiseRequest, AdvertiseResponse>(deviceId, moduleName, "Advertise", new AdvertiseRequest());
             }
             finally
             {
-                disabled = false;
+                _busyService.SetBusy(false);
             }
         }
 
         public async Task Ambiant()
         {
-            disabled = true;
+            _busyService.SetBusy(true);
             try
             {
                 var response = await _ioTHubServiceClientService.SendDirectMethod<AmbiantRequest, AmbiantResponse>(deviceId, moduleName, "Ambiant", new AmbiantRequest());
@@ -160,7 +174,7 @@ namespace BeerliftDashboard
             }
             finally
             {
-                disabled = false;
+                _busyService.SetBusy(false);
             }
         }
 

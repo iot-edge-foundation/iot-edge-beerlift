@@ -663,6 +663,12 @@ namespace BeerLiftModule
 
                     var beerLiftMessage = new BeerLiftMessage(_deviceId, dataPortA, dataPortB, _liftState);
 
+                    var pinValue = _controller.Read(FloodedPin); // Moisture sensor
+
+                    var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
+
+                    beerLiftMessage.isFlooded = flooded;
+
                     bottleHoldersResponse.BeerLiftMessage = beerLiftMessage;
 
                     Console.WriteLine($"BottleHolders ended at {DateTime.UtcNow}.");

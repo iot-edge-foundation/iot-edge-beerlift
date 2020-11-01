@@ -42,6 +42,8 @@ namespace BeerliftDashboard.Pages
 
         private Bottleholder _selectedBottleHolder = null;
 
+        public bool collapse1Visible;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -176,7 +178,7 @@ namespace BeerliftDashboard.Pages
 
             var changedIndexers = ProcessChanges(_lastBeerliftMessage, message);
 
-            foreach(var changedIndex in changedIndexers)
+            foreach (var changedIndex in changedIndexers)
             {
                 var bottleHolder = (from x in Bottleholders
                                     where x.indexer.ToString() == changedIndex.ToString()

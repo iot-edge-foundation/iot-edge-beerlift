@@ -6,37 +6,35 @@
 
 @if (Validated)
 {
-<p>
-    <button class="btn btn-primary" @onclick="Up"><Icon Name="IconName.ArrowUp" /></button>
-    <button class="btn btn-primary" @onclick="Down"><Icon Name="IconName.ArrowDown" /></button>
-    <button class="btn btn-primary" @onclick="Circus">Circus</button>
-    <button class="btn btn-primary" @onclick="Advertise">Advertise</button>
-</p>
+    <p>
+        <button class="btn btn-primary" @onclick="Up"><Icon Name="IconName.ArrowUp" /></button>
+        <button class="btn btn-primary" @onclick="Down"><Icon Name="IconName.ArrowDown" /></button>
+        <button class="btn btn-primary" @onclick="Circus"><Icon Name="IconName.WineBottle" /></button>
+        <button class="btn btn-primary" @onclick="Advertise"><Icon Name="IconName.Bell" /></button>
+    </p>
 
-<p>
-    <button class="btn btn-primary" @onclick="Ambiant">Ambiant</button>
-    Temperature: @temperature;
-    Humidity: @humidity;
-    Flooded: @flooded;
-    Lift state: @liftState;
-    Attempts: @attempts
-</p>
+    <p>
+        <button class="btn btn-primary" @onclick="Ambiant"><Icon Name="IconName.Heart" /></button>
+        Temperature: @temperature;
+        Humidity: @humidity;
+        Flooded: @flooded;
+        Lift state: @liftState;
+        Attempts: @attempts
+    </p>
 
-<BottleHolderComponent deviceId="@deviceId"
-                       moduleName="@moduleName"
-                       BottleholderSelectEvent="BottleholderSelected" />
+    <BottleHolderComponent deviceId="@deviceId"
+                           moduleName="@moduleName"
+                           BottleholderSelectEvent="BottleholderSelected" />
 
-<p>
-    Incoming telemetry: @telemetryMessage
-</p>
-
-<p>
-    Incoming heartbeat: @heartbeatMessage
-</p>
+    <p>
+        Incoming telemetry: @telemetryMessage
+        <br />
+        Incoming heartbeat: @heartbeatMessage
+    </p>
 }
 else
 {
-<p>
-    Not validated yet
-</p>
+    <p>
+        Not validated yet
+    </p>
 }

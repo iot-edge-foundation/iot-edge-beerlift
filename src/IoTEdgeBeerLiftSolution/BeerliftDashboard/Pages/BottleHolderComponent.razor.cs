@@ -32,7 +32,7 @@ namespace BeerliftDashboard.Pages
         [Parameter]
         public string moduleName { get; set; }
 
-        public string AddBottleText;
+        public string BottleActionText;
 
         public List<Bottleholder> Bottleholders;
 
@@ -94,15 +94,15 @@ namespace BeerliftDashboard.Pages
         {
             var emptySlotId = 0;
 
-            AddBottleText = string.Empty;
+            BottleActionText = string.Empty;
 
             if (string.IsNullOrEmpty(BottleBrandAndMake))
             {
-                AddBottleText = "Enter brand and make";
+                BottleActionText = "Enter brand and make";
                 return;
             }
 
-            AddBottleText = "Searching for empty slot...";
+            BottleActionText = "Searching for empty slot...";
 
             var response = await _ioTHubServiceClientService.SendDirectMethod<FindEmptySlotRequest, FindEmptySlotResponse>(deviceId, moduleName, "FindEmptySlot", new FindEmptySlotRequest());
 
@@ -113,12 +113,12 @@ namespace BeerliftDashboard.Pages
 
             if (emptySlotId == 0)
             {
-                AddBottleText = "No empty slot available ";
+                BottleActionText = "No empty slot available ";
 
                 return;
             }
 
-            AddBottleText = $"Found empty slot {emptySlotId}, Place the bottle";
+            BottleActionText = $"Found empty slot {emptySlotId}, Place the bottle";
 
             await InvokeAsync(() => StateHasChanged());
 
@@ -135,7 +135,7 @@ namespace BeerliftDashboard.Pages
 
                 i++;
 
-                AddBottleText = $"Found empty slot {emptySlotId}, Place the bottle... ({i})";
+                BottleActionText = $"Found empty slot {emptySlotId}, Place the bottle... ({i})";
 
                 await InvokeAsync(() => StateHasChanged());
 
@@ -157,7 +157,7 @@ namespace BeerliftDashboard.Pages
 
             if (placed)
             {
-                AddBottleText = $"Bottle is '{BottleBrandAndMake}' placed";
+                BottleActionText = $"Bottle is '{BottleBrandAndMake}' placed";
 
                 _sqliteService.PutBottleHolder(deviceId, moduleName, emptySlotId, BottleBrandAndMake, "occupied");
 
@@ -167,7 +167,7 @@ namespace BeerliftDashboard.Pages
             }
             else
             {
-                AddBottleText = $"Timed out, please try again";
+                BottleActionText = $"Timed out, please try again";
             }
         }
 
@@ -179,6 +179,8 @@ namespace BeerliftDashboard.Pages
         public async Task BottleHolderElementSelected(ChangeEventArgs args)
         {
             _busyService.SetBusy(true);
+
+            BottleActionText = string.Empty;
 
             try
             {
@@ -216,8 +218,6 @@ namespace BeerliftDashboard.Pages
             }
 
             Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
-
-            AddBottleText = $"Bottle is updated";
 
             // Remember
 
@@ -349,7 +349,7 @@ namespace BeerliftDashboard.Pages
 
                 Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
 
-                AddBottleText = $"Bottle is removed";
+                BottleActionText = $"Bottle {selectedBottleHolder.indexer} is revoked";
 
                 await MarkPosition(selectedBottleHolder.indexer);
             }

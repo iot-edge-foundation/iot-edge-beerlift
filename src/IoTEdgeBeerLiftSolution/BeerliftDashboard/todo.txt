@@ -9,3 +9,6 @@ ui blokkeren tijdens animatie van selected
 ui blokkeren tijdens flow van add
 
 
+
+FLOODING WAARSCHUWING
+CONNECTION LOST WAARSCHUWING

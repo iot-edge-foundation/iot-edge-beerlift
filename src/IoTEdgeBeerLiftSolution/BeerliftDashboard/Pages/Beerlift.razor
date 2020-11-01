@@ -2,13 +2,13 @@
 
 @inherits BeerliftBase
 
-<h1>Beerlift overview</h1>
+<h1>@deviceId : @moduleName</h1>
 
 @if (Validated)
 {
 <p>
-    <button class="btn btn-primary" @onclick="Up">Up</button>
-    <button class="btn btn-primary" @onclick="Down">Down</button>
+    <button class="btn btn-primary" @onclick="Up"><Icon Name="IconName.ArrowUp" /></button>
+    <button class="btn btn-primary" @onclick="Down"><Icon Name="IconName.ArrowDown" /></button>
     <button class="btn btn-primary" @onclick="Circus">Circus</button>
     <button class="btn btn-primary" @onclick="Advertise">Advertise</button>
 </p>
@@ -32,10 +32,6 @@
 
 <p>
     Incoming heartbeat: @heartbeatMessage
-</p>
-
-<p>
-    Message: @message
 </p>
 }
 else

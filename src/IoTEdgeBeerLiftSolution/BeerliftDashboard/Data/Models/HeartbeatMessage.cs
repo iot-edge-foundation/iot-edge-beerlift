@@ -12,7 +12,7 @@ namespace BeerliftDashboard.Models
 
         public override string ToString()
         {
-            var result = $"deviceId: {deviceId}: '{counter}' at {DateTime.Now}";
+            var result = $"Hearbeat '{counter}' at {DateTime.Now}";
 
             return result;
         }

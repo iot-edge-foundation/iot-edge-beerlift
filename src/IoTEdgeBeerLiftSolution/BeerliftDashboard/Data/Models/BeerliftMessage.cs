@@ -48,7 +48,7 @@ namespace BeerliftDashboard.Models
             beerholdersText += (slot14) ? "*" : "_";
             beerholdersText += (slot15) ? "*" : "_";
             beerholdersText += (slot16) ? "*" : "_";
-            var result = $"deviceId: {deviceId} {beerholdersText}; {isFloodedText}; Lift is now '{liftState}' at {DateTime.Now}";
+            var result = $"{beerholdersText}; {isFloodedText}; Lift is now '{liftState}' at {DateTime.Now}";
 
             return result;
         }

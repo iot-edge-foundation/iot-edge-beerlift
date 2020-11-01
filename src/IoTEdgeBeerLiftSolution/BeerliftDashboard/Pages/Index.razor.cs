@@ -12,6 +12,9 @@ namespace BeerliftDashboard
     public class IndexBase : ComponentBase, IDisposable
     {
         [Inject]
+        private NavigationManager NavManager { get; set; }
+
+        [Inject]
         public SqliteService _sqliteService { get; set; }
 
         [Inject]
@@ -65,6 +68,8 @@ namespace BeerliftDashboard
                 _sqliteService.WriteSetting("moduleName", moduleName);
 
                 message = "Validated";
+
+                NavManager.NavigateTo("/Beerlift");
             }
             else
             {

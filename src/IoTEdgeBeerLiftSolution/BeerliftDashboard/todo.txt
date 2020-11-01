@@ -3,3 +3,9 @@
 
 FLOODING WAARSCHUWING
 CONNECTION LOST WAARSCHUWING
+
+icoon
+
+plaatje van bierlift vooraan
+
+2 aparte methods samensmelten.

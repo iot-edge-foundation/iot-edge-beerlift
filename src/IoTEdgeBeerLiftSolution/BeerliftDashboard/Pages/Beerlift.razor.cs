@@ -165,8 +165,8 @@ namespace BeerliftDashboard
 
                 if (response.ResponseStatus == 200)
                 {
-                    temperature = response.AmbiantPayload.temperature;
-                    humidity = response.AmbiantPayload.humidity;
+                    temperature = Math.Round(response.AmbiantPayload.temperature, 1, MidpointRounding.AwayFromZero);
+                    humidity = Math.Round(response.AmbiantPayload.humidity, 1, MidpointRounding.AwayFromZero);
                     flooded = response.AmbiantPayload.flooded;
                     attempts = response.AmbiantPayload.attempts;
                     liftState = response.AmbiantPayload.liftState;
@@ -186,9 +186,14 @@ namespace BeerliftDashboard
                 return;
             }
 
+            // Message belongs to this beerlift
+
             _sessionService.BeerliftMessage = message;
 
             telemetryMessage = message.ToString();
+
+            flooded = message.isFlooded;
+            liftState = message.liftState;
 
             await InvokeAsync(() => StateHasChanged());
         }
@@ -200,6 +205,8 @@ namespace BeerliftDashboard
             {
                 return;
             }
+
+            // Message belongs to this beerlift
 
             _sessionService.HeartbeatMessage = message;
 

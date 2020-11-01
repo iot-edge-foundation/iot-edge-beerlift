@@ -68,7 +68,7 @@ namespace BeerliftDashboard.Pages
 
                     if (beerHoldersResponse.ResponseStatus == 200)
                     {
-                        OnInputTelemetryReceived(null, beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage);
+                        await _telemetryService.SendTelemetry(beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage);
                     }
                 };
 
@@ -92,82 +92,95 @@ namespace BeerliftDashboard.Pages
 
         public async Task AddBottle()
         {
-            var emptySlotId = 0;
+            _busyService.SetBusy(true);
 
-            BottleActionText = string.Empty;
-
-            if (string.IsNullOrEmpty(BottleBrandAndMake))
+            try
             {
-                BottleActionText = "Enter brand and make";
-                return;
-            }
+                var emptySlotId = 0;
 
-            BottleActionText = "Searching for empty slot...";
+                BottleActionText = string.Empty;
 
-            var response = await _ioTHubServiceClientService.SendDirectMethod<FindEmptySlotRequest, FindEmptySlotResponse>(deviceId, moduleName, "FindEmptySlot", new FindEmptySlotRequest());
-
-            if (response.ResponseStatus == 200)
-            {
-                emptySlotId = response.FindEmptySlotPayload.emptySlot;
-            }
-
-            if (emptySlotId == 0)
-            {
-                BottleActionText = "No empty slot available ";
-
-                return;
-            }
-
-            BottleActionText = $"Found empty slot {emptySlotId}, Place the bottle";
-
-            await InvokeAsync(() => StateHasChanged());
-
-            var placed = false;
-
-            var i = 0;
-
-            while (!placed)
-            {
-                if (i == 4)
+                if (string.IsNullOrEmpty(BottleBrandAndMake))
                 {
-                    break;
+                    BottleActionText = "Enter brand and make";
+                    return;
                 }
 
-                i++;
+                BottleActionText = "Searching for empty slot...";
 
-                BottleActionText = $"Found empty slot {emptySlotId}, Place the bottle... ({i})";
+                var response = await _ioTHubServiceClientService.SendDirectMethod<FindEmptySlotRequest, FindEmptySlotResponse>(deviceId, moduleName, "FindEmptySlot", new FindEmptySlotRequest());
+
+                if (response.ResponseStatus == 200)
+                {
+                    emptySlotId = response.FindEmptySlotPayload.emptySlot;
+                }
+
+                if (emptySlotId == 0)
+                {
+                    BottleActionText = "No empty slot available ";
+
+                    return;
+                }
+
+                BottleActionText = $"Found empty slot {emptySlotId}, Place the bottle";
 
                 await InvokeAsync(() => StateHasChanged());
 
-                var beerHoldersResponse = await _ioTHubServiceClientService.SendDirectMethod<BottleHoldersRequest, BottleHoldersResponse>(deviceId, moduleName, "BottleHolders", new BottleHoldersRequest());
+                var placed = false;
 
-                if (beerHoldersResponse.ResponseStatus == 200)
+                var i = 0;
+
+                while (!placed)
                 {
-                    _lastBeerliftMessage = beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage;
-
-                    if (_lastBeerliftMessage.IsSlotInUse(emptySlotId))
+                    if (i == 4)
                     {
-                        placed = true;
+                        // Max 4 attempts.
                         break;
                     }
+
+                    i++;
+
+                    BottleActionText = $"Found empty slot {emptySlotId}, Place the bottle... ({i})";
+
+                    await InvokeAsync(() => StateHasChanged());
+
+                    var beerHoldersResponse = await _ioTHubServiceClientService.SendDirectMethod<BottleHoldersRequest, BottleHoldersResponse>(deviceId, moduleName, "BottleHolders", new BottleHoldersRequest());
+
+                    if (beerHoldersResponse.ResponseStatus == 200)
+                    {
+                        await _telemetryService.SendTelemetry(beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage);
+
+                        _lastBeerliftMessage = beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage;
+
+                        if (_lastBeerliftMessage.IsSlotInUse(emptySlotId))
+                        {
+                            // The correct bottle is placed
+                            placed = true;
+                            break;
+                        }
+                    }
+
+                    await MarkPosition(emptySlotId);
                 }
 
-                await MarkPosition(emptySlotId);
+                if (placed)
+                {
+                    BottleActionText = $"Bottle is '{BottleBrandAndMake}' placed";
+
+                    _sqliteService.PutBottleHolder(deviceId, moduleName, emptySlotId, BottleBrandAndMake, "occupied");
+
+                    Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
+
+                    BottleBrandAndMake = string.Empty;
+                }
+                else
+                {
+                    BottleActionText = $"Timed out, please try again";
+                }
             }
-
-            if (placed)
+            finally
             {
-                BottleActionText = $"Bottle is '{BottleBrandAndMake}' placed";
-
-                _sqliteService.PutBottleHolder(deviceId, moduleName, emptySlotId, BottleBrandAndMake, "occupied");
-
-                Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
-
-                BottleBrandAndMake = string.Empty;
-            }
-            else
-            {
-                BottleActionText = $"Timed out, please try again";
+                _busyService.SetBusy(false);
             }
         }
 

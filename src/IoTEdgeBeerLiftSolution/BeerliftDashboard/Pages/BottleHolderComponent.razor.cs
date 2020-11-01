@@ -55,6 +55,27 @@ namespace BeerliftDashboard.Pages
             Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
         }
 
+        protected override void OnAfterRender(bool firstRender)
+        {
+            base.OnAfterRender(firstRender);
+
+            if (firstRender)
+            {
+                // execute with async pattern
+                Action act = async () =>
+                {
+                    var beerHoldersResponse = await _ioTHubServiceClientService.SendDirectMethod<BottleHoldersRequest, BottleHoldersResponse>(deviceId, moduleName, "BottleHolders", new BottleHoldersRequest());
+
+                    if (beerHoldersResponse.ResponseStatus == 200)
+                    {
+                        OnInputTelemetryReceived(null, beerHoldersResponse.BeerHoldersPayload.BeerLiftMessage);
+                    }
+                };
+
+                act();
+            }
+        }
+
         void IDisposable.Dispose()
         {
             _busyService.BusyEvent -= _busyService_BusyEvent;

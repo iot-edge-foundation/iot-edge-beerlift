@@ -10,15 +10,12 @@
 </select>
 
 <p>
-    @MarkedText
-</p>
-
-<p>
-    <input @bind="BottleBrandAndMake" placeholder="Brand and make" />
-    <button class="btn btn-primary" @onclick="AddBottle"><Icon Name="IconName.Add" /></button>
+    <input @bind="BottleBrandAndMake" placeholder="Brand and make" disabled="@disabled" />
+    <button class="btn btn-primary" @onclick="AddBottle" disabled="@disabled"><Icon Name="IconName.Add" /></button>
     @AddBottleText
-    <button class="btn btn-primary" @onclick="RemoveBottle"><Icon Name="IconName.Remove" /></button>
-</p>
 
-<br />
-<br />
+    @if (@selectedBottleHolder != null)
+    {
+        <button class="btn btn-primary" @onclick="RemoveBottle" disabled="@disabled"><Icon Name="IconName.Remove" /></button>
+    }
+</p>

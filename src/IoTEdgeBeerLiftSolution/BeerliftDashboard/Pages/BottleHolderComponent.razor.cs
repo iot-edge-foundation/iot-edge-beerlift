@@ -30,9 +30,7 @@ namespace BeerliftDashboard.Pages
         public string moduleName { get; set; }
 
         [Parameter]
-        public EventCallback<Bottleholder> BottleholderSelectEvent { get; set; }
-
-        public string MarkedText;
+        public EventCallback<bool> BusyEvent { get; set; }
 
         public string AddBottleText;
 
@@ -40,9 +38,11 @@ namespace BeerliftDashboard.Pages
 
         public string BottleBrandAndMake;
 
-        private Bottleholder _selectedBottleHolder = null;
+        public Bottleholder selectedBottleHolder = null;
 
         public bool collapse1Visible;
+
+        public bool disabled = false;
 
         protected override void OnInitialized()
         {
@@ -150,22 +150,29 @@ namespace BeerliftDashboard.Pages
 
         private async Task MarkPosition(int position)
         {
-            MarkedText = "marking...";
-
             await _ioTHubServiceClientService.SendDirectMethod<MarkPositionRequest, MarkPositionResponse>(deviceId, moduleName, "MarkPosition", new MarkPositionRequest { position = position });
-
-            MarkedText = $"marked {position}";
         }
 
         public async Task BottleHolderElementSelected(ChangeEventArgs args)
         {
-            _selectedBottleHolder = (from x in Bottleholders
-                                     where x.indexer.ToString() == args.Value.ToString()
-                                     select x).First();
+            BusyEvent.InvokeAsync(true).Wait();
 
-            BottleholderSelectEvent.InvokeAsync(_selectedBottleHolder).Wait();
+            disabled = true;
 
-            await MarkPosition(_selectedBottleHolder.indexer);
+            try
+            {
+                selectedBottleHolder = (from x in Bottleholders
+                                        where x.indexer.ToString() == args.Value.ToString()
+                                        select x).First();
+
+                await MarkPosition(selectedBottleHolder.indexer);
+            }
+            finally
+            {
+                BusyEvent.InvokeAsync(false).Wait();
+
+                disabled = false;
+            }
         }
 
         private async void OnInputTelemetryReceived(object sender, BeerliftMessage message)
@@ -315,15 +322,24 @@ namespace BeerliftDashboard.Pages
 
         public async Task RemoveBottle()
         {
-            if (_selectedBottleHolder != null)
+            disabled = true;
+
+            BusyEvent.InvokeAsync(true).Wait();
+
+            try
             {
-                _sqliteService.DropBottle(deviceId, moduleName, _selectedBottleHolder.indexer);
+                _sqliteService.DropBottle(deviceId, moduleName, selectedBottleHolder.indexer);
 
                 Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
 
                 AddBottleText = $"Bottle is removed";
 
-                await MarkPosition(_selectedBottleHolder.indexer);
+                await MarkPosition(selectedBottleHolder.indexer);
+            }
+            finally
+            {
+                disabled = false;
+                BusyEvent.InvokeAsync(false).Wait();
             }
         }
     }

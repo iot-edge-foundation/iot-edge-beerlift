@@ -51,6 +51,8 @@ namespace BeerliftDashboard
 
         public List<Bottleholder> Bottleholders { get; set; }
 
+        public bool disabled = false;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -90,35 +92,75 @@ namespace BeerliftDashboard
 
         public async Task Up()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<UpRequest, UpResponse>(deviceId, moduleName, "Up", new UpRequest());
+            disabled = true;
+            try
+            {
+                var response = await _ioTHubServiceClientService.SendDirectMethod<UpRequest, UpResponse>(deviceId, moduleName, "Up", new UpRequest());
+            }
+            finally
+            {
+                disabled = false;
+            }
         }
 
         public async Task Down()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<DownRequest, DownResponse>(deviceId, moduleName, "Down", new DownRequest());
+            disabled = true;
+            try
+            {
+                var response = await _ioTHubServiceClientService.SendDirectMethod<DownRequest, DownResponse>(deviceId, moduleName, "Down", new DownRequest());
+            }
+            finally
+            {
+                disabled = false;
+            }
         }
 
         public async Task Circus()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<CircusRequest, CircusResponse>(deviceId, moduleName, "Circus", new CircusRequest());
+            disabled = true;
+            try
+            {
+                var response = await _ioTHubServiceClientService.SendDirectMethod<CircusRequest, CircusResponse>(deviceId, moduleName, "Circus", new CircusRequest());
+            }
+            finally
+            {
+                disabled = false;
+            }
         }
 
         public async Task Advertise()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<AdvertiseRequest, AdvertiseResponse>(deviceId, moduleName, "Advertise", new AdvertiseRequest());
+            disabled = true;
+            try
+            {
+                var response = await _ioTHubServiceClientService.SendDirectMethod<AdvertiseRequest, AdvertiseResponse>(deviceId, moduleName, "Advertise", new AdvertiseRequest());
+            }
+            finally
+            {
+                disabled = false;
+            }
         }
 
         public async Task Ambiant()
         {
-            var response = await _ioTHubServiceClientService.SendDirectMethod<AmbiantRequest, AmbiantResponse>(deviceId, moduleName, "Ambiant", new AmbiantRequest());
-
-            if (response.ResponseStatus == 200)
+            disabled = true;
+            try
             {
-                temperature = response.AmbiantPayload.temperature;
-                humidity = response.AmbiantPayload.humidity;
-                flooded = response.AmbiantPayload.flooded;
-                attempts = response.AmbiantPayload.attempts;
-                liftState = response.AmbiantPayload.liftState;
+                var response = await _ioTHubServiceClientService.SendDirectMethod<AmbiantRequest, AmbiantResponse>(deviceId, moduleName, "Ambiant", new AmbiantRequest());
+
+                if (response.ResponseStatus == 200)
+                {
+                    temperature = response.AmbiantPayload.temperature;
+                    humidity = response.AmbiantPayload.humidity;
+                    flooded = response.AmbiantPayload.flooded;
+                    attempts = response.AmbiantPayload.attempts;
+                    liftState = response.AmbiantPayload.liftState;
+                }
+            }
+            finally
+            {
+                disabled = false;
             }
         }
 
@@ -169,9 +211,9 @@ namespace BeerliftDashboard
             }
         }
 
-        public void BottleholderSelected(Bottleholder bottleholder)
+        public void BusySelected(bool busy)
         {
-            message = $"Event Raised. bottleholder Selected: {bottleholder.name} with index {bottleholder.indexer}";
+            disabled = busy;
         }
     }
 }

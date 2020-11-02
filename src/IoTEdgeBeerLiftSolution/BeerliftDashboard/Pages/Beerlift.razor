@@ -7,8 +7,8 @@
 @if (Validated)
 {
     <p>
-        <button class="btn btn-primary" @onclick="Up" disabled="@disabled"><Icon Name="IconName.ArrowUp" /></button>
-        <button class="btn btn-primary" @onclick="Down" disabled="@disabled"><Icon Name="IconName.ArrowDown" /></button>
+        <button class="btn btn-primary" @onclick="Up" disabled="@disabledUp"><Icon Name="IconName.ArrowUp" /></button>
+        <button class="btn btn-primary" @onclick="Down" disabled="@disabledDown"><Icon Name="IconName.ArrowDown" /></button>
         <button class="btn btn-primary" @onclick="Circus" disabled="@disabled"><Icon Name="IconName.WineBottle" /></button>
         <button class="btn btn-primary" @onclick="Advertise" disabled="@disabled"><Icon Name="IconName.Bell" /></button>
     </p>

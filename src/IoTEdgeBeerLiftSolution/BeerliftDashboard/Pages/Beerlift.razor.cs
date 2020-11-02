@@ -55,6 +55,8 @@ namespace BeerliftDashboard
         public List<Bottleholder> Bottleholders { get; set; }
 
         public bool disabled = false;
+        public bool disabledUp = false;
+        public bool disabledDown = false;
 
         protected override void OnInitialized()
         {
@@ -99,7 +101,15 @@ namespace BeerliftDashboard
 
         private void _busyService_BusyEvent(object sender, bool busy)
         {
+            // when busy is TRUE all controls are disabled
+
             disabled = busy;
+
+            disabledUp = busy |
+                                  (liftState == "Up");
+
+            disabledDown = busy |
+                                  (liftState == "Down");
 
             InvokeAsync(() => StateHasChanged()).Wait();
         }
@@ -195,6 +205,8 @@ namespace BeerliftDashboard
             flooded = message.isFlooded;
             liftState = message.liftState;
 
+            _busyService.SetBusy(null);
+
             await InvokeAsync(() => StateHasChanged());
         }
 
@@ -230,11 +242,6 @@ namespace BeerliftDashboard
             {
                 _sqliteService.IntializeBeerlift(deviceId, moduleName);
             }
-        }
-
-        public void BusySelected(bool busy)
-        {
-            disabled = busy;
         }
     }
 }

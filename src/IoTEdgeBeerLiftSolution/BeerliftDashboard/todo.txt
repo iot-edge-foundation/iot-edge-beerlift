@@ -4,8 +4,15 @@
 FLOODING WAARSCHUWING
 CONNECTION LOST WAARSCHUWING
 
-icoon
+icoon van hint voorzien
 
-plaatje van bierlift vooraan
+Foto van bierlift vooraan
 
-2 aparte methods samensmelten.
+
+
+
+
+spinner animatie bij going up/ going down
+
+
+

@@ -17,18 +17,18 @@
         <button class="btn btn-primary" @onclick="Ambiant" disabled="@disabled"><Icon Name="IconName.Heart" /></button>
         Temperature: @temperature °C;
         Humidity: @humidity %;
-        Flooded: @flooded;
+        @*Flooded: @flooded;*@
         Lift state: @liftState;
-        Attempts: @attempts
+        @*Attempts: @attempts*@
     </p>
 
     <BottleHolderComponent deviceId="@deviceId"
                            moduleName="@moduleName" />
 
     <p>
-        Incoming telemetry: @telemetryMessage
+        Telemetry: @telemetryMessage
         <br />
-        Incoming heartbeat: @heartbeatMessage
+        Heartbeat: @heartbeatMessage
     </p>
     <Alert Color="Color.Danger" Visible="@flooded">
         <AlertMessage>FLOODING</AlertMessage>

@@ -73,12 +73,12 @@ namespace BeerliftDashboard
 
             if (_sessionService.BeerliftMessage != null)
             {
-                telemetryMessage = _sessionService.BeerliftMessage.ToString();
+                telemetryMessage = $"Updated at {_sessionService.BeerliftMessage.timeStamp}";
             }
 
             if (_sessionService.HeartbeatMessage != null)
             {
-                heartbeatMessage = _sessionService.HeartbeatMessage.ToString();
+                heartbeatMessage = $"Updated at {_sessionService.HeartbeatMessage.timeStamp} ({_sessionService.HeartbeatMessage.counter})";
             }
 
             _busyService.BusyEvent += _busyService_BusyEvent;
@@ -201,7 +201,7 @@ namespace BeerliftDashboard
 
             _sessionService.BeerliftMessage = message;
 
-            telemetryMessage = message.ToString();
+            telemetryMessage = $"Updated at {message.timeStamp}";
 
             flooded = message.isFlooded;
             liftState = message.liftState;
@@ -228,7 +228,7 @@ namespace BeerliftDashboard
             {
                 _sessionService.HeartbeatMessage = message;
 
-                heartbeatMessage = message.ToString();
+                heartbeatMessage = $"Updated at {message.timeStamp} ({message.counter})";
             }
 
             await InvokeAsync(() => StateHasChanged());

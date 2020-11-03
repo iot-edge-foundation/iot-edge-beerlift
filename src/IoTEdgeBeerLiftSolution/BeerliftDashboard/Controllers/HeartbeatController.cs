@@ -11,18 +11,18 @@ namespace BeerliftDashboard.Controllers
     [ApiController]
     public class HeartbeatController : ControllerBase
     {
-        private HeartbeatService _hearbeatService;
+        private HeartbeatService _heartbeatService;
 
-        public HeartbeatController(HeartbeatService hearbeatService)
+        public HeartbeatController(HeartbeatService heartbeatService)
         {
-            _hearbeatService = hearbeatService;
+            _heartbeatService = heartbeatService;
         }
 
         // POST api/<Heartbeat>
         [HttpPost]
-        public async Task Post([FromBody] HeartbeatMessage hearbeatMessage)
+        public async Task Post([FromBody] HeartbeatMessage heartbeatMessage)
         {
-            await _hearbeatService.SendHeartbeat(hearbeatMessage);
+            await _heartbeatService.SendHeartbeat(heartbeatMessage);
         }
     }
 }

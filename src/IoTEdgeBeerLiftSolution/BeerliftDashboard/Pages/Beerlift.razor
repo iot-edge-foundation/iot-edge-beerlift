@@ -30,6 +30,15 @@
         <br />
         Incoming heartbeat: @heartbeatMessage
     </p>
+    <Alert Color="Color.Danger" Visible="@flooded">
+        <AlertMessage>FLOODING</AlertMessage>
+        <AlertDescription>Water detected. Please check your beerlift</AlertDescription>
+    </Alert>
+
+    <Alert Color="Color.Warning" Visible="@NoHeartBeat">
+        <AlertMessage>Connection lost</AlertMessage>
+        <AlertDescription>Please check the internet connection of your beerlift</AlertDescription>
+    </Alert>
 }
 else
 {

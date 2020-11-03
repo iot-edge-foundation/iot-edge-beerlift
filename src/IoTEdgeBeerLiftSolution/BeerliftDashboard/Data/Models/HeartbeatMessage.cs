@@ -16,5 +16,7 @@ namespace BeerliftDashboard.Models
 
             return result;
         }
+
+        public bool elapsed = false;
     }
 }

@@ -1,8 +1,7 @@
 ﻿
 
 
-FLOODING WAARSCHUWING
-CONNECTION LOST WAARSCHUWING
+FLOODING WAARSCHUWING moet blijven staan
 
 icoon van hint voorzien
 

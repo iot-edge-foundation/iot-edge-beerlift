@@ -47,7 +47,6 @@ namespace BeerliftDashboard
         public string heartbeatMessage;
 
         public string message;
-
         public string deviceId { get; set; }
 
         public string moduleName { get; set; }
@@ -57,6 +56,8 @@ namespace BeerliftDashboard
         public bool disabled = false;
         public bool disabledUp = false;
         public bool disabledDown = false;
+
+        public bool NoHeartBeat = false;
 
         protected override void OnInitialized()
         {
@@ -213,16 +214,22 @@ namespace BeerliftDashboard
         private async void OnInputHeartbeatReceived(object sender, HeartbeatMessage message)
         {
             if (message == null
-                    || message.deviceId != deviceId)
+                    || (!string.IsNullOrEmpty(message.deviceId)
+                                            && message.deviceId != deviceId))
             {
                 return;
             }
 
             // Message belongs to this beerlift
 
-            _sessionService.HeartbeatMessage = message;
+            NoHeartBeat = message.elapsed;
 
-            heartbeatMessage = message.ToString();
+            if (!NoHeartBeat)
+            {
+                _sessionService.HeartbeatMessage = message;
+
+                heartbeatMessage = message.ToString();
+            }
 
             await InvokeAsync(() => StateHasChanged());
         }

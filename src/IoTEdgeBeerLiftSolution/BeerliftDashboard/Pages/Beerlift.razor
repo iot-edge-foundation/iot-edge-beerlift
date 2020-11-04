@@ -16,34 +16,45 @@
 
 @if (Validated)
 {
-    <p>
+<p>
+    <Tooltip Text="Move lift up">
         <button class="btn btn-primary" @onclick="Up" disabled="@disabledUp"><Icon Name="IconName.ArrowUp" /></button>
+    </Tooltip>
+
+    <Tooltip Text="Move lift down">
         <button class="btn btn-primary" @onclick="Down" disabled="@disabledDown"><Icon Name="IconName.ArrowDown" /></button>
+    </Tooltip>
+    <Tooltip Text="Play circus lights">
         <button class="btn btn-primary" @onclick="Circus" disabled="@disabled"><Icon Name="IconName.WineBottle" /></button>
+    </Tooltip>
+    <Tooltip Text="Advertise all beers">
         <button class="btn btn-primary" @onclick="Advertise" disabled="@disabled"><Icon Name="IconName.Bell" /></button>
-    </p>
+    </Tooltip>
+</p>
 
-    <p>
+<p>
+    <Tooltip Text="Check ambiant values">
         <button class="btn btn-primary" @onclick="Ambiant" disabled="@disabled"><Icon Name="IconName.Heart" /></button>
-        Temperature: @temperature °C;
-        Humidity: @humidity %;
-        @*Flooded: @flooded;*@
-        Lift state: @liftState;
-        @*Attempts: @attempts*@
-    </p>
+    </Tooltip>
+    Temperature: @temperature °C;
+    Humidity: @humidity %;
+    @*Flooded: @flooded;*@
+    Lift state: @liftState;
+    @*Attempts: @attempts*@
+</p>
 
-    <BottleHolderComponent deviceId="@deviceId"
-                           moduleName="@moduleName" />
+<BottleHolderComponent deviceId="@deviceId"
+                       moduleName="@moduleName" />
 
-    <p>
-        Telemetry: @telemetryMessage
-        <br />
-        Heartbeat: @heartbeatMessage
-    </p>
+<p>
+    Telemetry: @telemetryMessage
+    <br />
+    Heartbeat: @heartbeatMessage
+</p>
 }
 else
 {
-    <p>
-        Not validated yet
-    </p>
+<p>
+    Not validated yet
+</p>
 }

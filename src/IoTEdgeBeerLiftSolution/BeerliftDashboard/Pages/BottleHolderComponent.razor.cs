@@ -44,6 +44,8 @@ namespace BeerliftDashboard.Pages
 
         public bool disabled = false;
 
+        public bool addingBeerBottle = false;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -93,6 +95,8 @@ namespace BeerliftDashboard.Pages
         public async Task AddBottle()
         {
             _busyService.SetBusy(true);
+
+            addingBeerBottle = true;
 
             try
             {
@@ -172,14 +176,20 @@ namespace BeerliftDashboard.Pages
                     Bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
 
                     BottleBrandAndMake = string.Empty;
+
+                    await InvokeAsync(() => StateHasChanged());
+                    await Task.Delay(5000);
                 }
                 else
                 {
-                    BottleActionText = $"Timed out, please try again";
+                    BottleActionText = $"Time out, please try again";
+                    await InvokeAsync(() => StateHasChanged());
+                    await Task.Delay(5000);
                 }
             }
             finally
             {
+                addingBeerBottle = false;
                 _busyService.SetBusy(false);
             }
         }

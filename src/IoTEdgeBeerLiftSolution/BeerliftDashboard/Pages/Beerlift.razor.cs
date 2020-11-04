@@ -84,6 +84,22 @@ namespace BeerliftDashboard
             _busyService.BusyEvent += _busyService_BusyEvent;
         }
 
+        protected override void OnAfterRender(bool firstRender)
+        {
+            base.OnAfterRender(firstRender);
+
+            if (firstRender)
+            {
+                // execute with async pattern
+                Action act = async () =>
+                {
+                    await Ambiant();
+                };
+
+                act();
+            }
+        }
+
         protected override void OnParametersSet()
         {
             base.OnParametersSet();

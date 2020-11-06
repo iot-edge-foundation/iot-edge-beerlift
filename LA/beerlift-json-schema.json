@@ -1,0 +1,296 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema - created with jsonschema.net",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "body": {
+                "deviceId": "beerlift01",
+                "slot01": true,
+                "slot02": true,
+                "slot03": true,
+                "slot04": true,
+                "slot05": true,
+                "slot06": true,
+                "slot07": true,
+                "slot08": true,
+                "slot09": false,
+                "slot10": false,
+                "slot11": false,
+                "slot12": false,
+                "slot13": false,
+                "slot14": false,
+                "slot15": false,
+                "slot16": false,
+                "timeStamp": "2020-11-06T12:57:12.4340938Z",
+                "liftState": "Up",
+                "isFlooded": true
+            }
+        }
+    ],
+    "required": [
+        "body"
+    ],
+    "properties": {
+        "body": {
+            "$id": "#/properties/body",
+            "type": "object",
+            "title": "The body schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "deviceId": "beerlift01",
+                    "slot01": true,
+                    "slot02": true,
+                    "slot03": true,
+                    "slot04": true,
+                    "slot05": true,
+                    "slot06": true,
+                    "slot07": true,
+                    "slot08": true,
+                    "slot09": false,
+                    "slot10": false,
+                    "slot11": false,
+                    "slot12": false,
+                    "slot13": false,
+                    "slot14": false,
+                    "slot15": false,
+                    "slot16": false,
+                    "timeStamp": "2020-11-06T12:57:12.4340938Z",
+                    "liftState": "Up",
+                    "isFlooded": true
+                }
+            ],
+            "required": [
+                "deviceId",
+                "slot01",
+                "slot02",
+                "slot03",
+                "slot04",
+                "slot05",
+                "slot06",
+                "slot07",
+                "slot08",
+                "slot09",
+                "slot10",
+                "slot11",
+                "slot12",
+                "slot13",
+                "slot14",
+                "slot15",
+                "slot16",
+                "timeStamp",
+                "liftState",
+                "isFlooded"
+            ],
+            "properties": {
+                "deviceId": {
+                    "$id": "#/properties/body/properties/deviceId",
+                    "type": "string",
+                    "title": "The deviceId schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "beerlift01"
+                    ]
+                },
+                "slot01": {
+                    "$id": "#/properties/body/properties/slot01",
+                    "type": "boolean",
+                    "title": "The slot01 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "slot02": {
+                    "$id": "#/properties/body/properties/slot02",
+                    "type": "boolean",
+                    "title": "The slot02 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "slot03": {
+                    "$id": "#/properties/body/properties/slot03",
+                    "type": "boolean",
+                    "title": "The slot03 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "slot04": {
+                    "$id": "#/properties/body/properties/slot04",
+                    "type": "boolean",
+                    "title": "The slot04 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "slot05": {
+                    "$id": "#/properties/body/properties/slot05",
+                    "type": "boolean",
+                    "title": "The slot05 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "slot06": {
+                    "$id": "#/properties/body/properties/slot06",
+                    "type": "boolean",
+                    "title": "The slot06 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "slot07": {
+                    "$id": "#/properties/body/properties/slot07",
+                    "type": "boolean",
+                    "title": "The slot07 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "slot08": {
+                    "$id": "#/properties/body/properties/slot08",
+                    "type": "boolean",
+                    "title": "The slot08 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                },
+                "slot09": {
+                    "$id": "#/properties/body/properties/slot09",
+                    "type": "boolean",
+                    "title": "The slot09 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "slot10": {
+                    "$id": "#/properties/body/properties/slot10",
+                    "type": "boolean",
+                    "title": "The slot10 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "slot11": {
+                    "$id": "#/properties/body/properties/slot11",
+                    "type": "boolean",
+                    "title": "The slot11 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "slot12": {
+                    "$id": "#/properties/body/properties/slot12",
+                    "type": "boolean",
+                    "title": "The slot12 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "slot13": {
+                    "$id": "#/properties/body/properties/slot13",
+                    "type": "boolean",
+                    "title": "The slot13 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "slot14": {
+                    "$id": "#/properties/body/properties/slot14",
+                    "type": "boolean",
+                    "title": "The slot14 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "slot15": {
+                    "$id": "#/properties/body/properties/slot15",
+                    "type": "boolean",
+                    "title": "The slot15 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "slot16": {
+                    "$id": "#/properties/body/properties/slot16",
+                    "type": "boolean",
+                    "title": "The slot16 schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        false
+                    ]
+                },
+                "timeStamp": {
+                    "$id": "#/properties/body/properties/timeStamp",
+                    "type": "string",
+                    "title": "The timeStamp schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "2020-11-06T12:57:12.4340938Z"
+                    ]
+                },
+                "liftState": {
+                    "$id": "#/properties/body/properties/liftState",
+                    "type": "string",
+                    "title": "The liftState schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Up"
+                    ]
+                },
+                "isFlooded": {
+                    "$id": "#/properties/body/properties/isFlooded",
+                    "type": "boolean",
+                    "title": "The isFlooded schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": false,
+                    "examples": [
+                        true
+                    ]
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}

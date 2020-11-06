@@ -77,29 +77,27 @@ If the BeerLift detects flooding (water inside the BeerLift) this will result in
 Message:
 
 ```
-class BeerLiftMessage
 {
-    public string deviceId {get; set;}
-    public bool slot01 {get; set;}
-    public bool slot02 {get; set;}
-    public bool slot03 {get; set;}
-    public bool slot04 {get; set;}
-    public bool slot05 {get; set;}
-    public bool slot06 {get; set;}
-    public bool slot07 {get; set;}
-    public bool slot08 {get; set;}
-    public bool slot09 {get; set;}
-    public bool slot10 {get; set;}
-    public bool slot11 {get; set;}
-    public bool slot12 {get; set;}
-    public bool slot13 {get; set;}
-    public bool slot14 {get; set;}
-    public bool slot15 {get; set;}
-    public bool slot16 {get; set;}
-    string deviceId {get; set;}
-    DateTime timeStamp {get; set;}
-    string liftState {get; set;}
-    bool flooded {get; set;}
+    string deviceId,
+    bool slot01,
+    bool slot02,
+    bool slot03,
+    bool slot04,
+    bool slot05,
+    bool slot06,
+    bool slot07,
+    bool slot08,
+    bool slot09,
+    bool slot10,
+    bool slot11,
+    bool slot12,
+    bool slot13,
+    bool slot14,
+    bool slot15,
+    bool slot16,
+    timeStamp,
+    string liftState,
+    bool flooded
 }
 ```
 
@@ -131,10 +129,9 @@ Sends the lift up for the duration of 'UpDownInterval' milliseconds (20000 by de
 Response:
 
 ```
-class Response 
 {
-    int responseState { get; set; }
-    string errorMessage { get; set; }
+    int responseState,
+    string errorMessage
 }
 ```
 
@@ -151,10 +148,9 @@ After Down is executed, all leds are dimmed.
 Response:
 
 ```
-class Response 
 {
-    int responseState { get; set; }
-    string errorMessage { get; set; }
+    int responseState,
+    string errorMessage
 }
 ```
 
@@ -173,14 +169,13 @@ The state of the lift can be seen too.
 Response:
 
 ```
-class Response 
 {
-    int responseState { get; set; }
-    string errorMessage { get; set; }
-    double temperature {get; set;}
-    double humidity {get; set;}    
-    string liftState {get; set;}
-    bool flooded {get; set;}
+    int responseState,
+    string errorMessage,
+    double temperature,
+    double humidity,
+    string liftState,
+    bool flooded
 }
 ```
 
@@ -193,10 +188,9 @@ Lits up the LED lights in a semi-random pattern for a few seconds.
 Response:
 
 ```
-class Response 
 {
-    int responseState { get; set; }
-    string errorMessage { get; set; }
+    int responseState,
+    string errorMessage
 }
 ```
 
@@ -215,11 +209,10 @@ It also flashes the LED at the empty slot found.
 Response:
 
 ```
-class Response 
 {
-    int responseState { get; set; }
-    string errorMessage { get; set; }
-    int emptySlot {get; set;}
+    int responseState,
+    string errorMessage,
+    int emptySlot
 }
 ```
 
@@ -228,9 +221,10 @@ class Response
 A JSON body is needed to be send:
 
 ```
-class Request 
 {
-    int position { get; set; }
+    int responseState,
+    string errorMessage,
+    int position
 }
 ```
 
@@ -239,10 +233,9 @@ It flashes the LED at the markted slot.
 Response:
 
 ```
-class Response 
 {
-    int responseState { get; set; }
-    string errorMessage { get; set; }
+    int responseState,
+    string errorMessage
 }
 ```
 
@@ -255,10 +248,9 @@ Lits up all LED lights for 20 seconds so all bottle lables are shown and therefo
 Response:
 
 ```
-class Response 
 {
-    int responseState { get; set; }
-    string errorMessage { get; set; }
+    int responseState,
+    string errorMessage
 }
 ```
 
@@ -271,29 +263,27 @@ Returns instanly the current bottle holder information, liftstate and flooding.
 Response:
 
 ```
-class BeerLiftMessage
 {
-    public string deviceId {get; set;}
-    public bool slot01 {get; set;}
-    public bool slot02 {get; set;}
-    public bool slot03 {get; set;}
-    public bool slot04 {get; set;}
-    public bool slot05 {get; set;}
-    public bool slot06 {get; set;}
-    public bool slot07 {get; set;}
-    public bool slot08 {get; set;}
-    public bool slot09 {get; set;}
-    public bool slot10 {get; set;}
-    public bool slot11 {get; set;}
-    public bool slot12 {get; set;}
-    public bool slot13 {get; set;}
-    public bool slot14 {get; set;}
-    public bool slot15 {get; set;}
-    public bool slot16 {get; set;}
-    string deviceId {get; set;}
-    DateTime timeStamp {get; set;}
-    string liftState {get; set;}
-    bool flooded {get; set;}
+    string deviceId,
+    bool slot01,
+    bool slot02,
+    bool slot03,
+    bool slot04,
+    bool slot05,
+    bool slot06,
+    bool slot07,
+    bool slot08,
+    bool slot09,
+    bool slot10,
+    bool slot11,
+    bool slot12,
+    bool slot13,
+    bool slot14,
+    bool slot15,
+    bool slot16,
+    DateTime timeStamp,
+    string liftState,
+    bool flooded
 }
 ```
 

@@ -79,6 +79,7 @@ Message:
 ```
 class BeerLiftMessage
 {
+    public string deviceId {get; set;}
     public bool slot01 {get; set;}
     public bool slot02 {get; set;}
     public bool slot03 {get; set;}
@@ -115,6 +116,7 @@ The following direct methods are available:
 * FindEmptySlot
 * MarkPosition
 * Advertise
+* BottleHolders
 
 *Note* Method names are case sensitive
 
@@ -260,19 +262,54 @@ class Response
 }
 ```
 
+### Direct Method - BottleHolders
+
+No JSON body needed to be send.
+
+Returns instanly the current bottle holder information, liftstate and flooding.
+
+Response:
+
+```
+class BeerLiftMessage
+{
+    public string deviceId {get; set;}
+    public bool slot01 {get; set;}
+    public bool slot02 {get; set;}
+    public bool slot03 {get; set;}
+    public bool slot04 {get; set;}
+    public bool slot05 {get; set;}
+    public bool slot06 {get; set;}
+    public bool slot07 {get; set;}
+    public bool slot08 {get; set;}
+    public bool slot09 {get; set;}
+    public bool slot10 {get; set;}
+    public bool slot11 {get; set;}
+    public bool slot12 {get; set;}
+    public bool slot13 {get; set;}
+    public bool slot14 {get; set;}
+    public bool slot15 {get; set;}
+    public bool slot16 {get; set;}
+    string deviceId {get; set;}
+    DateTime timeStamp {get; set;}
+    string liftState {get; set;}
+    bool flooded {get; set;}
+}
+```
+
 ## Module Twin
 
 The module is configurable using the desired properties of the module twin:
 
-* interval (in milliseconds, default 5000)
-* upDownInterval (in milliseconds, default 20000)
-* upRelayPin (default pin 17)
-* downRelayPin (default pin 27)
-* floodedPin (default pin 23)
-* dht22Pin (default pin 4)
-* i2cAddressWrite (default 0x22)
-* i2cAddressRead (default 0x20)
-* silentFlooding (default false)
+* interval (in milliseconds, default 5000) - the polling interval for the hardware
+* upDownInterval (in milliseconds, default 20000) - the interval for moving up or down the beer lift
+* upRelayPin (default pin 17) - digital GPIO for controlling the Up relay
+* downRelayPin (default pin 27) - digital GPIO for controlling the Down relay
+* floodedPin (default pin 23) - digital GPIO for reading the moisture sensor (which is an analog sensor)
+* dht22Pin (default pin 4) - digital GPIO for reading the up relay
+* i2cAddressWrite (default 0x22) - i2c address for controlling the LEDs
+* i2cAddressRead (default 0x20) - i2c address for controlling the switches
+* silentFlooding (default false) - turn off sending flooding messages. The internal logging is still recording the warnings. Messages triggered when the lift state changes will still report the flooding state
 
 # Raspberry Pi
 

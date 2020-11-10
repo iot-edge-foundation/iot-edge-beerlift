@@ -324,7 +324,10 @@ namespace BeerLiftModule
                             pipeMessage.Properties.Add("Alarm", "Flooded");
                         }
 
-                        pipeMessage.Properties.Add("StateLength", "16");
+
+                        pipeMessage.Properties.Add("content-type", "application/edge-beerlift-json");
+                        pipeMessage.Properties.Add("Alarm", "Flooded");
+                        pipeMessage.Properties.Add("SlotLength", "8");
 
                         await client.SendEventAsync("output1", pipeMessage);
 

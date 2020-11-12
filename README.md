@@ -222,8 +222,6 @@ A JSON body is needed to be send:
 
 ```
 {
-    int responseState,
-    string errorMessage,
     int position
 }
 ```

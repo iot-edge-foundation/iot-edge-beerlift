@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace BeerLiftModule
 {
@@ -98,11 +99,37 @@ namespace BeerLiftModule
             return 0;
         }
 
+
+        private List<int> FindUsedSlots()
+        {
+            var result = new List<int>();
+
+            if (slot01) { result.Add(1); };
+            if (slot02) { result.Add(2); };
+            if (slot03) { result.Add(3); };
+            if (slot04) { result.Add(4); };
+            if (slot05) { result.Add(5); };
+            if (slot06) { result.Add(6); };
+            if (slot07) { result.Add(7); };
+            if (slot08) { result.Add(8); };
+            if (slot09) { result.Add(9); };
+            if (slot10) { result.Add(10); };
+            if (slot11) { result.Add(11); };
+            if (slot12) { result.Add(12); };
+            if (slot13) { result.Add(13); };
+            if (slot14) { result.Add(14); };
+            if (slot15) { result.Add(15); };
+            if (slot16) { result.Add(16); };
+
+            return result;
+        }
+
         public int Roulette()
         {
-            if (FindEmptySlot() == 0)
+            var usedSlots = FindUsedSlots();
+            if (usedSlots.Count == 0)
             {
-                // no empty slot found, return 0
+                // no empty slots found, return 0
                 return 0;
             }
 
@@ -117,34 +144,10 @@ namespace BeerLiftModule
                 r = random.Next(1, 17); // returns 1 to 16
 
                 // check if a bottle is available there
-                found = (!IsEmptySlot(r));
+                found = (usedSlots.Contains(r));
             }
 
             return r;
-        }
-
-        private bool IsEmptySlot(int slot)
-        {
-            // check is a certain location is empty
-
-            if (slot==1 && !slot01) return true;
-            if (slot==2 && !slot02) return true;
-            if (slot==3 && !slot03) return true;
-            if (slot==4 && !slot04) return true;
-            if (slot==5 && !slot05) return true;
-            if (slot==6 && !slot06) return true;
-            if (slot==7 && !slot07) return true;
-            if (slot==8 && !slot08) return true;
-            if (slot==9 && !slot09) return true;
-            if (slot==10 && !slot10) return true;
-            if (slot==11 && !slot11) return true;
-            if (slot==12 && !slot12) return true;
-            if (slot==13 && !slot13) return true;
-            if (slot==14 && !slot14) return true;
-            if (slot==15 && !slot15) return true;
-            if (slot==16 && !slot16) return true;
-
-            return false;
         }
     }
 }

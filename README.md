@@ -112,6 +112,7 @@ The following direct methods are available:
 * Ambiant
 * Circus
 * FindEmptySlot
+* Roulette
 * MarkPosition
 * Advertise
 * BottleHolders
@@ -215,6 +216,28 @@ Response:
     int emptySlot
 }
 ```
+
+### Direct Method - Roulette
+
+No JSON body needed to be send.
+
+Returns the a random slot (1-16) where a bottle is placed. 
+
+If all slots are already empty, it returns 0.
+
+It also flashes the LED at the random slot selected.
+
+Response:
+
+```
+{
+    int responseState,
+    string errorMessage,
+    int shot
+}
+```
+
+*Note*: Great for an alternative version of 'Russian Roullete'
 
 ### Direct Method - MarkPosition
 
@@ -372,3 +395,11 @@ Please be aware this beer lift is operating on 220 Volts.
 The MCP23017 access is based on library https://github.com/dotnet/iot/tree/master/src/devices/Mcp23xxx
 
 The DHT22 access is based on library https://github.com/dotnet/iot/tree/master/src/devices/Dhtxx 
+
+# Legal
+
+We actively encouraging a responsible attitude.
+
+Enjoy this beerlift responsibly.
+
+Quality over quantity!

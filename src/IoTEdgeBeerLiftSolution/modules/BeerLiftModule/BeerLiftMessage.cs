@@ -102,7 +102,7 @@ namespace BeerLiftModule
         {
             if (FindEmptySlot() == 0)
             {
-                // no empty slot available
+                // no empty slot found, return 0
                 return 0;
             }
 

@@ -97,5 +97,54 @@ namespace BeerLiftModule
 
             return 0;
         }
+
+        public int Roulette()
+        {
+            if (FindEmptySlot() == 0)
+            {
+                // no empty slot available
+                return 0;
+            }
+
+            var found = false;
+
+            var random = new Random(DateTime.Now.Millisecond);
+
+            var r = -1;
+
+            while (!found)
+            {
+                r = random.Next(1, 17); // returns 1 to 16
+
+                // check if a bottle is available there
+                found = (!IsEmptySlot(r));
+            }
+
+            return r;
+        }
+
+        private bool IsEmptySlot(int slot)
+        {
+            // check is a certain location is empty
+
+            if (slot==1 && !slot01) return true;
+            if (slot==2 && !slot02) return true;
+            if (slot==3 && !slot03) return true;
+            if (slot==4 && !slot04) return true;
+            if (slot==5 && !slot05) return true;
+            if (slot==6 && !slot06) return true;
+            if (slot==7 && !slot07) return true;
+            if (slot==8 && !slot08) return true;
+            if (slot==9 && !slot09) return true;
+            if (slot==10 && !slot10) return true;
+            if (slot==11 && !slot11) return true;
+            if (slot==12 && !slot12) return true;
+            if (slot==13 && !slot13) return true;
+            if (slot==14 && !slot14) return true;
+            if (slot==15 && !slot15) return true;
+            if (slot==16 && !slot16) return true;
+
+            return false;
+        }
     }
 }

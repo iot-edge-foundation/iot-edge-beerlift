@@ -192,6 +192,13 @@ namespace BeerLiftModule
 
             Console.WriteLine("Attached method handler: BottleHolders."); 
 
+            await ioTHubModuleClient.SetMethodHandlerAsync(
+                "Roulette",
+                RouletteMethodCallBack,
+                ioTHubModuleClient);
+
+            Console.WriteLine("Attached method handler: Roulette.");  
+
             SetupI2CRead();
 
             SetupI2CWrite();
@@ -763,6 +770,48 @@ namespace BeerLiftModule
             }
               
             var json = JsonConvert.SerializeObject(findEmptySlotResponse);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+
+            return response;  
+        }
+
+
+        private static async Task<MethodResponse> RouletteMethodCallBack(MethodRequest methodRequest, object userContext)
+        {
+            Console.WriteLine($"Executing RouletteMethodCallBack at {DateTime.UtcNow}");
+
+            var rouletteResponse = new RouletteResponse{responseState = 0};
+
+            try
+            {
+                //// Find the actual empty slot
+
+                var beerLiftMessageToRoulette = new BeerLiftMessage("dummy", _lastDataPortA, _lastDataPortB);
+
+                // Returns a value between 1 and 16 (or 0 is all occupied) 
+                rouletteResponse.shot = beerLiftMessageToRoulette.Roulette();
+
+                Console.WriteLine($"Empty slot found at position {rouletteResponse.shot} (0 when all slots occupied)");
+
+                //// Lit the right led
+
+                var result = await LedScenarios.DirectMarkPosition(_mcp23xxxWrite, rouletteResponse.shot);
+
+                if (!result)
+                {
+                    rouletteResponse.errorMessage = "RouletteMethodCallBack: Unable to cast Mcp23017 Write GPIO";   
+                    rouletteResponse.responseState = 1;
+                }
+
+                Console.WriteLine($"Roulette ended at {DateTime.UtcNow}.");
+            }
+            catch (Exception ex)
+            {
+                rouletteResponse.errorMessage = ex.Message;   
+                rouletteResponse.responseState = -999;
+            }
+              
+            var json = JsonConvert.SerializeObject(rouletteResponse);
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;  

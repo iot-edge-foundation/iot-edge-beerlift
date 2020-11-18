@@ -36,6 +36,8 @@ namespace BeerliftDashboard
 
         public bool flooded;
 
+        public bool showRoulette = false;
+
         public int attempts;
 
         public string liftState;
@@ -47,11 +49,12 @@ namespace BeerliftDashboard
         public string heartbeatMessage;
 
         public string message;
+
+        public string rouletteMessage;
+
         public string deviceId { get; set; }
 
         public string moduleName { get; set; }
-
-        public List<Bottleholder> Bottleholders { get; set; }
 
         public bool disabled = false;
         public bool disabledUp = false;
@@ -181,6 +184,39 @@ namespace BeerliftDashboard
             {
                 _busyService.SetBusy(false);
             }
+        }
+
+        public async Task Roulette()
+        {
+            _busyService.SetBusy(true);
+            try
+            {
+                var response = await _ioTHubServiceClientService.SendDirectMethod<RouletteRequest, RouletteResponse>(deviceId, moduleName, "Roulette", new RouletteRequest());
+
+                if (response.RoulettePayload.shot == 0)
+                {
+                    rouletteMessage = "We ran out of bottles...";
+                }
+                else
+                {
+                    var bottleholders = _sqliteService.GetBottleHolders(deviceId, moduleName);
+
+                    var bh = bottleholders.First(x => x.indexer == response.RoulettePayload.shot);
+
+                    rouletteMessage = $"You won yourselve a '{bh.name}'";
+                }
+
+                showRoulette = true;
+            }
+            finally
+            {
+                _busyService.SetBusy(false);
+            }
+        }
+
+        public void CloseRoulette()
+        {
+            showRoulette = false;
         }
 
         public async Task Ambiant()

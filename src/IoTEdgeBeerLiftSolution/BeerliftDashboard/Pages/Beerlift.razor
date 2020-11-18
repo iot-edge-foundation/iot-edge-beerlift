@@ -14,47 +14,59 @@
     <AlertDescription>Please check the internet connection of your beerlift</AlertDescription>
 </Alert>
 
+<Alert Color="Color.Success" Visible="@showRoulette">
+    <AlertMessage>Roulette</AlertMessage>
+    <AlertDescription>@rouletteMessage</AlertDescription>
+    <CloseButton @onclick="CloseRoulette" />
+</Alert>
+
 @if (Validated)
 {
-<p>
-    <Tooltip Text="Move lift up">
-        <button class="btn btn-primary" @onclick="Up" disabled="@disabledUp"><Icon Name="IconName.ArrowUp" /></button>
-    </Tooltip>
+    <p>
+        <Tooltip Text="Move lift up">
+            <button class="btn btn-primary" @onclick="Up" disabled="@disabledUp"><Icon Name="IconName.ArrowUp" /></button>
+        </Tooltip>
 
-    <Tooltip Text="Move lift down">
-        <button class="btn btn-primary" @onclick="Down" disabled="@disabledDown"><Icon Name="IconName.ArrowDown" /></button>
-    </Tooltip>
-    <Tooltip Text="Play circus lights">
-        <button class="btn btn-primary" @onclick="Circus" disabled="@disabled"><Icon Name="IconName.WineBottle" /></button>
-    </Tooltip>
-    <Tooltip Text="Advertise all beers">
-        <button class="btn btn-primary" @onclick="Advertise" disabled="@disabled"><Icon Name="IconName.Bell" /></button>
-    </Tooltip>
-</p>
+        <Tooltip Text="Move lift down">
+            <button class="btn btn-primary" @onclick="Down" disabled="@disabledDown"><Icon Name="IconName.ArrowDown" /></button>
+        </Tooltip>
 
-<p>
-    <Tooltip Text="Check ambiant values">
-        <button class="btn btn-primary" @onclick="Ambiant" disabled="@disabled"><Icon Name="IconName.Heart" /></button>
-    </Tooltip>
-    Temperature: @temperature °C;
-    Humidity: @humidity %;
-    @*Flooded: @flooded;*@
-    Lift state: @liftState;
-    @*Attempts: @attempts*@
-</p>
+        <Tooltip Text="Advertise all beers">
+            <button class="btn btn-primary" @onclick="Advertise" disabled="@disabled"><Icon Name="IconName.Bell" /></button>
+        </Tooltip>
 
-<BottleHolderComponent deviceId="@deviceId"
-                       moduleName="@moduleName" />
+        <Tooltip Text="Play circus lights">
+            <button class="btn btn-primary" @onclick="Circus" disabled="@disabled"><Icon Name="IconName.WineBottle" /></button>
+        </Tooltip>
 
-<p>
-    Telemetry: @telemetryMessage
-    <br />
-    Heartbeat: @heartbeatMessage
-</p>
+        <Tooltip Text="Roulette">
+            <button class="btn btn-primary" @onclick="Roulette" disabled="@disabled"><Icon Name="IconName.Dice" /></button>
+        </Tooltip>
+    </p>
+
+    <p>
+        <Tooltip Text="Check ambiant values">
+            <button class="btn btn-primary" @onclick="Ambiant" disabled="@disabled"><Icon Name="IconName.Heart" /></button>
+        </Tooltip>
+        Temperature: @temperature °C;
+        Humidity: @humidity %;
+        @*Flooded: @flooded;*@
+        Lift state: @liftState;
+        @*Attempts: @attempts*@
+    </p>
+
+    <BottleHolderComponent deviceId="@deviceId"
+                           moduleName="@moduleName" />
+
+    <p>
+        Telemetry: @telemetryMessage
+        <br />
+        Heartbeat: @heartbeatMessage
+    </p>
 }
 else
 {
-<p>
-    Not validated yet
-</p>
+    <p>
+        Not validated yet
+    </p>
 }

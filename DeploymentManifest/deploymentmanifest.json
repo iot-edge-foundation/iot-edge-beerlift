@@ -3,9 +3,9 @@
         "$edgeAgent": {
             "properties.desired": {
                 "modules": {
-                    "beerlift": {
+                    "bl": {
                         "settings": {
-                            "image": "svelde/iot-edge-beerlift:0.0.49-arm32v7",
+                            "image": "svelde/iot-edge-beerlift:0.0.64-arm32v7",
                             "createOptions": "{\"HostConfig\":{\"Privileged\":true}}"
                         },
                         "type": "docker",
@@ -20,12 +20,12 @@
                     },
                     "type": "docker"
                 },
-                "schemaVersion": "1.0",
+                "schemaVersion": "1.1",
                 "systemModules": {
                     "edgeAgent": {
                         "settings": {
                             "image": "mcr.microsoft.com/azureiotedge-agent:1.0",
-                            "createOptions": ""
+                            "createOptions": "{\"ExposedPorts\":{\"9600/tcp\":{}},\"HostConfig\":{\"PortBindings\":{\"9600/tcp\":[{\"HostPort\":\"9600\"}]}}}"
                         },
                         "type": "docker"
                     },
@@ -35,6 +35,23 @@
                             "createOptions": "{\"HostConfig\":{\"PortBindings\":{\"443/tcp\":[{\"HostPort\":\"443\"}],\"5671/tcp\":[{\"HostPort\":\"5671\"}],\"8883/tcp\":[{\"HostPort\":\"8883\"}]}}}"
                         },
                         "type": "docker",
+                        "env": {
+                            "httpSettings__enabled": {
+                                "value": "false"
+                            },
+                            "OptimizeForPerformance": {
+                                "value": "false"
+                            },
+                            "mqttSettings__enabled": {
+                                "value": "true"
+                            },
+                            "amqpSettings__enabled": {
+                                "value": "false"
+                            },
+                            "UpstreamProtocol": {
+                                "value": "MQTT"
+                            }
+                        },
                         "status": "running",
                         "restartPolicy": "always"
                     }
@@ -46,23 +63,17 @@
                 "routes": {
                     "route": "FROM /messages/* INTO $upstream"
                 },
-                "schemaVersion": "1.0",
+                "schemaVersion": "1.1",
                 "storeAndForwardConfiguration": {
                     "timeToLiveSecs": 7200
                 }
             }
         },
-        "beerlift": {
+        "bl": {
             "properties.desired": {
-                "interval" : 5000,
-                "upDownInterval": 20000,
-                "upRelayPin": 17,
-                "downRelayPin": 27,
-                "dhtPin" : 4,
-                "i2cAddressRead": "0x20",
                 "i2cAddressWrite": "0x24",
-                "silentFlooding": false,
-                "floodedPin" : 23
+                "upDownInterval": 50000,
+                "silentFlooding": false
             }
         }
     }

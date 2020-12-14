@@ -68,7 +68,7 @@ The state can be:
 * Going up
 * Up
 * Going down
-* Unknown or exception state
+* Unknown (exception state)
 
 If any bottles are taken out (or refilled) or the state is changes, a message is send.
 
@@ -285,26 +285,30 @@ Response:
 
 ```
 {
-    string deviceId,
-    bool slot01,
-    bool slot02,
-    bool slot03,
-    bool slot04,
-    bool slot05,
-    bool slot06,
-    bool slot07,
-    bool slot08,
-    bool slot09,
-    bool slot10,
-    bool slot11,
-    bool slot12,
-    bool slot13,
-    bool slot14,
-    bool slot15,
-    bool slot16,
-    DateTime timeStamp,
-    string liftState,
-    bool flooded
+    BeerLiftMessage : {
+        string deviceId,
+        bool slot01,
+        bool slot02,
+        bool slot03,
+        bool slot04,
+        bool slot05,
+        bool slot06,
+        bool slot07,
+        bool slot08,
+        bool slot09,
+        bool slot10,
+        bool slot11,
+        bool slot12,
+        bool slot13,
+        bool slot14,
+        bool slot15,
+        bool slot16,
+        DateTime timeStamp,
+        string liftState,
+        bool isFlooded
+    },
+    int responseState,
+    string errorMessage
 }
 ```
 

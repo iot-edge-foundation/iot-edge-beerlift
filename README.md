@@ -344,7 +344,9 @@ sudo apt-get install libssl1.0.2
 
 After that, perform the regular [installation](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-install-iot-edge-linux) on Buster. 
 
-*Note*: The installation guide is referring to Raspbian Stretch but that is applicable to Buster too.
+*Note*: The installation guide is referring to Raspbian Stretch but that is applicable to Buster too with the fix above.
+
+*Note*: The module runs on both Azure IoT Edge version 1.1 (LTS) and 1.2.
 
 ## Azure IoT Edge
 
@@ -406,4 +408,4 @@ We actively encouraging a responsible attitude.
 
 Enjoy this beerlift responsibly.
 
-Quality over quantity!
+And remember, drink responsibly: quality over quantity!

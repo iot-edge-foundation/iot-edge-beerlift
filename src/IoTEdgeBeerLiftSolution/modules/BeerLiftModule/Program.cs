@@ -29,6 +29,8 @@ namespace BeerLiftModule
 
         private const int DefaultUpDownInterval = 20000;
 
+        private const bool DefaultInDebugMode = false;
+
         // GPIO 17 which is physical pin 11
         private const int DefaultUpRelayPin = 17;
 
@@ -204,16 +206,27 @@ namespace BeerLiftModule
             SetupI2CWrite();
 
             //// start reading beer state
-            if (_mcp23xxxRead != null)
+            if (_mcp23xxxRead != null
+                    || _mcp23xxxWrite != null)
             {
                 var thread = new Thread(() => ThreadBody(ioTHubModuleClient));
                 thread.Start();
             }
-
-            if (_liftState == LiftState.Unknown)
+            else
             {
-                // move the lift down (initial state) in case of 'unknown' state
+                Console.WriteLine("Main functionality halted due to missing MCP23(s).");  
+            }
+
+            if (_liftState == LiftState.Unknown
+                    && !InDebugMode)
+            {
+                // move the lift down (initial state) in case of 'unknown' state 
+                // ONLY IF NOT IN DEBUG MODE!
                 await DownMethodCallBack(null, ioTHubModuleClient);          
+            }
+            else
+            {
+                Console.WriteLine("Down fnctionality halted due to debug mode.");  
             }
         }
 
@@ -365,6 +378,7 @@ namespace BeerLiftModule
         private static bool SilentFlooding { get; set; } = DefaultSilentFlooding;
         private static int Interval { get; set; } = DefaultInterval;
         private static int UpDownInterval { get; set; } = DefaultUpDownInterval;
+        private static bool InDebugMode {get; set;} = DefaultInDebugMode;
         private static int UpRelayPin { get; set; } = DefaultUpRelayPin;
         private static int DownRelayPin { get; set; } = DefaultDownRelayPin;
         private static int FloodedPin { get; set; } = DefaultFloodedPin;
@@ -423,6 +437,22 @@ namespace BeerLiftModule
                     Console.WriteLine($"UpDownInterval changed to {UpDownInterval}");
 
                     reportedProperties["upDownInterval"] = UpDownInterval;
+                }
+
+                if (desiredProperties.Contains("inDebugMode")) 
+                {
+                    if (desiredProperties["inDebugMode"] != null)
+                    {
+                        InDebugMode = bool.Parse( desiredProperties["inDebugMode"]);
+                    }
+                    else
+                    {
+                        InDebugMode = DefaultInDebugMode;
+                    }
+
+                    Console.WriteLine($"InDebugMode changed to {InDebugMode}");
+
+                    reportedProperties["inDebugMode"] = InDebugMode;
                 }
 
                 if (desiredProperties.Contains("upRelayPin")) 

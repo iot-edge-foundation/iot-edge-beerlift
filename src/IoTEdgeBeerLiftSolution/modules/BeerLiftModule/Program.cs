@@ -443,7 +443,10 @@ namespace BeerLiftModule
                 {
                     if (desiredProperties["inDebugMode"] != null)
                     {
-                        InDebugMode = bool.Parse( desiredProperties["inDebugMode"]);
+                        var inDebugMode = ((string) desiredProperties["inDebugMode"]).ToLower() == "true";
+
+                        InDebugMode = inDebugMode;
+
                     }
                     else
                     {

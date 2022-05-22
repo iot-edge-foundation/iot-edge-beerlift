@@ -74,7 +74,7 @@ The state can be:
 * Going down
 * Unknown (exception state / debug state)
 
-If any bottles are taken out (or refilled) or the state is changes, a message is send.
+If any bottles are taken out (or refilled) or the state is changes, a message is sent to output 'output1'.
 
 If the BeerLift detects flooding (water inside the BeerLift) this will result in cloud messages ALSO.
 

@@ -125,7 +125,12 @@ The following direct methods are available:
 
 #### Direct Method - Up
 
-No JSON body needed to be send.
+No JSON body needed to be send:
+
+```
+{
+}
+```
 
 Sends the lift up for the duration of 'UpDownInterval' milliseconds (20000 by default).
 
@@ -140,9 +145,16 @@ Response:
 }
 ```
 
+*Note*: Check the connection timeout on the method. It must be larger than the up/down interval.
+
 ### Direct Method - Down
 
-No JSON body needed to be send.
+No JSON body needed to be sent:
+
+```
+{
+}
+```
 
 Sends the lift down for the duration of 'UpDownInterval' milliseconds (20000 by default).
 
@@ -159,9 +171,16 @@ Response:
 }
 ```
 
+*Note*: Check the connection timeout on the method. It must be larger than the up/down interval.
+
 ### Direct Method - Ambiant
 
-No JSON body needed to be send.
+No JSON body needed to be sent:
+
+```
+{
+}
+```
 
 Reads the temperature and humidity of the DHT22.
 
@@ -186,7 +205,12 @@ Response:
 
 ### Direct Method - Circus
 
-No JSON body needed to be send.
+No JSON body needed to be sent:
+
+```
+{
+}
+```
 
 Lits up the LED lights in a semi-random pattern for a few seconds.
 
@@ -203,7 +227,12 @@ Response:
 
 ### Direct Method - FindEmptySlot
 
-No JSON body needed to be send.
+No JSON body needed to be sent:
+
+```
+{
+}
+```
 
 Returns the first empty slot (1-16) where no bottle is placed. 
 
@@ -223,11 +252,16 @@ Response:
 
 ### Direct Method - Roulette
 
-No JSON body needed to be send.
+No JSON body needed to be sent:
+
+```
+{
+}
+```
 
 Returns the a random slot (1-16) where a bottle is placed. 
 
-If all slots are already empty, it returns 0.
+If all slots are already empty, no bottles left, it will returns '0'.
 
 It also flashes the LED at the random slot selected.
 
@@ -245,7 +279,7 @@ Response:
 
 ### Direct Method - MarkPosition
 
-A JSON body is needed to be send:
+A JSON body is needed to be sent:
 
 ```
 {
@@ -253,7 +287,7 @@ A JSON body is needed to be send:
 }
 ```
 
-It flashes the LED at the markted slot.
+It flashes the LED at the markted slot while all other LEDs are shutdown.
 
 Response:
 
@@ -266,7 +300,12 @@ Response:
 
 ### Direct Method - Advertise
 
-No JSON body needed to be send.
+No JSON body needed to be sent:
+
+```
+{
+}
+```
 
 Lits up all LED lights for 20 seconds so all bottle lables are shown and therefor 'advertised'.
 
@@ -281,7 +320,12 @@ Response:
 
 ### Direct Method - BottleHolders
 
-No JSON body needed to be send.
+No JSON body needed to be sent:
+
+```
+{
+}
+```
 
 Returns instanly the current bottle holder information, liftstate and flooding.
 

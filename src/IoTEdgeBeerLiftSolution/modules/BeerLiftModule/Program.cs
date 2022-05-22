@@ -831,7 +831,7 @@ namespace BeerLiftModule
 
                 var beerLiftMessageToRoulette = new BeerLiftMessage("dummy", _lastDataPortA, _lastDataPortB);
 
-                // Returns a value between 1 and 16 (or 0 is all occupied) 
+                // Returns a value between 1 and 16 (or 0 is no bottle left!) 
                 rouletteResponse.shot = beerLiftMessageToRoulette.Roulette();
 
                 Console.WriteLine($"Empty slot found at position {rouletteResponse.shot} (0 when all slots occupied)");

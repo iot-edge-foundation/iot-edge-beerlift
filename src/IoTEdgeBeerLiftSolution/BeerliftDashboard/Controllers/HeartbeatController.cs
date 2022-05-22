@@ -3,7 +3,7 @@ using BeerliftDashboard.Data;
 using BeerliftDashboard.Models;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+// WARNING: PUBLIC ENDPOINT - NO SECURITY
 
 namespace BeerliftDashboard.Controllers
 {
@@ -21,6 +21,7 @@ namespace BeerliftDashboard.Controllers
         // POST api/<Heartbeat>
         [HttpPost]
         public async Task Post([FromBody] HeartbeatMessage heartbeatMessage)
+            //, [FromHeader(Name = "APIKEY")] string key)
         {
             await _heartbeatService.SendHeartbeat(heartbeatMessage);
         }

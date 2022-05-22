@@ -37,6 +37,8 @@ It's up to you to build your own beerlift. These are the (second hand) component
 * Two Snap-Action Switches with roller Lever; 3-Pin (for normally closed usage)
 * Wires, Wago connectors, etc.
 
+You can deviate from this of course, using your own hardware set.
+
 ## For the 16 beerholders
 
 * a LED
@@ -51,6 +53,8 @@ It's up to you to build your own beerlift. These are the (second hand) component
 * Two MCP23017 - i2c 16 input/output port expanders
 * Soil moisture sensor (Robodyn has an alog one which can also be used on a digital port)
 * Prototyping PCB boards, wires, etc
+
+The logic in this module is pretty bound to this hardware. If you use other sensors or expanders, you probably have to rewrite this module.
 
 # Azure IoT Edge
 
@@ -68,7 +72,7 @@ The state can be:
 * Going up
 * Up
 * Going down
-* Unknown (exception state)
+* Unknown (exception state / debug state)
 
 If any bottles are taken out (or refilled) or the state is changes, a message is send.
 
@@ -325,6 +329,7 @@ The module is configurable using the desired properties of the module twin:
 * i2cAddressWrite (default 0x22) - i2c address for controlling the LEDs
 * i2cAddressRead (default 0x20) - i2c address for controlling the switches
 * silentFlooding (default false) - turn off sending flooding messages. The internal logging is still recording the warnings. Messages triggered when the lift state changes will still report the flooding state
+* inDebugMode (default false) - prevents up/down movement of lift while being debugged 
 
 # Raspberry Pi
 
@@ -404,8 +409,8 @@ The DHT22 access is based on library https://github.com/dotnet/iot/tree/master/s
 
 # Legal
 
-We actively encouraging a responsible attitude.
+Enjoy this beerlift as much as we do.
 
-Enjoy this beerlift responsibly.
+We actively encouraging a responsible attitude. IoT and beer are a great combination but not at the same time!
 
-And remember, drink responsibly: quality over quantity!
+And remember, drink responsibly: quality over quantity.

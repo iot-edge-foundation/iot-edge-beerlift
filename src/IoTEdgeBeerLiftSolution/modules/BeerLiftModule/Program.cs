@@ -98,7 +98,7 @@ namespace BeerLiftModule
             Console.WriteLine(" |_\\___/\\__|   \\___\\__,_\\__, \\___|   |_.__/\\___\\___|_| |_|_|_|  \\__|");
             Console.WriteLine("                        |___/                                       ");
             Console.WriteLine();
-            Console.WriteLine("   Copyright © 2020 - josa josa josa");
+            Console.WriteLine("   Copyright © 2022 - IoT Edger");
             Console.WriteLine(" ");
 
             MqttTransportSettings mqttSetting = new MqttTransportSettings(TransportType.Mqtt_Tcp_Only);
@@ -131,8 +131,8 @@ namespace BeerLiftModule
             _controller.OpenPin(DownRelayPin, PinMode.Output);
             _controller.OpenPin(FloodedPin, PinMode.Input);
 
-            _controller.Write(UpRelayPin, PinValue.High);  //by default high
-            _controller.Write(DownRelayPin, PinValue.High);  //by default high
+            _controller.Write(UpRelayPin, PinValue.High);  //by default high - stop action
+            _controller.Write(DownRelayPin, PinValue.High);  //by default high - stop action
 
             Console.WriteLine("Default GPIO relays Initialized.");   
 
@@ -217,16 +217,11 @@ namespace BeerLiftModule
                 Console.WriteLine("Main functionality halted due to missing MCP23(s).");  
             }
 
-            if (_liftState == LiftState.Unknown
-                    && !InDebugMode)
+            if (_liftState == LiftState.Unknown)
             {
                 // move the lift down (initial state) in case of 'unknown' state 
-                // ONLY IF NOT IN DEBUG MODE!
+                // WILL MOVE ONLY IF NOT IN DEBUG MODE!
                 await DownMethodCallBack(null, ioTHubModuleClient);          
-            }
-            else
-            {
-                Console.WriteLine("Down fnctionality halted due to debug mode.");  
             }
         }
 
@@ -615,8 +610,16 @@ namespace BeerLiftModule
                     await LedScenarios.PlayUpScene(_mcp23xxxWrite, UpDownInterval);
                 });
 
-                _controller.Write(UpRelayPin, PinValue.Low); // start action
-             
+
+                if (!InDebugMode)
+                {
+                    _controller.Write(UpRelayPin, PinValue.Low); // start action
+                }
+                else
+                {
+                    Console.WriteLine("WARNING: While in debug mode, no UP movements are executed!");
+                }
+
                 await Task.Delay(UpDownInterval);
 
                 _controller.Write(UpRelayPin, PinValue.High); // stop action
@@ -659,8 +662,15 @@ namespace BeerLiftModule
                     await LedScenarios.PlayDownScene(_mcp23xxxWrite, UpDownInterval);
                 });
 
-                _controller.Write(DownRelayPin, PinValue.Low); // start action
-             
+                if (!InDebugMode)
+                {
+                    _controller.Write(DownRelayPin, PinValue.Low); // start action
+                }
+                else
+                {
+                    Console.WriteLine("WARNING: While in debug mode, no DOWN movements are executed!");
+                }
+
                 await Task.Delay(UpDownInterval);
 
                 _controller.Write(DownRelayPin, PinValue.High); // stop action

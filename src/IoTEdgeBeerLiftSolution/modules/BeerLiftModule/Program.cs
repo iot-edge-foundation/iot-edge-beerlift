@@ -842,6 +842,8 @@ namespace BeerLiftModule
 
                 _simulateFlooding = ((string) request.flooding).ToLower() == "true";
                 
+                 await Task.Delay(1);    
+
                 Console.WriteLine($"Start flooding simulation: {_simulateFlooding}");
 
                 Console.WriteLine($"SimulateFlooding ended at {DateTime.UtcNow}.");
@@ -856,9 +858,6 @@ namespace BeerLiftModule
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;  
-
-
-
         }
 
 

@@ -1,8 +1,8 @@
 namespace BeerLiftModule
 {
-    public class FindEmptySlotResponse
+    public class RouletteResponse
     {
-        public int emptySlot {get; set;}
+        public int shot {get; set;}
         
         public int responseState { get; set; }
 

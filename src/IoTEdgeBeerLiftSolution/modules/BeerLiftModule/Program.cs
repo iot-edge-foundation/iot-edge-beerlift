@@ -17,6 +17,8 @@ namespace BeerLiftModule
 
     class Program
     {
+        private static bool _simulateFlooding = false;
+
         private static Mcp23xxx _mcp23xxxRead = null;
 
         private static Mcp23xxx _mcp23xxxWrite = null;
@@ -98,7 +100,7 @@ namespace BeerLiftModule
             Console.WriteLine(" |_\\___/\\__|   \\___\\__,_\\__, \\___|   |_.__/\\___\\___|_| |_|_|_|  \\__|");
             Console.WriteLine("                        |___/                                       ");
             Console.WriteLine();
-            Console.WriteLine("   Copyright © 2022 - IoT Edger");
+            Console.WriteLine("   Copyright © 2022 - IoT Edge Foundation");
             Console.WriteLine(" ");
 
             MqttTransportSettings mqttSetting = new MqttTransportSettings(TransportType.Mqtt_Tcp_Only);
@@ -200,6 +202,13 @@ namespace BeerLiftModule
                 ioTHubModuleClient);
 
             Console.WriteLine("Attached method handler: Roulette.");  
+
+            await ioTHubModuleClient.SetMethodHandlerAsync(
+                "SimulateFlooding",
+                SimulateFloodingMethodCallBack,
+                ioTHubModuleClient);
+
+            Console.WriteLine("Attached method handler: SimulateFlooding.");   
 
             SetupI2CRead();
 
@@ -309,6 +318,9 @@ namespace BeerLiftModule
                 var pinValue = _controller.Read(FloodedPin); // Moisture sensor
 
                 var flooded = pinValue.ToString().ToLower() == "low" ? false : true;
+
+                // support simulation too
+                flooded = flooded || _simulateFlooding;
 
                 Console.WriteLine($"Ports read: A = {dataPortA} - B = {dataPortB}; Flooded = {flooded}; State = {_liftState} at {DateTime.Now}");
 
@@ -816,6 +828,37 @@ namespace BeerLiftModule
             var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
 
             return response;  
+        }
+
+        private static async Task<MethodResponse> SimulateFloodingMethodCallBack(MethodRequest methodRequest, object userContext)
+        {
+            Console.WriteLine($"Executing SimulateFloodingMethodCallBack at {DateTime.UtcNow}");
+
+            var simulateFloodingResponse = new SimulateFloodingResponse{responseState = 0};
+
+            try
+            {
+                dynamic request = JsonConvert.DeserializeObject(methodRequest.DataAsJson);
+
+                _simulateFlooding = ((string) request.flooding).ToLower() == "true";
+                
+                Console.WriteLine($"Start flooding simulation: {_simulateFlooding}");
+
+                Console.WriteLine($"SimulateFlooding ended at {DateTime.UtcNow}.");
+            }
+            catch (Exception ex)
+            {
+                simulateFloodingResponse.errorMessage = ex.Message;   
+                simulateFloodingResponse.responseState = -999;
+            }
+              
+            var json = JsonConvert.SerializeObject(simulateFloodingResponse);
+            var response = new MethodResponse(Encoding.UTF8.GetBytes(json), 200);
+
+            return response;  
+
+
+
         }
 
 

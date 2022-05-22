@@ -120,6 +120,7 @@ The following direct methods are available:
 * MarkPosition
 * Advertise
 * BottleHolders
+* SimulateFlooding
 
 *Note* Method names are case sensitive
 
@@ -355,6 +356,27 @@ Response:
         string liftState,
         bool isFlooded
     },
+    int responseState,
+    string errorMessage
+}
+```
+
+### Direct Method - SimulateFlooding
+
+A JSON body is needed to be sent:
+
+```
+{
+    bool flooding
+}
+```
+
+Simulated flloding and overrules actual flooding indicator.
+
+Response:
+
+```
+{
     int responseState,
     string errorMessage
 }

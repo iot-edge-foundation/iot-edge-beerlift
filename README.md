@@ -3,7 +3,7 @@ Beer lift connected to the Azure cloud using Azure IoT edge.
 
 *Note*: This is still a work in progress:
 
-![image](https://user-images.githubusercontent.com/694737/200544601-9f66225e-e31b-401b-a122-1f24d2d59752.png)
+![alt text](assets/beerlift-presentation.png "Beerlift during presentation")
 
 beerlift-proto2.png
 

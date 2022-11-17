@@ -5,8 +5,6 @@ Beer lift connected to the Azure cloud using Azure IoT edge.
 
 ![alt text](assets/beerlift-presentation.png "Beerlift during presentation")
 
-beerlift-proto2.png
-
 # Introduction
 
 This project involves a beer lift that will pop out of the floor when summoned using a two-way motor.
